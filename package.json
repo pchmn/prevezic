@@ -1,0 +1,40 @@
+{
+  "name": "@prevezic/monorepo",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Private pictures social network",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/pchmn/prevezic.git"
+  },
+  "author": "pchmn",
+  "license": "MIT",
+  "homepage": "https://github.com/pchmn/prevezic",
+  "scripts": {
+    "dev:web": "pnpm --filter @prevezic/web run dev",
+    "build:web": "pnpm --filter @prevezic/web run build",
+    "serve:web": "pnpm --filter @prevezic/web run serve",
+    "test:web": "pnpm --filter @prevezic/web run test",
+    "test:web:watch": "pnpm --filter @prevezic/web run test:watch",
+    "test:web:ui": "pnpm --filter @prevezic/web run test:ui",
+    "test:web:ci": "pnpm --filter @prevezic/web run test:ci",
+    "prepare": "husky install && rm -rf .git/hooks && ln -s ../.husky .git/hooks",
+    "lint": "eslint --cache --fix ."
+  },
+  "devDependencies": {
+    "@commitlint/cli": "^17.0.3",
+    "@commitlint/config-conventional": "^17.0.3",
+    "@commitlint/prompt-cli": "^17.0.3",
+    "@typescript-eslint/eslint-plugin": "^5.32.0",
+    "@typescript-eslint/parser": "^5.32.0",
+    "eslint": "^8.21.0",
+    "eslint-config-prettier": "^8.5.0",
+    "eslint-plugin-prettier": "^4.2.1",
+    "eslint-plugin-react": "^7.30.1",
+    "eslint-plugin-react-hooks": "^4.6.0",
+    "eslint-plugin-testing-library": "^5.6.0",
+    "husky": "^8.0.1",
+    "lint-staged": "^11.2.3",
+    "prettier": "^2.7.1"
+  }
+}
