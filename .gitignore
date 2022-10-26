@@ -7,3 +7,4 @@ coverage
 .eslintcache
 .nvmrc
 *.code-workspace
+dev-dist

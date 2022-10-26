@@ -2,7 +2,7 @@
   "name": "@prevezic/monorepo",
   "version": "0.0.0",
   "private": true,
-  "description": "Private pictures social network",
+  "description": "Prevezic is a private photo sharing platform",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/pchmn/prevezic.git"
