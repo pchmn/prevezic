@@ -25,7 +25,6 @@
     "test:watch": "vitest",
     "test:ci": "vitest run --coverage",
     "serve": "vite preview",
-    "prepare": "husky install && rm -rf .git/hooks && ln -s ../.husky .git/hooks",
     "lint": "eslint --cache --fix ./src"
   },
   "dependencies": {
