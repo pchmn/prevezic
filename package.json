@@ -18,6 +18,8 @@
     "test:web:watch": "pnpm --filter @prevezic/web run test:watch",
     "test:web:ui": "pnpm --filter @prevezic/web run test:ui",
     "test:web:ci": "pnpm --filter @prevezic/web run test:ci",
+    "build:ci": "pnpm run build:web",
+    "test:ci": "pnpm run test:web:ci",
     "prepare": "husky install && rm -rf .git/hooks || true && ln -s ../.husky .git/hooks || true",
     "lint": "eslint --cache --fix ."
   },
