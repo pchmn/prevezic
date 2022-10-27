@@ -49,14 +49,14 @@ jobs:
       # Upload dist artifacts
       - uses: actions/upload-artifact@v2
         with:
-          name: dist
-          path: dist/
+          name: web-dist
+          path: packages/web/dist/
 
       # Upload coverage artifacts
       - uses: actions/upload-artifact@v2
         with:
-          name: coverage
-          path: coverage/lcov.info
+          name: web-coverage
+          path: packages/web/coverage/lcov.info
 
   coverage:
     name: Coverage analysis
@@ -70,7 +70,7 @@ jobs:
       # Donwload coverage artifacts
       - uses: actions/download-artifact@v2
         with:
-          name: coverage
+          name: web-coverage
 
       # Update coverage file to codecov
       - name: CODECOV
