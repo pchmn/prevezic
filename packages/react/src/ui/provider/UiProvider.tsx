@@ -1,29 +1,60 @@
-import { MantineProvider } from '@mantine/core';
+import { ColorScheme, MantineProvider } from '@mantine/core';
+import { useColorScheme, useHotkeys, useLocalStorage } from '@mantine/hooks';
 import { PropsWithChildren } from 'react';
 import { generateThemeFromColor } from '../theme';
+import { componentsTheme } from '../theme/components';
+import { ThemePreferencesProvider } from './ThemePreferencesProvider';
 
 export function UiProvider({ children }: PropsWithChildren) {
-  const theme = generateThemeFromColor('#E6DEFF');
-  console.log('theme', JSON.stringify(theme, null, 2));
+  const preferredColorScheme = useColorScheme();
+  const [colorScheme, setColorScheme] = useLocalStorage<ColorScheme>({
+    key: 'theme-color-scheme',
+    defaultValue: preferredColorScheme,
+    getInitialValueInEffect: true
+  });
+
+  const [primaryColor, setPrimaryColor] = useLocalStorage<string>({
+    key: 'theme-primary-color',
+    defaultValue: '#E6DEFF',
+    getInitialValueInEffect: true
+  });
+
+  const toggleColorScheme = (value?: ColorScheme) =>
+    setColorScheme(value || (colorScheme === 'dark' ? 'light' : 'dark'));
+  useHotkeys([['mod+J', () => toggleColorScheme()]]);
+
+  const theme = generateThemeFromColor(primaryColor);
+  // console.log('theme', JSON.stringify(theme, null, 2));
 
   return (
-    <MantineProvider
-      withGlobalStyles
-      withNormalizeCSS
-      theme={{
-        colorScheme: 'dark',
-        colors: theme.colors,
-        other: { schemes: theme.schemes },
-        globalStyles: (theme) => ({
-          body: {
-            backgroundColor: theme.other.schemes[theme.colorScheme].background,
-            color: theme.other.schemes[theme.colorScheme].onBackground,
-            WebkitFontSmoothing: 'antialiased'
-          }
-        })
-      }}
+    <ThemePreferencesProvider
+      primaryColor={primaryColor}
+      colorScheme={colorScheme}
+      toggleColorScheme={toggleColorScheme}
+      changePrimaryColor={setPrimaryColor}
     >
-      {children}
-    </MantineProvider>
+      <MantineProvider
+        withGlobalStyles
+        withNormalizeCSS
+        theme={{
+          colorScheme: colorScheme,
+          colors: theme.colors,
+          primaryColor: 'primary',
+          primaryShade: { light: 6, dark: 2 },
+          other: { schemes: theme.schemes },
+          defaultRadius: 'md',
+          components: componentsTheme,
+          globalStyles: (theme) => ({
+            body: {
+              backgroundColor: theme.other.schemes[theme.colorScheme].background,
+              color: theme.other.schemes[theme.colorScheme].onBackground,
+              WebkitFontSmoothing: 'antialiased'
+            }
+          })
+        }}
+      >
+        {children}
+      </MantineProvider>
+    </ThemePreferencesProvider>
   );
 }

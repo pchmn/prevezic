@@ -1,3 +1,5 @@
+import { CSSObject, MantineTheme } from '@mantine/core';
+
 export type MaterialColors = 'primary' | 'secondary' | 'tertiary' | 'error' | 'neutral' | 'neutralVariant';
 
 export type MaterialScheme = {
@@ -33,4 +35,12 @@ export type MaterialScheme = {
   inverseSurface: string;
   inverseOnSurface: string;
   inversePrimary: string;
+};
+
+export type ThemeComponent = {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  defaultProps?: Record<string, any>;
+  classNames?: Record<string, string>;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  styles?: Record<string, CSSObject> | ((theme: MantineTheme, params: any) => Record<string, CSSObject>);
 };

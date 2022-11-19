@@ -1,4 +1,4 @@
-import { Tuple } from '@mantine/core';
+import { MantineTheme, Tuple } from '@mantine/core';
 import {
   argbFromHex,
   hexFromArgb,
@@ -6,7 +6,7 @@ import {
   themeFromSourceColor,
   TonalPalette
 } from '@material/material-color-utilities';
-import { MaterialScheme } from './types';
+import { MaterialColors, MaterialScheme } from './types';
 
 export function generateThemeFromColor(color: string) {
   const theme = themeFromSourceColor(argbFromHex(color));
@@ -28,16 +28,16 @@ export function generateThemeFromColor(color: string) {
 
 function generatePaletteFrom(tonalPalette: TonalPalette) {
   return [
-    hexFromArgb(tonalPalette.tone(10)),
-    hexFromArgb(tonalPalette.tone(20)),
-    hexFromArgb(tonalPalette.tone(30)),
-    hexFromArgb(tonalPalette.tone(40)),
-    hexFromArgb(tonalPalette.tone(50)),
-    hexFromArgb(tonalPalette.tone(60)),
-    hexFromArgb(tonalPalette.tone(70)),
-    hexFromArgb(tonalPalette.tone(80)),
+    hexFromArgb(tonalPalette.tone(95)),
     hexFromArgb(tonalPalette.tone(90)),
-    hexFromArgb(tonalPalette.tone(100))
+    hexFromArgb(tonalPalette.tone(80)),
+    hexFromArgb(tonalPalette.tone(70)),
+    hexFromArgb(tonalPalette.tone(60)),
+    hexFromArgb(tonalPalette.tone(50)),
+    hexFromArgb(tonalPalette.tone(40)),
+    hexFromArgb(tonalPalette.tone(30)),
+    hexFromArgb(tonalPalette.tone(20)),
+    hexFromArgb(tonalPalette.tone(10))
   ] as Tuple<string, 10>;
 }
 
@@ -65,4 +65,18 @@ function setOpacity(hex: string, alpha: number) {
   return `${hex}${Math.floor(alpha * 255)
     .toString(16)
     .padStart(2, '0')}`;
+}
+
+export function getColor(color: MaterialColors = 'primary', theme: MantineTheme): string {
+  return theme.other.schemes[theme.colorScheme][color];
+}
+
+export function getOnColor(color: MaterialColors = 'primary', theme: MantineTheme): string {
+  console.log(
+    'getOnColor',
+    color,
+    theme,
+    theme.other.schemes[theme.colorScheme][`on${color.charAt(0).toUpperCase()}${color.slice(1)}` as keyof Scheme]
+  );
+  return theme.other.schemes[theme.colorScheme][`on${color.charAt(0).toUpperCase()}${color.slice(1)}` as keyof Scheme];
 }
