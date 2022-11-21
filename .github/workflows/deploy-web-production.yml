@@ -44,6 +44,32 @@ jobs:
           name: web-dist
           path: apps/web/dist/
 
+      # Upload coverage artifacts
+      - uses: actions/upload-artifact@v2
+        with:
+          name: web-coverage
+          path: apps/web/coverage/lcov.info
+
+  coverage:
+    name: Coverage analysis
+    needs: buildAndTest
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      # Donwload coverage artifacts
+      - uses: actions/download-artifact@v2
+        with:
+          name: web-coverage
+
+      # Update coverage file to codecov
+      - name: CODECOV
+        uses: codecov/codecov-action@v3
+        with:
+          files: lcov.info
+
   # Deploy
   deploy:
     name: Deploy
