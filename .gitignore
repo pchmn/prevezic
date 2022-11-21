@@ -8,3 +8,4 @@ coverage
 .nvmrc
 *.code-workspace
 dev-dist
+.turbo
