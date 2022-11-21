@@ -1,6 +1,6 @@
 import { CSSObject, MantineTheme } from '@mantine/core';
 
-export type MaterialColors = 'primary' | 'secondary' | 'tertiary' | 'error' | 'neutral' | 'neutralVariant';
+export type MaterialColor = 'primary' | 'secondary' | 'tertiary' | 'error' | 'neutral' | 'neutralVariant';
 
 export type MaterialScheme = {
   primary: string;

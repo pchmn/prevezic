@@ -2,7 +2,7 @@ import { ColorScheme, MantineProvider } from '@mantine/core';
 import { useColorScheme, useHotkeys, useLocalStorage } from '@mantine/hooks';
 import { PropsWithChildren } from 'react';
 import { generateThemeFromColor } from '../theme';
-import { componentsTheme } from '../theme/components';
+import { componentsTheme } from '../theme/styles';
 import { ThemePreferencesProvider } from './ThemePreferencesProvider';
 
 export function UiProvider({ children }: PropsWithChildren) {
@@ -13,8 +13,8 @@ export function UiProvider({ children }: PropsWithChildren) {
     getInitialValueInEffect: true
   });
 
-  const [primaryColor, setPrimaryColor] = useLocalStorage<string>({
-    key: 'theme-primary-color',
+  const [baseColor, setBaseColor] = useLocalStorage<string>({
+    key: 'theme-base-color',
     defaultValue: '#E6DEFF',
     getInitialValueInEffect: true
   });
@@ -23,15 +23,15 @@ export function UiProvider({ children }: PropsWithChildren) {
     setColorScheme(value || (colorScheme === 'dark' ? 'light' : 'dark'));
   useHotkeys([['mod+J', () => toggleColorScheme()]]);
 
-  const theme = generateThemeFromColor(primaryColor);
+  const theme = generateThemeFromColor(baseColor);
   // console.log('theme', JSON.stringify(theme, null, 2));
 
   return (
     <ThemePreferencesProvider
-      primaryColor={primaryColor}
+      baseColor={baseColor}
       colorScheme={colorScheme}
       toggleColorScheme={toggleColorScheme}
-      changePrimaryColor={setPrimaryColor}
+      changeBaseColor={setBaseColor}
     >
       <MantineProvider
         withGlobalStyles

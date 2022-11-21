@@ -1,9 +1,10 @@
-import { Tuple } from '@mantine/core';
-import { MaterialColors, MaterialScheme } from './src/ui/theme/types';
+import '@emotion/react';
+import { MantineTheme, Tuple } from '@mantine/core';
+import { MaterialColor, MaterialScheme } from './src/ui/theme/types';
 
 declare module '@mantine/core' {
   export interface MantineThemeColorsOverride {
-    colors: Record<MaterialColors, Tuple<string, 10>>;
+    colors: Record<MaterialColor, Tuple<string, 10>>;
   }
   export interface MantineThemeOther {
     schemes: {
@@ -11,4 +12,9 @@ declare module '@mantine/core' {
       dark: MaterialScheme;
     };
   }
+}
+
+declare module '@emotion/react' {
+  // eslint-disable-next-line @typescript-eslint/no-empty-interface
+  export interface Theme extends MantineTheme {}
 }

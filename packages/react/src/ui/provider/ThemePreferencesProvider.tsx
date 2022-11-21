@@ -3,9 +3,9 @@ import { createContext, useContext } from 'react';
 
 interface ThemePreferencesProviderProps {
   colorScheme: ColorScheme;
-  primaryColor: string;
+  baseColor: string;
   toggleColorScheme(colorScheme?: ColorScheme): void;
-  changePrimaryColor(color: string): void;
+  changeBaseColor(color: string): void;
 }
 
 const ThemeProviderContext = createContext<ThemePreferencesProviderProps>({} as ThemePreferencesProviderProps);

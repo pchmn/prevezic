@@ -6,7 +6,7 @@ import {
   themeFromSourceColor,
   TonalPalette
 } from '@material/material-color-utilities';
-import { MaterialColors, MaterialScheme } from './types';
+import { MaterialColor, MaterialScheme } from './types';
 
 export function generateThemeFromColor(color: string) {
   const theme = themeFromSourceColor(argbFromHex(color));
@@ -67,16 +67,12 @@ function setOpacity(hex: string, alpha: number) {
     .padStart(2, '0')}`;
 }
 
-export function getColor(color: MaterialColors = 'primary', theme: MantineTheme): string {
-  return theme.other.schemes[theme.colorScheme][color];
+export function getColor(color: MaterialColor = 'primary', theme: MantineTheme): string {
+  return theme.other.schemes[theme.colorScheme][color as keyof MaterialScheme];
 }
 
-export function getOnColor(color: MaterialColors = 'primary', theme: MantineTheme): string {
-  console.log(
-    'getOnColor',
-    color,
-    theme,
-    theme.other.schemes[theme.colorScheme][`on${color.charAt(0).toUpperCase()}${color.slice(1)}` as keyof Scheme]
-  );
-  return theme.other.schemes[theme.colorScheme][`on${color.charAt(0).toUpperCase()}${color.slice(1)}` as keyof Scheme];
+export function getOnColor(color: MaterialColor = 'primary', theme: MantineTheme): string {
+  return theme.other.schemes[theme.colorScheme][
+    `on${color.charAt(0).toUpperCase()}${color.slice(1)}` as keyof MaterialScheme
+  ];
 }
