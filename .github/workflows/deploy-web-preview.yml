@@ -1,0 +1,63 @@
+name: Deploy web app to Preview Channel
+
+on:
+  pull_request:
+    # Optionally configure to run only for specific files. For example:
+    paths:
+    - "apps/web/**"
+    - "packages/react/**"
+
+jobs:
+  # Build & Test
+  buildAndTest:
+    name: Build & Test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - uses: pnpm/action-setup@v2
+        with:
+          version: 6.22.2
+
+      - uses: actions/setup-node@v3
+        with:
+          node-version: "16"
+          cache: "pnpm"
+
+      # Install
+      - name: INSTALL
+        run: pnpm install
+
+      # Build
+      - name: BUILD
+        run: pnpm build:ci
+
+      # Test
+      - name: TEST
+        run: pnpm test:ci
+
+      # Upload dist artifacts
+      - uses: actions/upload-artifact@v2
+        with:
+          name: web-dist
+          path: apps/web/dist/
+
+  # Deploy
+  deploy:
+    name: Deploy
+    runs-on: ubuntu-latest
+    needs: buildAndTest
+    steps:
+      - uses: actions/checkout@v3
+
+      # Donwload coverage artifacts
+      - uses: actions/download-artifact@v2
+        with:
+          name: web-dist
+
+      - name: Deploy to Preview Channel
+        uses: FirebaseExtended/action-hosting-deploy@v0
+        with:
+          repoToken: '${{ secrets.GITHUB_TOKEN }}'
+          firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT_PREVEZIC }}'
+          projectId: prevezic
