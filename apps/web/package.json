@@ -19,8 +19,8 @@
   "dependencies": {
     "@prevezic/react": "workspace:*",
     "@emotion/react": "^11.10.5",
-    "@mantine/core": "^5.6.2",
-    "@mantine/hooks": "^5.6.2",
+    "@mantine/core": "^5.8.0",
+    "@mantine/hooks": "^5.8.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
   },
