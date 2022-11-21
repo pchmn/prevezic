@@ -1,6 +1,7 @@
 {
   "extends": "@prevezic/tsconfig/vite.json",
   "compilerOptions": {
+    "types": ["vite/client", "vitest/globals"],
     "baseUrl": ".",
     "paths": {
       "@app/*": ["src/app/*"],
