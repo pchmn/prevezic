@@ -1,7 +1,10 @@
-import { AppShell, Header, Navbar } from '@mantine/core';
+import { AppShell, Button, Header, Navbar } from '@mantine/core';
+import { ThemeEditor } from '@prevezic/react/src/ui/theme';
+import { useState } from 'react';
 import './App.css';
 
 function App() {
+  const [open, setOpen] = useState(false);
   return (
     <AppShell
       padding="md"
@@ -15,11 +18,9 @@ function App() {
           {/* Header content */}
         </Header>
       }
-      styles={(theme) => ({
-        main: { backgroundColor: theme.colorScheme === 'dark' ? theme.colors.dark[8] : theme.colors.gray[0] }
-      })}
     >
-      Hello
+      <Button onClick={() => setOpen(true)}>Hello</Button>
+      <ThemeEditor opened={open} onClose={() => setOpen(false)} />
     </AppShell>
   );
 }
