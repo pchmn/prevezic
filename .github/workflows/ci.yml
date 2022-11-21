@@ -50,13 +50,13 @@ jobs:
       - uses: actions/upload-artifact@v2
         with:
           name: web-dist
-          path: packages/web/dist/
+          path: apps/web/dist/
 
       # Upload coverage artifacts
       - uses: actions/upload-artifact@v2
         with:
           name: web-coverage
-          path: packages/web/coverage/lcov.info
+          path: apps/web/coverage/lcov.info
 
   coverage:
     name: Coverage analysis
