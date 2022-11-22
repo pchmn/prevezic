@@ -17,10 +17,11 @@
     "lint": "eslint --cache --fix ./src"
   },
   "dependencies": {
-    "@prevezic/react": "workspace:*",
     "@emotion/react": "^11.10.5",
+    "@importantimport/material-color-utilities": "^0.2.0",
     "@mantine/core": "^5.8.0",
     "@mantine/hooks": "^5.8.0",
+    "@prevezic/react": "workspace:*",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
   },
@@ -32,6 +33,7 @@
     "@types/react": "^18.0.15",
     "@types/react-dom": "^18.0.6",
     "@vitejs/plugin-react": "^2.0.0",
+    "@vitest/coverage-c8": "^0.25.2",
     "c8": "^7.12.0",
     "eslint-config-prevezic-react": "workspace:*",
     "happy-dom": "^6.0.4",
