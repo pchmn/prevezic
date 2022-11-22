@@ -10,6 +10,7 @@ on:
     paths:
       - "apps/web/**"
       - "packages/react/**"
+      - ".github/workflows/deploy-web-preview.yml"
 
 jobs:
   # Build & Test
@@ -86,6 +87,7 @@ jobs:
       - uses: actions/download-artifact@v2
         with:
           name: web-dist
+          path: apps/web/dist
 
       - name: Deploy to Preview Channel
         uses: FirebaseExtended/action-hosting-deploy@v0
