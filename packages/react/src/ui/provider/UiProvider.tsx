@@ -1,6 +1,7 @@
 import { ColorScheme, MantineProvider } from '@mantine/core';
 import { useColorScheme, useHotkeys, useLocalStorage } from '@mantine/hooks';
 import { PropsWithChildren } from 'react';
+import { Helmet, HelmetProvider } from 'react-helmet-async';
 import { generateThemeFromColor } from '../theme';
 import { componentsTheme } from '../theme/styles';
 import { ThemePreferencesProvider } from './ThemePreferencesProvider';
@@ -24,37 +25,42 @@ export function UiProvider({ children }: PropsWithChildren) {
   useHotkeys([['mod+J', () => toggleColorScheme()]]);
 
   const theme = generateThemeFromColor(baseColor);
-  // console.log('theme', JSON.stringify(theme, null, 2));
 
   return (
-    <ThemePreferencesProvider
-      baseColor={baseColor}
-      colorScheme={colorScheme}
-      toggleColorScheme={toggleColorScheme}
-      changeBaseColor={setBaseColor}
-    >
-      <MantineProvider
-        withGlobalStyles
-        withNormalizeCSS
-        theme={{
-          colorScheme: colorScheme,
-          colors: theme.colors,
-          primaryColor: 'primary',
-          primaryShade: { light: 6, dark: 2 },
-          other: { schemes: theme.schemes },
-          defaultRadius: 'md',
-          components: componentsTheme,
-          globalStyles: (theme) => ({
-            body: {
-              backgroundColor: theme.other.schemes[theme.colorScheme].background,
-              color: theme.other.schemes[theme.colorScheme].onBackground,
-              WebkitFontSmoothing: 'antialiased'
-            }
-          })
-        }}
+    <HelmetProvider>
+      <ThemePreferencesProvider
+        baseColor={baseColor}
+        colorScheme={colorScheme}
+        toggleColorScheme={toggleColorScheme}
+        changeBaseColor={setBaseColor}
       >
-        {children}
-      </MantineProvider>
-    </ThemePreferencesProvider>
+        <Helmet>
+          <link rel="mask-icon" href="/mask-icon.svg" color={theme.schemes[colorScheme].background} />
+          <meta name="theme-color" content={theme.schemes[colorScheme].background} />
+        </Helmet>
+        <MantineProvider
+          withGlobalStyles
+          withNormalizeCSS
+          theme={{
+            colorScheme: colorScheme,
+            colors: theme.colors,
+            primaryColor: 'primary',
+            primaryShade: { light: 6, dark: 2 },
+            other: { schemes: theme.schemes },
+            defaultRadius: 'md',
+            components: componentsTheme,
+            globalStyles: (theme) => ({
+              body: {
+                backgroundColor: theme.other.schemes[theme.colorScheme].background,
+                color: theme.other.schemes[theme.colorScheme].onBackground,
+                WebkitFontSmoothing: 'antialiased'
+              }
+            })
+          }}
+        >
+          {children}
+        </MantineProvider>
+      </ThemePreferencesProvider>
+    </HelmetProvider>
   );
 }
