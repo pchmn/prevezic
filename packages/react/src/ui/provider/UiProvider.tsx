@@ -2,9 +2,9 @@ import { ColorScheme, MantineProvider } from '@mantine/core';
 import { useColorScheme, useHotkeys, useLocalStorage } from '@mantine/hooks';
 import { PropsWithChildren } from 'react';
 import { Helmet, HelmetProvider } from 'react-helmet-async';
-import { generateThemeFromColor } from '../theme';
+import { ThemePreferencesProvider } from '../theme';
 import { componentsTheme } from '../theme/styles';
-import { ThemePreferencesProvider } from './ThemePreferencesProvider';
+import { generateThemeFromColor } from '../theme/utils';
 
 export function UiProvider({ children }: PropsWithChildren) {
   const preferredColorScheme = useColorScheme();

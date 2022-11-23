@@ -6,8 +6,7 @@ export const componentsTheme: Record<string, ThemeComponent> = {
   Button: {
     styles: (theme, params: ButtonStylesParams) => ({
       root: {
-        color:
-          params.variant === 'filled' ? getOnColor(params.color as MaterialColor, theme) : theme.colors[params.color][7]
+        color: params.variant === 'filled' ? getOnColor(params.color as MaterialColor, theme) : undefined
       }
     })
   },
