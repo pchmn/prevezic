@@ -7,7 +7,7 @@ export const sizes = {
   sm: 14,
   md: 18,
   lg: 26,
-  xl: 34
+  xl: 34,
 };
 
 interface IconProps {

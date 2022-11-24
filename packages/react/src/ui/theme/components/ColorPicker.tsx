@@ -13,7 +13,7 @@ const baseColors = [
   '#BBF394',
   '#CEE5FF',
   '#E7DEFF',
-  '#FED7FD'
+  '#FED7FD',
 ];
 
 export function ColorPicker({ baseColor, onChange }: { baseColor: string; onChange: (color: string) => void }) {
@@ -41,7 +41,7 @@ const Round = styled.div<{ color: string; isSelected: boolean }>(({ color, isSel
       : theme.other.schemes.light.primary,
   boxShadow: `0 0 0 3px ${
     isSelected ? theme.fn[`${theme.colorScheme}en`](theme.other.schemes[theme.colorScheme].primary, 0.5) : 'transparent'
-  }`
+  }`,
 }));
 function ColorItem({ color, onClick, isSelected }: { color: string; onClick: () => void; isSelected: boolean }) {
   return (

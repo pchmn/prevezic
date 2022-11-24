@@ -11,13 +11,13 @@ export function UiProvider({ children }: PropsWithChildren) {
   const [colorScheme, setColorScheme] = useLocalStorage<ColorScheme>({
     key: 'theme-color-scheme',
     defaultValue: preferredColorScheme,
-    getInitialValueInEffect: true
+    getInitialValueInEffect: true,
   });
 
   const [baseColor, setBaseColor] = useLocalStorage<string>({
     key: 'theme-base-color',
     defaultValue: '#E6DEFF',
-    getInitialValueInEffect: true
+    getInitialValueInEffect: true,
   });
 
   const toggleColorScheme = (value?: ColorScheme) =>
@@ -53,9 +53,9 @@ export function UiProvider({ children }: PropsWithChildren) {
               body: {
                 backgroundColor: theme.other.schemes[theme.colorScheme].background,
                 color: theme.other.schemes[theme.colorScheme].onBackground,
-                WebkitFontSmoothing: 'antialiased'
-              }
-            })
+                WebkitFontSmoothing: 'antialiased',
+              },
+            }),
           }}
         >
           {children}

@@ -28,7 +28,7 @@ function ThemeEditorContent({
   baseColorTitle = 'Base color',
   darkLabel = 'Dark',
   lightLabel = 'Light',
-  closeLabel = 'Close'
+  closeLabel = 'Close',
 }: Omit<ThemeEditorProps, 'opened' | 'title'>) {
   const { colorScheme, baseColor, changeBaseColor, toggleColorScheme } = useThemePreferences();
 
@@ -47,7 +47,7 @@ function ThemeEditorContent({
                   <MoonIcon />
                   <Box ml={10}>{darkLabel}</Box>
                 </Center>
-              )
+              ),
             },
             {
               value: 'light',
@@ -56,8 +56,8 @@ function ThemeEditorContent({
                   <SunIcon />
                   <Box ml={10}>{lightLabel}</Box>
                 </Center>
-              )
-            }
+              ),
+            },
           ]}
         />
       </Flex>

@@ -1,4 +1,4 @@
 module.exports = {
   root: true,
-  extends: ['prevezic-ts']
+  extends: ['prevezic-ts'],
 };

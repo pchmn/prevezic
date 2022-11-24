@@ -13,7 +13,7 @@ export default defineConfig({
     VitePWA({
       registerType: 'autoUpdate',
       devOptions: {
-        enabled: true
+        enabled: true,
       },
       includeAssets: ['favicon.ico', 'apple-touch-icon.png', 'mask-icon.svg'],
       manifest: {
@@ -25,26 +25,26 @@ export default defineConfig({
           {
             src: 'pwa-192x192.png',
             sizes: '192x192',
-            type: 'image/png'
+            type: 'image/png',
           },
           {
             src: 'pwa-512x512.png',
             sizes: '512x512',
-            type: 'image/png'
-          }
-        ]
-      }
-    })
+            type: 'image/png',
+          },
+        ],
+      },
+    }),
   ],
   build: {
-    sourcemap: true
+    sourcemap: true,
   },
   test: {
     globals: true,
     environment: 'happy-dom',
     setupFiles: './src/setupTests.ts',
     coverage: {
-      reporter: ['html', 'lcov']
-    }
-  }
+      reporter: ['html', 'lcov'],
+    },
+  },
 });

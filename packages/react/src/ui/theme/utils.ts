@@ -3,7 +3,7 @@ import {
   hexFromArgb,
   Scheme,
   themeFromSourceColor,
-  TonalPalette
+  TonalPalette,
 } from '@importantimport/material-color-utilities';
 import { MantineTheme, Tuple } from '@mantine/core';
 import { MaterialColor, MaterialScheme } from './types';
@@ -17,12 +17,12 @@ export function generateThemeFromColor(color: string) {
       tertiary: generatePaletteFrom(theme.palettes.tertiary),
       error: generatePaletteFrom(theme.palettes.error),
       neutral: generatePaletteFrom(theme.palettes.neutral),
-      neutralVariant: generatePaletteFrom(theme.palettes.neutralVariant)
+      neutralVariant: generatePaletteFrom(theme.palettes.neutralVariant),
     },
     schemes: {
       light: generateSchemeFrom(theme.schemes.light),
-      dark: generateSchemeFrom(theme.schemes.dark)
-    }
+      dark: generateSchemeFrom(theme.schemes.dark),
+    },
   };
 }
 
@@ -37,7 +37,7 @@ function generatePaletteFrom(tonalPalette: TonalPalette) {
     hexFromArgb(tonalPalette.tone(40)),
     hexFromArgb(tonalPalette.tone(30)),
     hexFromArgb(tonalPalette.tone(20)),
-    hexFromArgb(tonalPalette.tone(10))
+    hexFromArgb(tonalPalette.tone(10)),
   ] as Tuple<string, 10>;
 }
 

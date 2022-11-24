@@ -5,8 +5,8 @@ module.exports = {
     'no-restricted-imports': [
       'error',
       {
-        patterns: ['@lib/*/*', '@app/*/*/*']
-      }
-    ]
-  }
+        patterns: ['@lib/*/*', '@app/*/*/*', '@prevezic/react/*'],
+      },
+    ],
+  },
 };
