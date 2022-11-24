@@ -10,6 +10,7 @@ on:
     paths:
       - "apps/web/**"
       - "packages/react/**"
+      - ".github/workflows/deploy-web-preview.yml"
 
 jobs:
   # Build & Test
@@ -41,13 +42,13 @@ jobs:
         run: pnpm test:ci
 
       # Upload dist artifacts
-      - uses: actions/upload-artifact@v2
+      - uses: actions/upload-artifact@v3
         with:
           name: web-dist
           path: apps/web/dist/
 
       # Upload coverage artifacts
-      - uses: actions/upload-artifact@v2
+      - uses: actions/upload-artifact@v3
         with:
           name: web-coverage
           path: apps/web/coverage/lcov.info
@@ -62,7 +63,7 @@ jobs:
           fetch-depth: 0
 
       # Donwload coverage artifacts
-      - uses: actions/download-artifact@v2
+      - uses: actions/download-artifact@v3
         with:
           name: web-coverage
 
@@ -83,9 +84,10 @@ jobs:
       - uses: actions/checkout@v3
 
       # Donwload coverage artifacts
-      - uses: actions/download-artifact@v2
+      - uses: actions/download-artifact@v3
         with:
           name: web-dist
+          path: apps/web/dist
 
       - name: Deploy to Preview Channel
         uses: FirebaseExtended/action-hosting-deploy@v0
