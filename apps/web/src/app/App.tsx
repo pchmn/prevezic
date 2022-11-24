@@ -1,5 +1,5 @@
 import { AppShell, Button, Header, Navbar } from '@mantine/core';
-import { ThemeEditor } from '@prevezic/react/src/ui/theme';
+import { ThemeEditor } from '@prevezic/react';
 import { useState } from 'react';
 import './App.css';
 
