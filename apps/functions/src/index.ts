@@ -1,9 +1,5 @@
-import * as functions from 'firebase-functions';
+import { onRequest } from 'firebase-functions/v1/https';
 
-// // Start writing Firebase Functions
-// // https://firebase.google.com/docs/functions/typescript
-//
-export const helloWorld = functions.https.onRequest((request, response) => {
-  functions.logger.info('Hello logs!', { structuredData: true });
-  response.send('Hello from Firebase!');
+export const signInWithEmailLink = onRequest(async (req, res) => {
+  await (await import('./signInWithEmailLink/index')).default(req, res);
 });

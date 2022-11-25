@@ -6,7 +6,8 @@
   "license": "MIT",
   "main": "dist/index.js",
   "scripts": {
-    "build": "esbuild src/index.ts --bundle --minify --platform=node --target=node16.0 --outfile=dist/index.js",
+    "build": "rm -rf ./dist && tsc",
+    "esbuild": "esbuild `find ./src \\( -name '*.ts' \\)` --minify --platform=node --target=node16.0 --format=cjs --outdir=dist",
     "serve": "pnpm run build && firebase emulators:start --only functions",
     "shell": "pnpm run build && firebase functions:shell",
     "start": "pnpm run shell",
