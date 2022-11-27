@@ -14,7 +14,7 @@ const mjmlTemplate = ({ email, link, userAgent }: TemplateParams) =>
   `<mjml>
   <mj-body width="500px">
 
-    <mj-section padding="30px">
+    <mj-section padding="20px">
     </mj-section>
 
     <mj-wrapper padding="10px" background-color="#FAF7FD" border-radius="12px">
@@ -31,7 +31,7 @@ const mjmlTemplate = ({ email, link, userAgent }: TemplateParams) =>
 
           <mj-button border-radius="8px" background-color="#6253A6" font-size="14px" padding-bottom="30px" align="center" inner-padding="12px 25px" height="30px" href="${link}">Sign in to Prevezic</mj-button>
 
-          <mj-text font-size="12px" line-height="20px" align="center" padding="0px">
+          <mj-text color="#848484" font-size="12px" line-height="20px" align="center" padding-bottom="0px" padding-top="0px">
             You will be signed in with ${email} by confirming this request.
           </mj-text>
 
@@ -43,9 +43,9 @@ const mjmlTemplate = ({ email, link, userAgent }: TemplateParams) =>
           ? `
       <mj-section padding="10px">
         <mj-column background-color="#F2ECF9" border-radius="8px">
-          <mj-text align="center" color="#6c6b6b" font-size="12px">Requested from <b>${userAgent.os}</b>${
-              userAgent.device ? ` (<b>${userAgent.device}</b>)` : ''
-            } using <b>${userAgent.browser}</b></mj-text>
+          <mj-text align="center" color="#848484" font-size="12px" line-height="20px">Requested from <b>${
+            userAgent.os
+          }</b>${userAgent.device ? ` (<b>${userAgent.device}</b>)` : ''} using <b>${userAgent.browser}</b></mj-text>
         </mj-column>
       </mj-section>`
           : ``
@@ -53,7 +53,7 @@ const mjmlTemplate = ({ email, link, userAgent }: TemplateParams) =>
 
     </mj-wrapper>
 
-    <mj-section padding-bottom="30px">
+    <mj-section padding-bottom="20px">
     </mj-section>
   </mj-body>
 </mjml>`;
