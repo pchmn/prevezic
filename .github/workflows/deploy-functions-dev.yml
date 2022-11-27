@@ -70,7 +70,9 @@ jobs:
       - name: Deploy to prevezic-dev
         run: |
           firebase use prevezic-dev
-          pnpm install
-          pnpm deploy:functions
+          cd apps/functions
+          pnpm remove -D @prevezic/tsconfig eslint-config-prevezic-ts
+          pnpm install -P
+          pnpm deploy
         env:
           FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}

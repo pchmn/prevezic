@@ -64,10 +64,12 @@ jobs:
       - name: Install Firebase CLI
         run: pnpm add -g firebase-tools
 
-      - name: Deploy to prevezic
+      - name: Deploy to prevezic-dev
         run: |
-          firebase use prevezic
-          pnpm install
-          pnpm deploy:functions
+          firebase use prevezic-dev
+          cd apps/functions
+          pnpm remove -D @prevezic/tsconfig eslint-config-prevezic-ts
+          pnpm install -P
+          pnpm deploy
         env:
           FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
