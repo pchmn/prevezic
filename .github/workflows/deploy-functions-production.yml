@@ -32,12 +32,6 @@ jobs:
       - name: BUILD
         run: pnpm build:functions
 
-      # Upload node_modules
-      - uses: actions/upload-artifact@v3
-        with:
-          name: functions-node_modules
-          path: apps/functions/node_modules/
-
       # Upload dist artifacts
       - uses: actions/upload-artifact@v3
         with:
@@ -60,12 +54,6 @@ jobs:
           node-version: "16"
           cache: "pnpm"
 
-      # Donwload node_modules artifacts
-      - uses: actions/download-artifact@v3
-        with:
-          name: functions-node_modules
-          path: apps/functions/node_modules
-
       # Donwload dist artifacts
       - uses: actions/download-artifact@v3
         with:
@@ -79,6 +67,7 @@ jobs:
       - name: Deploy to prevezic
         run: |
           firebase use prevezic
+          pnpm install
           pnpm deploy:functions
         env:
           FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
