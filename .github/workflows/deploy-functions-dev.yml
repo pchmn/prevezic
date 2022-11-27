@@ -70,6 +70,7 @@ jobs:
       - name: Deploy to prevezic-dev
         run: |
           firebase use prevezic-dev
+          pnpm install -P
           pnpm deploy:functions
         env:
           FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
