@@ -1,0 +1,67 @@
+name: Deploy Firebase Functions to Production
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+    - "apps/functions/**"
+    - ".github/workflows/deploy-functions-production.yml"
+
+jobs:
+  build:
+    name: Build Functions
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - uses: pnpm/action-setup@v2
+        with:
+          version: 6.22.2
+
+      - uses: actions/setup-node@v3
+        with:
+          node-version: "16"
+          cache: "pnpm"
+
+      # Install
+      - name: INSTALL
+        run: pnpm install
+
+      # Build
+      - name: BUILD
+        run: pnpm build:functions
+
+      # Upload dist artifacts
+      - uses: actions/upload-artifact@v3
+        with:
+          name: functions-dist
+          path: apps/functions/dist/
+
+  deploy:
+    name: Deploy Functions
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      # Donwload coverage artifacts
+      - uses: actions/download-artifact@v3
+        with:
+          name: functions-dist
+          path: apps/functions/dist
+
+      - uses: actions/setup-node@v3
+        with:
+          node-version: "16"
+          cache: "pnpm"
+
+      # Install
+      - name: Install Firebase CLI
+        run: pnpm add -g firebase-tools
+
+      - name: Deploy to prevezic
+        run: |
+          firebase use prevezic
+          pnpm deploy:functions
+        env:
+          FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}

@@ -21,6 +21,7 @@
     "build:ci": "pnpm run build:web",
     "test:ci": "pnpm run test:web:ci",
     "build:functions": "pnpm --filter @prevezic/functions run build",
+    "deploy:functions": "pnpm --filter @prevezic/functions run deploy",
     "prepare": "husky install && rm -rf .git/hooks || true && ln -s ../.husky .git/hooks || true",
     "lint": "eslint --cache --fix ."
   },
