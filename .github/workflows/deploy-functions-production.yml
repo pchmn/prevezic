@@ -45,16 +45,20 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      # Donwload coverage artifacts
-      - uses: actions/download-artifact@v3
+      - uses: pnpm/action-setup@v2
         with:
-          name: functions-dist
-          path: apps/functions/dist
+          version: 6.22.2
 
       - uses: actions/setup-node@v3
         with:
           node-version: "16"
           cache: "pnpm"
+
+      # Donwload coverage artifacts
+      - uses: actions/download-artifact@v3
+        with:
+          name: functions-dist
+          path: apps/functions/dist
 
       # Install
       - name: Install Firebase CLI
