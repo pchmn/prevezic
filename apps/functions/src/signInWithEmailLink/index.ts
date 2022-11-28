@@ -1,33 +1,32 @@
 import sgMail from '@sendgrid/mail';
 import { initializeApp } from 'firebase-admin/app';
 import { getAuth } from 'firebase-admin/auth';
-import { Response } from 'firebase-functions/v1';
+import { CallableContext } from 'firebase-functions/v1/https';
 import parser from 'ua-parser-js';
-import { TypedRequest } from '../core/TypedRequest';
 import { getEmailHtml } from './template';
 
 sgMail.setApiKey(process.env.SENDGRID_API_KEY_DEV || '');
 initializeApp();
 
-type RequestBody = {
+type DataType = {
   email: string;
   from: string;
 };
 
-export default async (req: TypedRequest<RequestBody>, res: Response) => {
-  if (!req.body.email) {
-    return res.status(400).send('Missing email');
+export default async (data: DataType, context: CallableContext) => {
+  if (!data.email) {
+    throw new Error('Email is required');
   }
 
-  const userAgent = parser(req.headers['user-agent']);
+  const userAgent = parser(context.rawRequest.headers['user-agent']);
 
   const actionSettings = {
-    url: req.body.from || 'http://localhost:5173/',
+    url: data.from || 'http://localhost:5173/',
   };
-  const emailLink = await getAuth().generateSignInWithEmailLink(req.body.email, actionSettings);
+  const emailLink = await getAuth().generateSignInWithEmailLink(data.email, actionSettings);
 
   const html = getEmailHtml({
-    email: req.body.email,
+    email: data.email,
     link: emailLink,
     userAgent: {
       browser: userAgent.browser.name,
@@ -37,12 +36,12 @@ export default async (req: TypedRequest<RequestBody>, res: Response) => {
   });
 
   const msg = {
-    to: req.body.email,
+    to: data.email,
     from: 'no-reply@prevezic.com',
     subject: 'Sign in to Prevezic',
     html: html,
   };
   await sgMail.send(msg);
 
-  res.send('Email sent');
+  return { success: true };
 };
