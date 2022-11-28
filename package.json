@@ -22,6 +22,7 @@
     "test:ci": "pnpm run test:web:ci",
     "build:functions": "pnpm --filter @prevezic/functions run build",
     "deploy:functions": "pnpm --filter @prevezic/functions run deploy",
+    "deploy:rules": "firebase deploy --only firestore:rules",
     "prepare": "husky install && rm -rf .git/hooks || true && ln -s ../.husky .git/hooks || true",
     "lint": "eslint --cache --fix ."
   },

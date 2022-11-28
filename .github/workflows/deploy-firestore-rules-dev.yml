@@ -1,0 +1,39 @@
+name: Deploy Firestore Rules to Dev
+
+on:
+  pull_request:
+    types:
+      - opened
+      - reopened
+      - synchronize
+      - ready_for_review
+    paths:
+      - "firestore.rules"
+      - ".github/workflows/deploy-firestore-rules-dev.yml"
+
+jobs:
+  deploy:
+    name: Deploy Rules
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - uses: actions/checkout@v3
+
+      - uses: pnpm/action-setup@v2
+        with:
+          version: 6.22.2
+
+      - uses: actions/setup-node@v3
+        with:
+          node-version: "16"
+          cache: "pnpm"
+
+      - name: Install Firebase CLI
+        run: pnpm add -g firebase-tools
+
+      - name: Deploy to prevezic-dev
+        run: |
+          firebase use prevezic-dev
+          pnpm deploy:rules
+        env:
+          FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}

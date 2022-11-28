@@ -1,0 +1,10 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /users/{uid} {
+      allow read: if request.auth.uid == uid;
+      allow create: if (!request.resource.data.keys().hasAny(['isAccount', 'accessRights']));
+      allow update: if request.auth.uid == uid && (!request.resource.data.keys().hasAny(['isAccount', 'accessRights']));
+    }
+  }
+}
