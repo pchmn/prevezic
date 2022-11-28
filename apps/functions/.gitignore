@@ -8,5 +8,3 @@ typings/
 node_modules/
 
 .env
-firebase-debug.log
-ui-debug.log

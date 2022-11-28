@@ -9,3 +9,6 @@ coverage
 *.code-workspace
 dev-dist
 .turbo
+firebase-debug.log
+firestore-debug.log
+ui-debug.log

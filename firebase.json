@@ -20,6 +20,15 @@
     "functions": {
       "host": "192.168.1.10",
       "port": 5001
+    },
+    "auth": {
+      "port": 9099
+    },
+    "firestore": {
+      "port": 8080
+    },
+    "ui": {
+      "enabled": true
     }
   },
   "firestore": {
