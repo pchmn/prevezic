@@ -2,6 +2,7 @@ import { ColorScheme, MantineProvider } from '@mantine/core';
 import { useColorScheme, useHotkeys, useLocalStorage } from '@mantine/hooks';
 import { PropsWithChildren } from 'react';
 import { Helmet, HelmetProvider } from 'react-helmet-async';
+
 import { ThemePreferencesProvider } from '../theme';
 import { componentsTheme } from '../theme/styles';
 import { generateThemeFromColor } from '../theme/utils';

@@ -1,4 +1,5 @@
 import { ButtonStylesParams, MantineTheme } from '@mantine/core';
+
 import { MaterialColor, ThemeComponent } from '../types';
 import { getOnColor } from '../utils';
 

@@ -6,6 +6,7 @@ import {
   TonalPalette,
 } from '@importantimport/material-color-utilities';
 import { MantineTheme, Tuple } from '@mantine/core';
+
 import { MaterialColor, MaterialScheme } from './types';
 
 export function generateThemeFromColor(color: string) {
