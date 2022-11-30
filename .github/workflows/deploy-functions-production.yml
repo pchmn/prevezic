@@ -64,6 +64,13 @@ jobs:
       - name: Install Firebase CLI
         run: pnpm add -g firebase-tools
 
+      - name: Create env file
+        run: |
+          cd apps/functions
+          touch .env
+          echo SENDGRID_API_KEY=${{ secrets.SENDGRID_API_KEY_PROD }} >> .env
+          cat .env
+
       - name: Deploy to prevezic-dev
         run: |
           firebase use prevezic-dev
