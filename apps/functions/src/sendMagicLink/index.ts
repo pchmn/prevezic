@@ -5,7 +5,7 @@ import { CallableContext } from 'firebase-functions/v1/https';
 import parser from 'ua-parser-js';
 import { getEmailHtml } from './template';
 
-sgMail.setApiKey(process.env.SENDGRID_API_KEY_DEV || '');
+sgMail.setApiKey(process.env.SENDGRID_API_KEY || '');
 initializeApp();
 
 type DataType = {
