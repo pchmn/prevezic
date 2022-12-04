@@ -1,5 +1,5 @@
 import { ColorScheme, MantineProvider } from '@mantine/core';
-import { useColorScheme, useHotkeys, useLocalStorage } from '@mantine/hooks';
+import { useHotkeys, useLocalStorage } from '@mantine/hooks';
 import { PropsWithChildren } from 'react';
 import { Helmet, HelmetProvider } from 'react-helmet-async';
 
@@ -8,7 +8,8 @@ import { componentsTheme } from '../theme/styles';
 import { generateThemeFromColor } from '../theme/utils';
 
 export function UiProvider({ children }: PropsWithChildren) {
-  const preferredColorScheme = useColorScheme();
+  const preferredColorScheme =
+    window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
   const [colorScheme, setColorScheme] = useLocalStorage<ColorScheme>({
     key: 'theme-color-scheme',
     defaultValue: preferredColorScheme,
@@ -17,7 +18,7 @@ export function UiProvider({ children }: PropsWithChildren) {
 
   const [baseColor, setBaseColor] = useLocalStorage<string>({
     key: 'theme-base-color',
-    defaultValue: '#E6DEFF',
+    defaultValue: '#E7DEFF',
     getInitialValueInEffect: true,
   });
 

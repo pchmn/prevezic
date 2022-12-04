@@ -8,7 +8,6 @@ export function useFirestoreDocument<T>(
   ref: DocumentReference,
   { listen = true, defaultValue, enabled = true }: UseFirestoreOptions<T>
 ) {
-  console.log('listen', listen);
   const queryClient = useQueryClient();
   const unsubscribe = useRef<Unsubscribe>();
 

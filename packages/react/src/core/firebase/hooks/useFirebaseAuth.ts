@@ -1,75 +1,76 @@
-import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { useQueryClient } from '@tanstack/react-query';
 import {
   getAuth,
-  onAuthStateChanged,
   signInAnonymously as firebaseSignInAnonymously,
+  signInWithEmailLink,
   signOut as firebaseSignOut,
-  Unsubscribe,
   User,
-  UserCredential,
 } from 'firebase/auth';
-import { doc, getFirestore } from 'firebase/firestore';
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 
-import { useFirestoreDocument } from './useFirestoreDocument';
+import { useCallFunction } from './useCallFunction';
 
 export function useFirebaseAuth() {
   const queryClient = useQueryClient();
 
-  const db = useMemo(() => getFirestore(), []);
   const auth = useMemo(() => getAuth(), []);
-  const unsubscribe = useRef<Unsubscribe>();
 
-  const [idToken, setIdToken] = useState<string | undefined>();
+  const sendMagicLinkFunction = useCallFunction('sendMagicLink');
 
-  useEffect(() => {
-    return () => unsubscribe.current?.();
-  }, []);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<Error | undefined>();
 
-  const {
-    data: currentUser,
-    isLoading,
-    isFetching,
-    error,
-  } = useQuery<User | null, Error>(
-    ['firebaseAuth'],
-    async () => {
-      let resolved = false;
+  const signInAnonymously = useCallback(async () => {
+    setLoading(true);
+    setError(undefined);
+    try {
+      await firebaseSignInAnonymously(auth);
+      setLoading(false);
+    } catch (error) {
+      setError(error as Error);
+      setLoading(false);
+    }
+  }, [auth]);
 
-      return new Promise<User | null>((resolve, reject) => {
-        unsubscribe.current = onAuthStateChanged(
-          auth,
-          (firebaseUser) => {
-            if (!resolved) {
-              resolved = true;
-              return resolve(firebaseUser);
-            }
-            queryClient.setQueryData<User | null>(['firebaseAuth'], firebaseUser);
-          },
-          reject
-        );
-      });
+  const sendMagicLink = useCallback(
+    async (email: string, redirectTo?: string) => {
+      setLoading(true);
+      setError(undefined);
+      try {
+        await sendMagicLinkFunction({ email, redirectTo });
+        return setLoading(false);
+      } catch (error) {
+        setError(error as Error);
+        setLoading(false);
+      }
     },
-    { staleTime: Infinity }
+    [sendMagicLinkFunction]
   );
 
-  const userRef = useMemo(() => doc(db, 'users', currentUser?.uid || 'unknown'), [db, currentUser]);
-  const { data: user } = useFirestoreDocument(userRef, { enabled: !!currentUser });
+  const signInWithMagicLink = useCallback(
+    async (email: string) => {
+      setLoading(true);
+      setError(undefined);
+      try {
+        await signInWithEmailLink(auth, email, window.location.href);
+        queryClient.setQueryData<User | null>(['firebaseAuth'], auth.currentUser);
+        setLoading(false);
+      } catch (error) {
+        setError(error as Error);
+        setLoading(false);
+      }
+    },
+    [auth, queryClient]
+  );
 
-  useEffect(() => {
-    currentUser?.getIdToken().then(setIdToken);
-  }, [currentUser, user]);
-
-  const signInAnonymously: () => Promise<UserCredential> = useCallback(() => firebaseSignInAnonymously(auth), [auth]);
-
-  const signOut: () => Promise<void> = useCallback(() => firebaseSignOut(auth), [auth]);
+  const signOut = useCallback(() => firebaseSignOut(auth), [auth]);
 
   return {
-    currentUser,
-    idToken,
-    isLoading: isLoading || isFetching,
-    error,
     signInAnonymously,
     signOut,
+    sendMagicLink,
+    signInWithMagicLink,
+    loading,
+    error,
   };
 }
