@@ -23,7 +23,7 @@
     "dev:functions": "pnpm --filter @prevezic/functions run dev",
     "build:functions": "pnpm --filter @prevezic/functions run build",
     "deploy:functions": "pnpm --filter @prevezic/functions run deploy",
-    "dev:firebase": "firebase emulators:start --only auth,firestore,functions",
+    "dev:emulators": "pnpm build:functions | firebase emulators:start --only auth,firestore,functions",
     "deploy:rules": "firebase deploy --only firestore:rules",
     "prepare": "husky install && rm -rf .git/hooks || true && ln -s ../.husky .git/hooks || true",
     "lint": "eslint --cache --fix ."
