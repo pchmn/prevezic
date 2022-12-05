@@ -6,9 +6,9 @@
   "license": "MIT",
   "main": "dist/apps/functions/src/index.js",
   "scripts": {
-    "build": "rm -rf ./dist && tsc",
-    "build:watch": "tsc -w",
-    "esbuild": "esbuild `find ./src \\( -name '*.ts' \\)` --minify --platform=node --target=node16.0 --format=cjs --outdir=dist",
+    "build": "rm -rf ./dist && tsc && tsc-alias",
+    "build:watch": "rm -rf ./dist && tsc-watch --onSuccess \"tsc-alias\"",
+    "esbuild": "esbuild `find ./src \\( -name '*.ts' \\)` --platform=node --target=node16.0 --format=cjs --outdir=dist",
     "dev": "pnpm run build:watch | firebase emulators:start --only functions",
     "shell": "pnpm run build && firebase functions:shell",
     "start": "pnpm run shell",
@@ -33,6 +33,8 @@
     "esbuild": "^0.15.15",
     "eslint-config-prevezic-ts": "workspace:*",
     "firebase-functions-test": "^0.2.0",
+    "tsc-alias": "^1.8.1",
+    "tsc-watch": "^5.0.3",
     "typescript": "^4.6.4"
   }
 }

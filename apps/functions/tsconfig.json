@@ -7,8 +7,7 @@
     "outDir": "dist",
     "baseUrl": ".",
     "paths": {
-      "@prevezic/core": ["../../packages/core/src/index.ts"]
+      "@prevezic/core": ["../../packages/core/src/index"]
     }
   },
-  "include": ["src"]
 }

@@ -2,15 +2,21 @@ import { FunctionParams, FunctionValidation } from '@prevezic/core';
 import sgMail from '@sendgrid/mail';
 import { initializeApp } from 'firebase-admin/app';
 import { getAuth } from 'firebase-admin/auth';
-import { CallableContext } from 'firebase-functions/v1/https';
+import { CallableContext, HttpsError } from 'firebase-functions/v1/https';
 import parser from 'ua-parser-js';
+
 import { getEmailHtml } from './template';
 
 sgMail.setApiKey(process.env.SENDGRID_API_KEY || '');
 initializeApp();
 
 export default async (data: FunctionParams['sendMagicLink'], context: CallableContext) => {
-  FunctionValidation['sendMagicLink'].parse(data);
+  try {
+    FunctionValidation['sendMagicLink'].parse(data);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  } catch (error: any) {
+    throw new HttpsError('invalid-argument', 'Invalid data', error.issues);
+  }
 
   const userAgent = parser(context.rawRequest.headers['user-agent']);
 

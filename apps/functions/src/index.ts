@@ -13,4 +13,4 @@ const functions: Record<FunctionName, unknown> = {
 
 const { sendMagicLink, processSignUp } = functions;
 
-export { sendMagicLink, processSignUp };
+export { processSignUp, sendMagicLink };
