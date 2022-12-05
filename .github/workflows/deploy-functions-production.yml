@@ -76,7 +76,6 @@ jobs:
           firebase use prevezic-dev
           cd apps/functions
           pnpm remove -D @prevezic/tsconfig eslint-config-prevezic-ts
-          pnpm install -P
           pnpm deploy
         env:
           FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
