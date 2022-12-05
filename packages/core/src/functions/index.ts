@@ -1,14 +1,11 @@
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
-interface Params {}
-
-interface SendMagicLinkParams extends Params {
-  email: string;
-  validatingUrl: string;
-  from?: string;
-}
+import { SendMagicLinkParams, sendMagicLinkValidation } from './sendMagicLink';
 
 export type FunctionParams = {
   sendMagicLink: SendMagicLinkParams;
+};
+
+export const FunctionValidation = {
+  sendMagicLink: sendMagicLinkValidation,
 };
 
 export type CallableFunctionName = keyof FunctionParams;

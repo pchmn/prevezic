@@ -1,4 +1,4 @@
-import { FunctionParams } from '@prevezic/core';
+import { FunctionParams, FunctionValidation } from '@prevezic/core';
 import sgMail from '@sendgrid/mail';
 import { initializeApp } from 'firebase-admin/app';
 import { getAuth } from 'firebase-admin/auth';
@@ -10,9 +10,7 @@ sgMail.setApiKey(process.env.SENDGRID_API_KEY || '');
 initializeApp();
 
 export default async (data: FunctionParams['sendMagicLink'], context: CallableContext) => {
-  if (!data.email) {
-    throw new Error('Email is required');
-  }
+  FunctionValidation['sendMagicLink'].parse(data);
 
   const userAgent = parser(context.rawRequest.headers['user-agent']);
 
