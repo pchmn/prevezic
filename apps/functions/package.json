@@ -4,7 +4,7 @@
   "private": true,
   "author": "pchmn",
   "license": "MIT",
-  "main": "dist/index.js",
+  "main": "dist/apps/functions/src/index.js",
   "scripts": {
     "build": "rm -rf ./dist && tsc",
     "build:watch": "tsc -w",
