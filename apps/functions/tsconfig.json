@@ -5,6 +5,10 @@
     "declarationMap": false,
     "sourceMap": true,
     "outDir": "dist",
+    "baseUrl": ".",
+    "paths": {
+      "@prevezic/core": ["../../packages/core/src/index.ts"]
+    }
   },
   "include": ["src"]
 }

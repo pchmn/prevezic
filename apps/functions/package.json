@@ -4,7 +4,7 @@
   "private": true,
   "author": "pchmn",
   "license": "MIT",
-  "main": "dist/index.js",
+  "main": "dist/apps/functions/src/index.js",
   "scripts": {
     "build": "rm -rf ./dist && tsc",
     "build:watch": "tsc -w",
@@ -23,7 +23,8 @@
     "firebase-admin": "^11.3.0",
     "firebase-functions": "^4.1.0",
     "mjml": "^4.13.0",
-    "ua-parser-js": "^1.0.32"
+    "ua-parser-js": "^1.0.32",
+    "zod": "^3.19.1"
   },
   "devDependencies": {
     "@prevezic/tsconfig": "workspace:*",
