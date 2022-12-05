@@ -1,4 +1,5 @@
 import { z } from 'zod';
+
 import { Params } from './types';
 
 export interface SendMagicLinkParams extends Params {
