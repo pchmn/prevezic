@@ -1,4 +1,5 @@
 import './conf/firebase';
+import '@app/core/i18n';
 
 import routes from '@app/App';
 import { UiProvider } from '@prevezic/react';
