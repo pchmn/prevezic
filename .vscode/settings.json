@@ -4,5 +4,12 @@
     "source.fixAll.eslint": true,
     "source.organizeImports": false
   },
-  "typescript.preferences.importModuleSpecifier": "non-relative"
+  "typescript.preferences.importModuleSpecifier": "non-relative",
+  "i18n-ally.enabledFrameworks": [
+    "i18next"
+  ],
+  "i18n-ally.localesPaths": [
+    "apps/web/src/app/core/i18n"
+  ],
+  "i18n-ally.keystyle": "nested"
 }

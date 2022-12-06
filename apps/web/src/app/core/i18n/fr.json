@@ -1,1 +1,11 @@
-{}
+{
+  "signIn": {
+    "title": "Sign in",
+    "description": "We'll send you a magic link to automatically sign in.",
+    "emailPlaceholder": "Enter your email",
+    "sendMagicLink": "Send magic link",
+    "emailSent": "We've sent a magic link to your email. Please check your inbox.",
+    "emailSentError": "We couldn't send a magic link to your email. Please try again.",
+    "invalidEmail": "Please enter a valid email address."
+  }
+}
