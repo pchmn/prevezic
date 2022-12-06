@@ -11,7 +11,7 @@ const routes: RouteObject = {
   children: [...dashboardRoutes, ...prevezicRoutes, ...signInRoutes],
 };
 
-function App() {
+export function App() {
   const [open, setOpen] = useState(false);
   const { currentUser, idToken } = useFirebaseUser();
 
