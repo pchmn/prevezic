@@ -1,5 +1,6 @@
 import styled from '@emotion/styled';
 import { Group } from '@mantine/core';
+
 import { Icon } from '../../components';
 
 const baseColors = [

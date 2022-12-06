@@ -1,4 +1,5 @@
 import { Box, Button, Center, Flex, Modal, SegmentedControl, Title } from '@mantine/core';
+
 import { Icon } from '../../components';
 import { useThemePreferences } from '../provider';
 import { ColorPicker } from './ColorPicker';

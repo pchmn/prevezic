@@ -1,5 +1,6 @@
 import { MantineNumberSize, useMantineTheme } from '@mantine/core';
 import { ReactNode } from 'react';
+
 import { MaterialColor } from '../theme/types';
 
 export const sizes = {
