@@ -1,14 +1,12 @@
-import { Button } from '@mantine/core';
-import { useFirebaseAuth } from '@prevezic/react';
 import { Outlet } from 'react-router-dom';
 
-export function SignInModule() {
-  const { signOut } = useFirebaseAuth(false);
+import { SignInLayout } from './layout';
 
+export function SignInModule() {
   return (
-    <>
+    <SignInLayout>
       <Outlet />
-      <Button onClick={signOut}>Sign out</Button>
-    </>
+      {/* <Button onClick={signOut}>Sign out</Button> */}
+    </SignInLayout>
   );
 }
