@@ -8,14 +8,12 @@ import {
 } from 'firebase/auth';
 import { useCallback, useMemo, useState } from 'react';
 
-import { useCallFunction } from './useCallFunction';
+import { callFunction } from '../functions';
 
 export function useFirebaseAuth() {
   const queryClient = useQueryClient();
 
   const auth = useMemo(() => getAuth(), []);
-
-  const sendMagicLinkFunction = useCallFunction('sendMagicLink');
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<Error | undefined>();
@@ -32,20 +30,21 @@ export function useFirebaseAuth() {
     }
   }, [auth]);
 
-  const sendMagicLink = useCallback(
-    async (email: string, redirectTo?: string) => {
-      setLoading(true);
-      setError(undefined);
-      try {
-        await sendMagicLinkFunction({ email, redirectTo });
-        return setLoading(false);
-      } catch (error) {
-        setError(error as Error);
-        setLoading(false);
-      }
-    },
-    [sendMagicLinkFunction]
-  );
+  const sendMagicLink = useCallback(async (email: string, from?: string) => {
+    setLoading(true);
+    setError(undefined);
+    try {
+      await callFunction('sendMagicLink', {
+        email,
+        validationUrl: `${window.location.origin}/signin/validate-link`,
+        from,
+      });
+      return setLoading(false);
+    } catch (error) {
+      setError(error as Error);
+      setLoading(false);
+    }
+  }, []);
 
   const signInWithMagicLink = useCallback(
     async (email: string) => {
