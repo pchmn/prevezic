@@ -21,7 +21,7 @@ export default async (data: FunctionParams['sendMagicLink'], context: CallableCo
   const userAgent = parser(context.rawRequest.headers['user-agent']);
 
   const actionSettings = {
-    url: data.validatingUrl + `${data.from ? `?from=${data.from}` : ''}`,
+    url: data.validationUrl + `${data.from ? `?from=${data.from}` : ''}`,
   };
   const emailLink = await getAuth().generateSignInWithEmailLink(data.email, actionSettings);
 

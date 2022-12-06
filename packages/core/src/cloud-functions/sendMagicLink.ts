@@ -4,7 +4,7 @@ import { Params } from './types';
 
 export interface SendMagicLinkParams extends Params {
   email: string;
-  validatingUrl: string;
+  validationUrl: string;
   from?: string;
 }
 
