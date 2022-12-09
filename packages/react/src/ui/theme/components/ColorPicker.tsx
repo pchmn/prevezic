@@ -19,11 +19,13 @@ const baseColors = [
 
 export function ColorPicker({ baseColor, onChange }: { baseColor: string; onChange: (color: string) => void }) {
   return (
-    <Group position="center">
-      {baseColors.map((color) => (
-        <ColorItem key={color} color={color} onClick={() => onChange(color)} isSelected={baseColor === color} />
-      ))}
-    </Group>
+    <>
+      <Group position="center">
+        {baseColors.map((color) => (
+          <ColorItem key={color} color={color} onClick={() => onChange(color)} isSelected={baseColor === color} />
+        ))}
+      </Group>
+    </>
   );
 }
 

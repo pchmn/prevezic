@@ -16,7 +16,7 @@ const app = initializeApp(firebaseConfig);
 
 if (import.meta.env.DEV) {
   const auth = getAuth();
-  connectAuthEmulator(auth, 'http://192.168.1.10:9099');
+  connectAuthEmulator(auth, 'http://192.168.1.10:9099', { disableWarnings: true });
 
   const db = getFirestore();
   connectFirestoreEmulator(db, '192.168.1.10', 8080);

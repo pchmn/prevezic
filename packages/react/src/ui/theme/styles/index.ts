@@ -9,6 +9,12 @@ export const componentsTheme: Record<string, ThemeComponent> = {
       root: {
         color: params.variant === 'filled' ? getOnColor(params.color as MaterialColor, theme) : undefined,
       },
+      icon: {
+        color: params.variant === 'filled' ? getOnColor(params.color as MaterialColor, theme) : undefined,
+        '& svg': {
+          stroke: params.variant === 'filled' ? getOnColor(params.color as MaterialColor, theme) : undefined,
+        },
+      },
     }),
   },
   Modal: {
@@ -39,6 +45,13 @@ export const componentsTheme: Record<string, ThemeComponent> = {
       },
       labelActive: {
         color: `${theme.other.schemes[theme.colorScheme].onSurface} !important`,
+      },
+    }),
+  },
+  Paper: {
+    styles: (theme: MantineTheme) => ({
+      root: {
+        backgroundColor: theme.other.schemes[theme.colorScheme].surface1,
       },
     }),
   },

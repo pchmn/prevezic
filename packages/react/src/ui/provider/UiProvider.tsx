@@ -51,6 +51,17 @@ export function UiProvider({ children }: PropsWithChildren) {
             other: { schemes: theme.schemes },
             defaultRadius: 'md',
             components: componentsTheme,
+            fontFamily: 'Readex Pro, sans-serif',
+            headings: {
+              fontFamily: 'Readex Pro, sans-serif',
+            },
+            spacing: {
+              xs: 4,
+              sm: 8,
+              md: 16,
+              lg: 24,
+              xl: 32,
+            },
             globalStyles: (theme) => ({
               body: {
                 backgroundColor: theme.other.schemes[theme.colorScheme].background,

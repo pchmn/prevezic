@@ -1,11 +1,16 @@
 {
   "signIn": {
     "title": "Sign in",
-    "description": "We'll send you a magic link to automatically sign in.",
+    "description": "We'll send to your email a magic link to automatically sign in.",
     "emailPlaceholder": "Enter your email",
-    "sendMagicLink": "Send magic link",
+    "sendMagicLink": "Send the link",
     "emailSent": "We've sent a magic link to your email. Please check your inbox.",
     "emailSentError": "We couldn't send a magic link to your email. Please try again.",
     "invalidEmail": "Please enter a valid email address."
+  },
+  "navbar": {
+    "home": "Home",
+    "Albums": "Albums",
+    "Account": "Account"
   }
 }
