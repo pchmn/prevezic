@@ -1,11 +1,28 @@
 {
   "signIn": {
-    "title": "Sign in",
-    "description": "We'll send you a magic link to automatically sign in.",
-    "emailPlaceholder": "Enter your email",
-    "sendMagicLink": "Send magic link",
-    "emailSent": "We've sent a magic link to your email. Please check your inbox.",
-    "emailSentError": "We couldn't send a magic link to your email. Please try again.",
-    "invalidEmail": "Please enter a valid email address."
+    "title": "Se connecter",
+    "description": "Nous vous enverrons un lien magique à votre adresse email pour se connecter automatiquement.",
+    "emailPlaceholder": "Entrer votre email",
+    "sendMagicLink": "Envoyer le lien",
+    "emailSent": "Un lien magique a été envoyé à votre adresse email. Veuillez vérifier votre boite de réception.",
+    "emailSentError": "Une erreur est survenue lors de l'envoi du lien magique. Veuillez réessayer.",
+    "invalidEmail": "L'adresse email est invalide."
+  },
+  "navbar": {
+    "home": "Accueil",
+    "albums": "Albums",
+    "account": "Compte"
+  },
+  "account": {
+    "title": "Compte",
+    "preferences": "Préférences",
+    "theme": "Thème",
+    "darkMode": "Mode sombre",
+    "lightMode": "Mode clair",
+    "language": "Langue",
+    "fr": "Français",
+    "en": "Anglais",
+    "signOut": "Se déconnecter",
+    "signIn": "Se connecter"
   }
 }

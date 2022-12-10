@@ -1,7 +1,5 @@
+import { Account } from './components/Account';
+
 export function AccountModule() {
-  return (
-    <div>
-      <h1>Welcome to Account!</h1>
-    </div>
-  );
+  return <Account />;
 }

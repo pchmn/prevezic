@@ -23,11 +23,6 @@ export function AppLayout({ children, showNavbar = true }: PropsWithChildren<{ s
           {showNavbar && showMediumNav && <DesktopNavbar size="medium" />}
         </>
       }
-      // header={
-      //   <Header height={60} p="xs">
-      //     {/* Header content */}
-      //   </Header>
-      // }
     >
       {children}
       {showMobileNav && <MobileNavbar />}

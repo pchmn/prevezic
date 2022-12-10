@@ -2,5 +2,8 @@ export * from './AccounFilledtIcon';
 export * from './AccountIcon';
 export * from './AlbumsFilledIcon';
 export * from './AlbumsIcon';
+export * from './ChevronRightIcon';
 export * from './HomeFilledIcon';
 export * from './HomeIcon';
+export * from './LanguageIcon';
+export * from './PaletteIcon';

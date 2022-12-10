@@ -96,6 +96,7 @@ importers:
       react-dom: ^18.2.0
       react-i18next: ^12.0.0
       react-router-dom: ^6.4.3
+      react-use-ripple: ^1.5.2
       typescript: ^4.6.4
       vite: ^3.2.3
       vite-plugin-pwa: ^0.13.1
@@ -117,6 +118,7 @@ importers:
       react-dom: 18.2.0_react@18.2.0
       react-i18next: 12.0.0_xp3tcnypqfah7nlbdog3oni4pe
       react-router-dom: 6.4.3_biqbaboplfbrettd7655fr4n2y
+      react-use-ripple: 1.5.2_react@18.2.0
       zod: 3.19.1
     devDependencies:
       '@prevezic/tsconfig': link:../../packages/tsconfig
@@ -7826,6 +7828,15 @@ packages:
       use-latest: 1.2.1_iapumuv4e6jcjznwuxpf4tt22e
     transitivePeerDependencies:
       - '@types/react'
+
+  /react-use-ripple/1.5.2_react@18.2.0:
+    resolution: {integrity: sha512-pK7PLEaEGJ4xCM5acxW+ua7ba0lqxbhNzBHzEw+MoD0yVFT3r8SkfkG6aSpiEm4iLZO9HOeSnUz+1k7YVuYX5w==}
+    engines: {node: '>=10'}
+    peerDependencies:
+      react: ^16.8.0
+    dependencies:
+      react: 18.2.0
+    dev: false
 
   /react/18.2.0:
     resolution: {integrity: sha512-/3IjMdb2L9QbBdWiW5e3P2/npwMBaU9mHCSCUzNln0ZCYbcfTsGbTJrU/kGemdH2IWmB2ioZ+zkxtmq6g09fGQ==}

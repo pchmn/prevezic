@@ -7,8 +7,8 @@ import {
   HomeIcon,
 } from '@app/shared/components';
 import { Flex, Text } from '@mantine/core';
-import i18next from 'i18next';
 import { ReactNode } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
 export function MobileNavbar() {
@@ -37,24 +37,6 @@ export function MobileNavbar() {
           onClick={() => navigate(item.href)}
         />
       ))}
-      {/* <SegmentedControl
-        radius="lg"
-        value={window.location.pathname}
-        onChange={(value) => navigate(value)}
-        data={items.map((item) => ({
-          value: item.href,
-          label: (
-            <Flex gap="sm" align="center" justify="center">
-              {item.icon}
-              {window.location.pathname.includes(item.href) && <Text>{item.label}</Text>}
-            </Flex>
-          ),
-        }))}
-        sx={{
-          backgroundColor: 'transparent',
-          width: '100%',
-        }}
-      />*/}
     </Flex>
   );
 }
@@ -70,48 +52,66 @@ function Item({
   isActive: boolean;
   onClick?: () => void;
 }) {
+  const { i18n } = useTranslation();
+
   return (
     <Flex
       gap="sm"
       align="center"
+      justify="center"
       py="sm"
       px="md"
       sx={(theme) => ({
+        position: 'relative',
         color: isActive
           ? theme.other.schemes[theme.colorScheme].primary
           : theme.other.schemes[theme.colorScheme].onBackground,
         backgroundColor: isActive ? theme.other.schemes[theme.colorScheme].surface5 : 'transparent',
         borderRadius: theme.radius.xl,
-        transition: 'background-color 300ms ease-in-out, max-width 300ms ease-in-out',
-        maxWidth: isActive ? 200 : 48,
+        transition: 'background-color 300ms ease-in-out, width 300ms ease-in-out, color 300ms ease-in-out',
+        width: isActive ? 130 : 48,
         overflow: 'hidden',
         '& svg': {
           overflow: 'visible !important',
         },
+        // '&::after': {
+        //   position: 'absolute',
+        //   top: '50%',
+        //   left: '50%',
+        //   margin: '-35px 0 0 -35px',
+        //   width: '70px',
+        //   height: '70px',
+        //   borderRadius: '50%',
+        //   content: '""',
+        //   opacity: 0,
+        //   pointerEvents: 'none',
+        //   boxShadow: 'inset 0 0 0 35px rgba(111,148,182,0)',
+        //   animation: `${anim} 0.5s ease-out infinite`,
+        // },
       })}
       onClick={onClick}
     >
       {icon}
-      <Text>{label}</Text>
+      {isActive && <Text>{i18n.t(label)}</Text>}
     </Flex>
   );
 }
 
 const items = [
   {
-    label: i18next.t('navbar.home'),
+    label: 'navbar.home',
     icon: <HomeIcon size={24} />,
     filledIcon: <HomeFilledIcon size={24} />,
     href: '/home',
   },
   {
-    label: i18next.t('navbar.home'),
+    label: 'navbar.albums',
     icon: <AlbumsIcon size={24} />,
     filledIcon: <AlbumsFilledIcon size={24} />,
     href: '/albums',
   },
   {
-    label: i18next.t('navbar.home'),
+    label: 'navbar.account',
     icon: <AccountIcon size={24} />,
     filledIcon: <AccountFilledIcon size={24} />,
     href: '/account',

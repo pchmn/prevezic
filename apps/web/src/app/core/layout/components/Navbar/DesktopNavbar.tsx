@@ -8,8 +8,8 @@ import {
 } from '@app/shared/components';
 import styled from '@emotion/styled';
 import { Flex, Image, Navbar as MantineNavbar, Space, Text, Title } from '@mantine/core';
-import i18next from 'i18next';
 import { ReactNode } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
 export function DesktopNavbar({ size }: { size: 'large' | 'medium' }) {
@@ -28,19 +28,19 @@ export function DesktopNavbar({ size }: { size: 'large' | 'medium' }) {
 
 const items = [
   {
-    label: i18next.t('navbar.home'),
+    label: 'navbar.home',
     icon: <HomeIcon size="lg" />,
     filledIcon: <HomeFilledIcon size="lg" />,
     href: '/home',
   },
   {
-    label: i18next.t('navbar.Albums'),
+    label: 'navbar.albums',
     icon: <AlbumsIcon size="lg" />,
     filledIcon: <AlbumsFilledIcon size="lg" />,
     href: '/albums',
   },
   {
-    label: i18next.t('navbar.Account'),
+    label: 'navbar.account',
     icon: <AccountIcon size="lg" />,
     filledIcon: <AccountFilledIcon size="lg" />,
     href: '/account',
@@ -89,10 +89,11 @@ function Item({
   onClick?: () => void;
   isActive: boolean;
 }) {
+  const { i18n } = useTranslation();
   return (
     <NavLink gap="md" isActive={isActive} onClick={onClick}>
       {icon}
-      {label && <Text>{label}</Text>}
+      {label && <Text>{i18n.t(label)}</Text>}
     </NavLink>
   );
 }

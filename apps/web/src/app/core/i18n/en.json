@@ -10,7 +10,19 @@
   },
   "navbar": {
     "home": "Home",
-    "Albums": "Albums",
-    "Account": "Account"
+    "albums": "Albums",
+    "account": "Account"
+  },
+  "account": {
+    "title": "Account",
+    "preferences": "Preferences",
+    "theme": "Theme",
+    "darkMode": "Dark mode",
+    "lightMode": "Light mode",
+    "language": "Language",
+    "fr": "French",
+    "en": "English",
+    "signOut": "Sign out",
+    "signIn": "Sign in"
   }
 }
