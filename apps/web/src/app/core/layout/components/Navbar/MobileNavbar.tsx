@@ -52,7 +52,7 @@ function Item({
   isActive: boolean;
   onClick?: () => void;
 }) {
-  const { i18n } = useTranslation();
+  const { t } = useTranslation();
 
   return (
     <Flex
@@ -74,25 +74,12 @@ function Item({
         '& svg': {
           overflow: 'visible !important',
         },
-        // '&::after': {
-        //   position: 'absolute',
-        //   top: '50%',
-        //   left: '50%',
-        //   margin: '-35px 0 0 -35px',
-        //   width: '70px',
-        //   height: '70px',
-        //   borderRadius: '50%',
-        //   content: '""',
-        //   opacity: 0,
-        //   pointerEvents: 'none',
-        //   boxShadow: 'inset 0 0 0 35px rgba(111,148,182,0)',
-        //   animation: `${anim} 0.5s ease-out infinite`,
-        // },
       })}
       onClick={onClick}
     >
       {icon}
-      {isActive && <Text>{i18n.t(label)}</Text>}
+      {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+      {isActive && <Text>{t(label as any) as string}</Text>}
     </Flex>
   );
 }

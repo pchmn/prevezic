@@ -2,11 +2,13 @@ import { Button, Flex, Image, Paper, Space, Text, TextInput, Title } from '@mant
 import { useForm, zodResolver } from '@mantine/form';
 import { useLocalStorage } from '@mantine/hooks';
 import { useFirebaseAuth } from '@prevezic/react';
-import i18next from 'i18next';
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { z } from 'zod';
 
 export function SignIn() {
+  const { t } = useTranslation();
+
   const [, setEmail] = useLocalStorage({ key: 'emailForSignIn' });
 
   const { sendMagicLink, loading } = useFirebaseAuth();
@@ -39,25 +41,27 @@ export function SignIn() {
       </Flex>
       <Flex justify="center" align="center">
         <Paper shadow="xs" p={30} maw={450}>
-          <Title order={3}>{i18next.t('signIn.title')}</Title>
+          <Title order={3}>{t('signIn.title')}</Title>
           <Space h={10} />
-          <Text>{i18next.t('signIn.description')}</Text>
+          <Text>{t('signIn.description')}</Text>
           <Space h={30} />
-          {!emailSent ? (
-            <SignInForm loading={loading} onSubmit={handleSubmit} />
-          ) : (
-            <Text>{i18next.t('signIn.emailSent')}</Text>
-          )}
+          {!emailSent ? <SignInForm loading={loading} onSubmit={handleSubmit} /> : <Text>{t('signIn.emailSent')}</Text>}
         </Paper>
       </Flex>
     </Flex>
   );
 }
 
-const formSchema = z.object({
-  email: z.string().email({ message: i18next.t('signIn.invalidEmail') || '' }),
-});
 function SignInForm({ loading, onSubmit }: { loading: boolean; onSubmit: (values: { email: string }) => void }) {
+  const { t } = useTranslation();
+
+  const formSchema = useMemo(
+    () =>
+      z.object({
+        email: z.string().email({ message: t('signIn.invalidEmail') }),
+      }),
+    [t]
+  );
   const form = useForm({
     validate: zodResolver(formSchema),
     initialValues: {
@@ -70,12 +74,12 @@ function SignInForm({ loading, onSubmit }: { loading: boolean; onSubmit: (values
       <Flex direction="column" gap="md" w="100%">
         <TextInput
           size="lg"
-          placeholder={i18next.t('signIn.emailPlaceholder') || ''}
+          placeholder={t('signIn.emailPlaceholder') || ''}
           {...form.getInputProps('email')}
           disabled={loading}
         />
         <Button size="lg" type="submit" disabled={!form.values.email} loading={loading}>
-          {i18next.t('signIn.sendMagicLink')}
+          {t('signIn.sendMagicLink')}
         </Button>
       </Flex>
     </form>

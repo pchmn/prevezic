@@ -89,11 +89,12 @@ function Item({
   onClick?: () => void;
   isActive: boolean;
 }) {
-  const { i18n } = useTranslation();
+  const { t } = useTranslation();
   return (
     <NavLink gap="md" isActive={isActive} onClick={onClick}>
       {icon}
-      {label && <Text>{i18n.t(label)}</Text>}
+      {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+      {label && <Text>{t(label as any) as string}</Text>}
     </NavLink>
   );
 }
