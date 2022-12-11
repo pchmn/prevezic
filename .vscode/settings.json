@@ -6,6 +6,7 @@
   },
   "typescript.preferences.importModuleSpecifier": "shortest",
   "i18n-ally.enabledFrameworks": [
+    "react",
     "i18next"
   ],
   "i18n-ally.localesPaths": [

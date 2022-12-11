@@ -1,8 +1,8 @@
 import i18next from 'i18next';
 import { initReactI18next } from 'react-i18next';
 
-import { default as enTranslations } from './en.json';
-import { default as frTranslations } from './fr.json';
+import enTranslations from './en.json';
+import frTranslations from './fr.json';
 
 const resources = {
   en: {
@@ -13,7 +13,6 @@ const resources = {
   },
 };
 
-console.log(localStorage.getItem('language')?.replace(/['"]+/g, ''));
 i18next.use(initReactI18next).init({
   resources,
   lng: localStorage.getItem('language')?.replace(/['"]+/g, '') || 'en',
