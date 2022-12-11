@@ -1,4 +1,16 @@
 {
+  "common": {
+    "close": "Fermer",
+    "cancel": "Annuler",
+    "confirm": "Confirmer"
+  },
+  "themeEditor": {
+    "title": "Configurer le thème",
+    "colorScheme": "Arrière-plan",
+    "baseColor": "Couleur de base",
+    "light": "Clair",
+    "dark": "Sombre"
+  },
   "signIn": {
     "title": "Se connecter",
     "description": "Nous vous enverrons un lien magique à votre adresse email pour se connecter automatiquement.",

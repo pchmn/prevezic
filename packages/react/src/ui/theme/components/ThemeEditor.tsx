@@ -7,7 +7,7 @@ import { ColorPicker } from './ColorPicker';
 interface ThemeEditorProps {
   opened: boolean;
   onClose: () => void;
-  title?: string;
+  title: string;
   colorSchemeTitle?: string;
   baseColorTitle?: string;
   darkLabel?: string;
@@ -15,7 +15,7 @@ interface ThemeEditorProps {
   closeLabel?: string;
 }
 
-export function ThemeEditor({ opened, onClose, title = 'Theme editor', ...otherProps }: ThemeEditorProps) {
+export function ThemeEditor({ opened, onClose, title, ...otherProps }: ThemeEditorProps) {
   return (
     <Modal opened={opened} onClose={onClose} title={title}>
       <ThemeEditorContent onClose={onClose} {...otherProps} />
@@ -35,21 +35,12 @@ function ThemeEditorContent({
 
   return (
     <Flex direction="column" gap="xl">
-      <Flex direction="column" gap="sm" justify="center" align="center">
+      <Flex direction="column" gap="md" justify="center" align="center">
         <Title order={6}>{colorSchemeTitle}</Title>
         <SegmentedControl
           value={colorScheme}
           onChange={() => toggleColorScheme()}
           data={[
-            {
-              value: 'dark',
-              label: (
-                <Center>
-                  <MoonIcon />
-                  <Box ml={10}>{darkLabel}</Box>
-                </Center>
-              ),
-            },
             {
               value: 'light',
               label: (
@@ -59,11 +50,20 @@ function ThemeEditorContent({
                 </Center>
               ),
             },
+            {
+              value: 'dark',
+              label: (
+                <Center>
+                  <MoonIcon />
+                  <Box ml={10}>{darkLabel}</Box>
+                </Center>
+              ),
+            },
           ]}
         />
       </Flex>
 
-      <Flex direction="column" gap="sm" justify="center" align="center">
+      <Flex direction="column" gap="md" justify="center" align="center">
         <Title order={6}>{baseColorTitle}</Title>
         <ColorPicker baseColor={baseColor} onChange={changeBaseColor} />
       </Flex>

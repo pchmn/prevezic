@@ -1,10 +1,11 @@
 import { LanguageIcon, PaletteIcon } from '@app/shared/components';
 import styled from '@emotion/styled';
-import { Button, Flex, Modal, Radio, Text, Title } from '@mantine/core';
-import { useInputState, useLocalStorage } from '@mantine/hooks';
+import { Flex, Text, Title } from '@mantine/core';
 import { ColorDot, ThemeEditor, useThemePreferences } from '@prevezic/react';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
+
+import { LanguageSelector } from './LanguageSelector';
 
 const PreferenceItem = styled(Flex)(({ theme }) => ({
   '&:active': {
@@ -18,7 +19,7 @@ const PreferenceItem = styled(Flex)(({ theme }) => ({
 }));
 
 export function Account() {
-  const { i18n } = useTranslation();
+  const { i18n, t } = useTranslation();
   const [themeEditorOpen, setThemeEditorOpen] = useState(false);
   const [languageSelectorOpen, setLanguageSelectorOpen] = useState(false);
 
@@ -26,69 +27,51 @@ export function Account() {
 
   return (
     <Flex p="md" direction="column" gap="sm">
-      <Title order={2}>{i18n.t('account.title')}</Title>
-      <Title order={4}>{i18n.t('account.preferences')}</Title>
-      <PreferenceItem align="center" gap="lg" px="md" py="sm" onClick={() => setLanguageSelectorOpen(true)}>
-        <LanguageIcon />
-        <Flex direction="column" gap={2}>
-          <Text>{i18n.t('account.language')}</Text>
-          <Text weight={300} size="sm" color="neutral">
-            {i18n.t(`account.${i18n.language}`)}
-          </Text>
-        </Flex>
-      </PreferenceItem>
-      <PreferenceItem align="center" gap="lg" px="md" py="sm" onClick={() => setThemeEditorOpen(true)}>
-        <PaletteIcon />
-        <Flex direction="column" gap={2}>
-          <Text>{i18n.t('account.theme')}</Text>
-          <Flex align="center" gap="sm">
+      <Title order={4}>{t('account.preferences')}</Title>
+      <Flex direction="column" gap="xs">
+        <PreferenceItem align="center" gap="lg" px="md" py="sm" onClick={() => setLanguageSelectorOpen(true)}>
+          <LanguageIcon />
+          <Flex direction="column">
+            <Text>{t('account.language')}</Text>
             <Text weight={300} size="sm" color="neutral">
-              {i18n.t(`account.${colorScheme}Mode`)}
+              {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+              {t(`account.${i18n.language}` as any)}
             </Text>
-            <Text size="xs" color="neutral">
-              •
-            </Text>
-            <ColorDot color={baseColor} size={12} />
           </Flex>
-        </Flex>
-      </PreferenceItem>
+        </PreferenceItem>
+        <PreferenceItem align="center" gap="lg" px="md" py="sm" onClick={() => setThemeEditorOpen(true)}>
+          <PaletteIcon />
+          <Flex direction="column">
+            <Text>{t('account.theme')}</Text>
+            <Flex align="center" gap="sm">
+              <Text weight={300} size="sm" color="neutral">
+                {t(`account.${colorScheme}Mode`)}
+              </Text>
+              <Text size="xs" color="neutral">
+                •
+              </Text>
+              <ColorDot color={baseColor} size={12} />
+            </Flex>
+          </Flex>
+        </PreferenceItem>
+      </Flex>
 
-      <ThemeEditor opened={themeEditorOpen} onClose={() => setThemeEditorOpen(false)} />
+      <ThemeEditor
+        title={t('themeEditor.title')}
+        colorSchemeTitle={t('themeEditor.colorScheme')}
+        darkLabel={t('themeEditor.dark')}
+        lightLabel={t('themeEditor.light')}
+        baseColorTitle={t('themeEditor.baseColor')}
+        closeLabel={t('common.close')}
+        opened={themeEditorOpen}
+        onClose={() => setThemeEditorOpen(false)}
+      />
 
-      <Modal
+      <LanguageSelector
+        title={t('account.language')}
         opened={languageSelectorOpen}
         onClose={() => setLanguageSelectorOpen(false)}
-        title={i18n.t('account.language')}
-      >
-        <LanguageSelector onClose={() => setLanguageSelectorOpen(false)} />
-      </Modal>
-    </Flex>
-  );
-}
-
-function LanguageSelector({ onClose }: { onClose: () => void }) {
-  const { i18n } = useTranslation();
-  const [, setLanguageStorage] = useLocalStorage({ key: 'language', defaultValue: 'en' });
-  const [language, setLanguage] = useInputState(i18n.language);
-
-  const handleSubmit = (value: string) => {
-    setLanguageStorage(value);
-    i18n.changeLanguage(value);
-    onClose();
-  };
-
-  return (
-    <Flex direction="column" gap="xl" pt="md">
-      <Radio.Group value={language} onChange={setLanguage} name="language" orientation="vertical">
-        <Radio value="fr" label={i18n.t('account.fr')} />
-        <Radio value="en" label={i18n.t('account.en')} />
-      </Radio.Group>
-      <Flex gap="md" justify="end" w="100%">
-        <Button variant="subtle" onClick={onClose}>
-          Annuler
-        </Button>
-        <Button onClick={() => handleSubmit(language)}>Confirmer</Button>
-      </Flex>
+      />
     </Flex>
   );
 }

@@ -1,4 +1,16 @@
 {
+  "common": {
+    "close": "Close",
+    "cancel": "Cancel",
+    "confirm": "Confirm"
+  },
+  "themeEditor": {
+    "title": "Theme editor",
+    "colorScheme": "Color scheme",
+    "baseColor": "Base color",
+    "light": "Light",
+    "dark": "Dark"
+  },
   "signIn": {
     "title": "Sign in",
     "description": "We'll send to your email a magic link to automatically sign in.",
