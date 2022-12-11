@@ -32,11 +32,13 @@ jobs:
 
       # Build
       - name: BUILD
-        run: pnpm build:ci
+        run: pnpm build:web
+        env:
+          VITE_FIREBASE_API_KEY: ${{ secrets.VITE_FIREBASE_API_KEY_PROD }}
 
       # Test
       - name: TEST
-        run: pnpm test:ci
+        run: pnpm test:web:ci
 
       # Upload dist artifacts
       - uses: actions/upload-artifact@v3
