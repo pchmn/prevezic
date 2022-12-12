@@ -1,12 +1,13 @@
-import { Button, Flex, Image, Paper, Space, Text, TextInput, Title } from '@mantine/core';
+import { MailCheckIcon } from '@app/shared/components';
+import { Button, Flex, Text, TextInput, useMantineTheme } from '@mantine/core';
 import { useForm, zodResolver } from '@mantine/form';
-import { useLocalStorage } from '@mantine/hooks';
+import { useLocalStorage, useMediaQuery } from '@mantine/hooks';
 import { useFirebaseAuth } from '@prevezic/react';
 import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { z } from 'zod';
 
-export function SignIn() {
+export function MagicLinkSignIn({ onEmailSent }: { onEmailSent: () => void }) {
   const { t } = useTranslation();
 
   const [, setEmail] = useLocalStorage({ key: 'emailForSignIn' });
@@ -14,40 +15,37 @@ export function SignIn() {
   const { sendMagicLink, loading } = useFirebaseAuth();
   const [emailSent, setEmailSent] = useState(false);
 
+  const theme = useMantineTheme();
+  const isMobile = useMediaQuery(`(max-width: ${theme.breakpoints.sm}px)`);
+
   const handleSubmit = ({ email }: { email: string }) => {
     if (loading) {
       return;
     }
     setEmail(email);
     sendMagicLink(email, `${window.location.origin}/signin/validate-link`)
-      .then(() => setEmailSent(true))
+      .then(() => {
+        setEmailSent(true);
+        onEmailSent();
+      })
       .catch((err) => console.log('err', err));
   };
 
   return (
-    <Flex direction="column">
-      <Flex
-        justify="center"
-        sx={(theme) => ({
-          paddingBottom: 50,
-          paddingTop: 50 - theme.spacing.xl,
-          [`@media (max-width: ${theme.breakpoints.sm}px)`]: {
-            paddingTop: 0,
-            paddingBottom: theme.spacing.xl,
-          },
-        })}
-      >
-        <Image src="favicon.svg" height={50} width={50} />
-      </Flex>
-      <Flex justify="center" align="center">
-        <Paper shadow="xs" p={30} maw={450}>
-          <Title order={3}>{t('signIn.title')}</Title>
-          <Space h={10} />
-          <Text>{t('signIn.description')}</Text>
-          <Space h={30} />
-          {!emailSent ? <SignInForm loading={loading} onSubmit={handleSubmit} /> : <Text>{t('signIn.emailSent')}</Text>}
-        </Paper>
-      </Flex>
+    <Flex direction="column" justify="center" h="100%" gap="xl" sx={{ position: 'relative' }}>
+      {!emailSent ? (
+        <>
+          <Text sx={{ position: isMobile ? 'absolute' : undefined, top: isMobile ? 0 : undefined }}>
+            {t('signIn.description')}
+          </Text>
+          <SignInForm loading={loading} onSubmit={handleSubmit} />{' '}
+        </>
+      ) : (
+        <Flex direction="column" align="center" gap="md">
+          <MailCheckIcon size={60} color="#73DAA4" />
+          <Text align="center">{t('signIn.emailSent')}</Text>
+        </Flex>
+      )}
     </Flex>
   );
 }
@@ -73,12 +71,11 @@ function SignInForm({ loading, onSubmit }: { loading: boolean; onSubmit: (values
     <form onSubmit={form.onSubmit((values) => onSubmit(values))} style={{ width: '100%' }}>
       <Flex direction="column" gap="md" w="100%">
         <TextInput
-          size="lg"
           placeholder={t('signIn.emailPlaceholder') || ''}
           {...form.getInputProps('email')}
           disabled={loading}
         />
-        <Button size="lg" type="submit" disabled={!form.values.email} loading={loading}>
+        <Button type="submit" disabled={!form.values.email} loading={loading}>
           {t('signIn.sendMagicLink')}
         </Button>
       </Flex>

@@ -6,7 +6,7 @@ import {
   HomeFilledIcon,
   HomeIcon,
 } from '@app/shared/components';
-import { Flex, Text } from '@mantine/core';
+import { Flex, Footer, Text } from '@mantine/core';
 import { ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
@@ -15,29 +15,30 @@ export function MobileNavbar() {
   const navigate = useNavigate();
 
   return (
-    <Flex
-      h={72}
-      justify="space-between"
-      align="center"
-      px={50}
-      py="md"
-      sx={(theme) => ({
-        position: 'fixed',
-        bottom: 0,
-        left: 0,
-        right: 0,
-        backgroundColor: theme.other.schemes[theme.colorScheme].surface1,
-      })}
-    >
-      {items.map((item) => (
-        <Item
-          key={item.label}
-          {...item}
-          isActive={window.location.pathname.includes(item.href)}
-          onClick={() => navigate(item.href)}
-        />
-      ))}
-    </Flex>
+    <Footer height={72} sx={{ borderBottom: 'none' }}>
+      <Flex
+        justify="space-between"
+        align="center"
+        px={50}
+        py="md"
+        sx={(theme) => ({
+          position: 'fixed',
+          bottom: 0,
+          left: 0,
+          right: 0,
+          backgroundColor: theme.other.schemes[theme.colorScheme].surface1,
+        })}
+      >
+        {items.map((item) => (
+          <Item
+            key={item.label}
+            {...item}
+            isActive={window.location.pathname.includes(item.href)}
+            onClick={() => navigate(item.href)}
+          />
+        ))}
+      </Flex>
+    </Footer>
   );
 }
 

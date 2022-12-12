@@ -13,12 +13,14 @@
   },
   "signIn": {
     "title": "Se connecter",
-    "description": "Nous vous enverrons un lien magique à votre adresse email pour se connecter automatiquement.",
+    "description": "Nous enverrons un lien magique à votre email pour vous connecter automatiquement.",
     "emailPlaceholder": "Entrer votre email",
     "sendMagicLink": "Envoyer le lien",
-    "emailSent": "Un lien magique a été envoyé à votre adresse email. Veuillez vérifier votre boite de réception.",
+    "emailSent": "Un lien vous a été envoyé. Veuillez vérifier votre boite de réception.",
     "emailSentError": "Une erreur est survenue lors de l'envoi du lien magique. Veuillez réessayer.",
-    "invalidEmail": "L'adresse email est invalide."
+    "invalidEmail": "L'adresse email est invalide.",
+    "signInWithGoogle": "Se connecter avec Google",
+    "signInWithMagicLink": "Se connecter avec un lien magique"
   },
   "navbar": {
     "home": "Accueil",

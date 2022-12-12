@@ -23,9 +23,15 @@ export function AppLayout({ children, showNavbar = true }: PropsWithChildren<{ s
           {showNavbar && showMediumNav && <DesktopNavbar size="medium" />}
         </>
       }
+      styles={{
+        main: {
+          minHeight: '100dvh',
+          paddingBottom: showMobileNav ? 72 + 16 : 16,
+        },
+      }}
+      footer={<>{showMobileNav && <MobileNavbar />}</>}
     >
       {children}
-      {showMobileNav && <MobileNavbar />}
     </AppShell>
   );
 }

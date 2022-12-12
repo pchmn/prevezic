@@ -6,6 +6,7 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { LanguageSelector } from './LanguageSelector';
+import { Profile } from './Profile';
 
 const PreferenceItem = styled(Flex)(({ theme }) => ({
   '&:active': {
@@ -16,6 +17,7 @@ const PreferenceItem = styled(Flex)(({ theme }) => ({
   borderRadius: 8,
   cursor: 'pointer',
   WebkitTapHighlightColor: 'transparent',
+  userSelect: 'none',
 }));
 
 export function Account() {
@@ -26,35 +28,39 @@ export function Account() {
   const { baseColor, colorScheme } = useThemePreferences();
 
   return (
-    <Flex p="md" direction="column" gap="sm">
-      <Title order={4}>{t('account.preferences')}</Title>
-      <Flex direction="column" gap="xs">
-        <PreferenceItem align="center" gap="lg" px="md" py="sm" onClick={() => setLanguageSelectorOpen(true)}>
-          <LanguageIcon />
-          <Flex direction="column">
-            <Text>{t('account.language')}</Text>
-            <Text weight={300} size="sm" color="neutral">
-              {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
-              {t(`account.${i18n.language}` as any)}
-            </Text>
-          </Flex>
-        </PreferenceItem>
-        <PreferenceItem align="center" gap="lg" px="md" py="sm" onClick={() => setThemeEditorOpen(true)}>
-          <PaletteIcon />
-          <Flex direction="column">
-            <Text>{t('account.theme')}</Text>
-            <Flex align="center" gap="sm">
+    <Flex p="md" direction="column" justify="space-between" h="100%">
+      <Flex direction="column" gap="sm">
+        <Title order={4}>{t('account.preferences')}</Title>
+        <Flex direction="column">
+          <PreferenceItem align="center" gap="lg" px="md" py="sm" onClick={() => setLanguageSelectorOpen(true)}>
+            <LanguageIcon />
+            <Flex direction="column">
+              <Text>{t('account.language')}</Text>
               <Text weight={300} size="sm" color="neutral">
-                {t(`account.${colorScheme}Mode`)}
+                {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+                {t(`account.${i18n.language}` as any)}
               </Text>
-              <Text size="xs" color="neutral">
-                •
-              </Text>
-              <ColorDot color={baseColor} size={12} />
             </Flex>
-          </Flex>
-        </PreferenceItem>
+          </PreferenceItem>
+          <PreferenceItem align="center" gap="lg" px="md" py="sm" onClick={() => setThemeEditorOpen(true)}>
+            <PaletteIcon />
+            <Flex direction="column">
+              <Text>{t('account.theme')}</Text>
+              <Flex align="center" gap="sm">
+                <Text weight={300} size="sm" color="neutral">
+                  {t(`account.${colorScheme}Mode`)}
+                </Text>
+                <Text size="xs" color="neutral">
+                  •
+                </Text>
+                <ColorDot color={baseColor} size={12} />
+              </Flex>
+            </Flex>
+          </PreferenceItem>
+        </Flex>
       </Flex>
+
+      <Profile />
 
       <ThemeEditor
         title={t('themeEditor.title')}

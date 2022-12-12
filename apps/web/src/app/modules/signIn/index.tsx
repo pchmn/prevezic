@@ -1,6 +1,6 @@
 import { RouteObject } from 'react-router-dom';
 
-import { SignIn, ValidateEmailLink } from './components';
+import { SignInModal, ValidateEmailLink } from './components';
 import { SignInModule } from './SignInModule';
 
 const signInRoutes: RouteObject[] = [
@@ -16,6 +16,6 @@ const signInRoutes: RouteObject[] = [
   },
 ];
 
-export { SignIn };
+export { SignInModal };
 
 export default signInRoutes;
