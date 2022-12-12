@@ -59,6 +59,7 @@ export const componentsTheme: Record<string, ThemeComponent> = {
     styles: (theme: MantineTheme) => ({
       root: {
         backgroundColor: theme.fn.rgba(theme.other.schemes[theme.colorScheme].primary, 0.025),
+        height: '100dvh',
       },
     }),
   },

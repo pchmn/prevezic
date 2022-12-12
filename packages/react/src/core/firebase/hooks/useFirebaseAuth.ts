@@ -1,8 +1,10 @@
 import { useQueryClient } from '@tanstack/react-query';
 import {
   getAuth,
+  GoogleAuthProvider,
   signInAnonymously as firebaseSignInAnonymously,
   signInWithEmailLink,
+  signInWithPopup,
   signOut as firebaseSignOut,
   User,
 } from 'firebase/auth';
@@ -62,6 +64,19 @@ export function useFirebaseAuth() {
     [auth, queryClient]
   );
 
+  const signInWithGoogle = useCallback(async () => {
+    setLoading(true);
+    setError(undefined);
+    try {
+      const result = await signInWithPopup(auth, new GoogleAuthProvider());
+      queryClient.setQueryData<User | null>(['firebaseAuth'], result.user);
+      setLoading(false);
+    } catch (error) {
+      setError(error as Error);
+      setLoading(false);
+    }
+  }, [auth, queryClient]);
+
   const signOut = useCallback(() => firebaseSignOut(auth), [auth]);
 
   return {
@@ -69,6 +84,7 @@ export function useFirebaseAuth() {
     signOut,
     sendMagicLink,
     signInWithMagicLink,
+    signInWithGoogle,
     loading,
     error,
   };
