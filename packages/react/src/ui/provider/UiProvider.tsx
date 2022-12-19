@@ -1,11 +1,21 @@
 import { ColorScheme, MantineProvider } from '@mantine/core';
 import { useHotkeys, useLocalStorage } from '@mantine/hooks';
+import { NotificationsProvider } from '@mantine/notifications';
 import { PropsWithChildren } from 'react';
 import { Helmet, HelmetProvider } from 'react-helmet-async';
 
 import { ThemePreferencesProvider } from '../theme';
 import { componentsTheme } from '../theme/styles';
 import { generateThemeFromColor } from '../theme/utils';
+
+export const breakpoints = { xs: 576, sm: 768, md: 992, lg: 1200, xl: 1400 };
+export const spacing = {
+  xs: 4,
+  sm: 8,
+  md: 16,
+  lg: 24,
+  xl: 32,
+};
 
 export function UiProvider({ children }: PropsWithChildren) {
   const preferredColorScheme =
@@ -55,23 +65,19 @@ export function UiProvider({ children }: PropsWithChildren) {
             headings: {
               fontFamily: 'Readex Pro, sans-serif',
             },
-            spacing: {
-              xs: 4,
-              sm: 8,
-              md: 16,
-              lg: 24,
-              xl: 32,
-            },
+            spacing,
+            breakpoints,
             globalStyles: (theme) => ({
               body: {
                 backgroundColor: theme.other.schemes[theme.colorScheme].background,
                 color: theme.other.schemes[theme.colorScheme].onBackground,
                 WebkitFontSmoothing: 'antialiased',
+                height: '100%',
               },
             }),
           }}
         >
-          {children}
+          <NotificationsProvider>{children}</NotificationsProvider>
         </MantineProvider>
       </ThemePreferencesProvider>
     </HelmetProvider>

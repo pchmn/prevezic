@@ -19,7 +19,7 @@ export interface IconProps {
   children: ReactNode;
 }
 
-export function Icon({ size = 'md', color, children, viewBox = '0 0 24 24', strokeWidth = 1.5 }: IconProps) {
+export function Icon({ size = 'md', color, children, viewBox = '0 0 24 24' }: IconProps) {
   const theme = useMantineTheme();
   size = theme.fn.size({ size, sizes });
   color = color && color in theme.colors ? theme.fn.themeColor(color) : color;
@@ -32,8 +32,6 @@ export function Icon({ size = 'md', color, children, viewBox = '0 0 24 24', stro
       width={size}
       height={size}
       color={color}
-      stroke={color}
-      strokeWidth={strokeWidth}
     >
       {children}
     </svg>

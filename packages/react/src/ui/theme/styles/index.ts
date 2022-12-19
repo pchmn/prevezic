@@ -1,11 +1,11 @@
-import { ButtonStylesParams, MantineTheme } from '@mantine/core';
+import { ButtonProps, InputProps, MantineTheme } from '@mantine/core';
 
 import { MaterialColor, ThemeComponent } from '../types';
 import { getOnColor } from '../utils';
 
 export const componentsTheme: Record<string, ThemeComponent> = {
   Button: {
-    styles: (theme, params: ButtonStylesParams) => ({
+    styles: (theme, params: ButtonProps) => ({
       root: {
         color: params.variant === 'filled' ? getOnColor(params.color as MaterialColor, theme) : undefined,
       },
@@ -13,6 +13,28 @@ export const componentsTheme: Record<string, ThemeComponent> = {
         color: params.variant === 'filled' ? getOnColor(params.color as MaterialColor, theme) : undefined,
         '& svg': {
           stroke: params.variant === 'filled' ? getOnColor(params.color as MaterialColor, theme) : undefined,
+        },
+      },
+    }),
+  },
+  Input: {
+    styles: (theme, params: InputProps) => ({
+      input: {
+        backgroundColor:
+          params.variant === 'default'
+            ? theme.other.schemes[theme.colorScheme].surface1
+            : params.variant === 'filled'
+            ? theme.other.schemes[theme.colorScheme].surface2
+            : undefined,
+        color: theme.other.schemes[theme.colorScheme].onSurface,
+        borderColor:
+          params.variant === 'default'
+            ? theme.colorScheme === 'dark'
+              ? theme.colors.neutral[7]
+              : theme.colors.neutral[2]
+            : undefined,
+        '::placeholder': {
+          color: theme.colorScheme === 'dark' ? theme.colors.neutral[6] : theme.colors.neutral[3],
         },
       },
     }),
@@ -60,6 +82,7 @@ export const componentsTheme: Record<string, ThemeComponent> = {
       root: {
         backgroundColor: theme.fn.rgba(theme.other.schemes[theme.colorScheme].primary, 0.025),
         height: '100dvh',
+        borderColor: theme.colorScheme === 'dark' ? theme.colors.neutral[8] : theme.colors.neutral[1],
       },
     }),
   },
