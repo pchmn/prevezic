@@ -41,7 +41,12 @@ export default async (data: FunctionParams['sendMagicLink'], context: CallableCo
     subject: 'Sign in to Prevezic',
     html: html,
   };
-  await sgMail.send(msg);
+  try {
+    await sgMail.send(msg);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  } catch (error: any) {
+    throw new HttpsError('internal', 'Error when sending email', error.body.errors);
+  }
 
   return { success: true };
 };
