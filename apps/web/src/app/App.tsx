@@ -4,13 +4,13 @@ import accountRoutes from '@app/modules/account';
 import albumsRoutes from '@app/modules/albums';
 import homeRoutes from '@app/modules/home';
 import signInRoutes from '@app/modules/signIn';
-import { Navigate, Outlet, RouteObject } from 'react-router-dom';
+import { Navigate, Outlet, RouteObject, useLocation } from 'react-router-dom';
 
 export function App() {
-  // console.log('currentUser', currentUser, idToken);
+  const location = useLocation();
 
   return (
-    <AppLayout showNavbar={window.location.pathname !== '/signin/validate-link'}>
+    <AppLayout showNavbar={location.pathname !== '/signin/validate-link'}>
       <Outlet />
     </AppLayout>
   );

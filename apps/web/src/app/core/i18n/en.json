@@ -2,7 +2,8 @@
   "common": {
     "close": "Close",
     "cancel": "Cancel",
-    "confirm": "Confirm"
+    "confirm": "Confirm",
+    "gotToHome": "Go to home"
   },
   "themeEditor": {
     "title": "Theme editor",
@@ -17,10 +18,22 @@
     "emailPlaceholder": "Enter your email",
     "sendMagicLink": "Send the link",
     "emailSent": "We've sent a magic link to your email. Please check your inbox.",
-    "emailSentError": "We couldn't send a magic link to your email. Please try again.",
+    "emailSentError": {
+      "title": "Oops!",
+      "description": "We couldn't send you the link. Please try again later."
+    },
     "invalidEmail": "Please enter a valid email address.",
     "signInWithGoogle": "Sign in with Google",
-    "signInWithMagicLink": "Sign in with a Magic link"
+    "signInWithMagicLink": "Sign in with a Magic link",
+    "validatingLink": "Validating the link...",
+    "differentDevice": "It seems you opened the link from a different device. Please confirm your email.",
+    "linkValidationError": {
+      "title": "Oops!",
+      "description": "We couldn't validate the link."
+    },
+    "successFullSignIn": "You're now signed in. Welcome!",
+    "invalidLink": "We couldn't validate the link."
+
   },
   "navbar": {
     "home": "Home",

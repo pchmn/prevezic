@@ -1,18 +1,14 @@
-import { AppShell, useMantineTheme } from '@mantine/core';
+import { AppShell } from '@mantine/core';
 import { useMediaQuery } from '@mantine/hooks';
+import { breakpoints } from '@prevezic/react';
 import { PropsWithChildren } from 'react';
 
 import { DesktopNavbar, MobileNavbar } from './Navbar';
 
 export function AppLayout({ children, showNavbar = true }: PropsWithChildren<{ showNavbar?: boolean }>) {
-  const theme = useMantineTheme();
-  const showLargeNav = useMediaQuery(`(min-width: ${theme.breakpoints.lg}px)`);
-  const showMediumNav = useMediaQuery(
-    `(min-width: ${theme.breakpoints.sm}px) and (max-width: ${theme.breakpoints.lg}px)`
-  );
+  const showLargeNav = useMediaQuery(`(min-width: ${breakpoints.lg}px)`);
+  const showMediumNav = useMediaQuery(`(min-width: ${breakpoints.sm}px) and (max-width: ${breakpoints.lg}px)`);
   const showMobileNav = !showLargeNav && !showMediumNav;
-
-  console.log('showLargeNav', showLargeNav);
 
   return (
     <AppShell
@@ -29,7 +25,7 @@ export function AppLayout({ children, showNavbar = true }: PropsWithChildren<{ s
           paddingBottom: showMobileNav ? 72 + 16 : 16,
         },
       }}
-      footer={<>{showMobileNav && <MobileNavbar />}</>}
+      footer={<>{showNavbar && showMobileNav && <MobileNavbar />}</>}
     >
       {children}
     </AppShell>

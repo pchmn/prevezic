@@ -75,7 +75,7 @@ function SignInModalContent({
           </Button>
         </Flex>
       )}
-      {signInMethod === 'magic' && <MagicLinkSignIn onEmailSent={() => setSignInMethod(null)} />}
+      {signInMethod === 'magic' && <MagicLinkSignIn />}
     </>
   );
 }

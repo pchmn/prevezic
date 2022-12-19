@@ -2,12 +2,12 @@ import { MailCheckIcon } from '@app/shared/components';
 import { Button, Flex, Text, TextInput, useMantineTheme } from '@mantine/core';
 import { useForm, zodResolver } from '@mantine/form';
 import { useLocalStorage, useMediaQuery } from '@mantine/hooks';
-import { useFirebaseAuth } from '@prevezic/react';
+import { useFirebaseAuth, useNotification } from '@prevezic/react';
 import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { z } from 'zod';
 
-export function MagicLinkSignIn({ onEmailSent }: { onEmailSent: () => void }) {
+export function MagicLinkSignIn() {
   const { t } = useTranslation();
 
   const [, setEmail] = useLocalStorage({ key: 'emailForSignIn' });
@@ -18,17 +18,19 @@ export function MagicLinkSignIn({ onEmailSent }: { onEmailSent: () => void }) {
   const theme = useMantineTheme();
   const isMobile = useMediaQuery(`(max-width: ${theme.breakpoints.sm}px)`);
 
-  const handleSubmit = ({ email }: { email: string }) => {
+  const { showError } = useNotification();
+
+  const handleSubmit = async ({ email }: { email: string }) => {
     if (loading) {
       return;
     }
     setEmail(email);
-    sendMagicLink(email, `${window.location.origin}/signin/validate-link`)
-      .then(() => {
-        setEmailSent(true);
-        onEmailSent();
-      })
-      .catch((err) => console.log('err', err));
+    try {
+      await sendMagicLink(email, window.location.pathname);
+      setEmailSent(true);
+    } catch (error) {
+      showError({ title: t('signIn.emailSentError.title'), message: t('signIn.emailSentError.description') });
+    }
   };
 
   return (
