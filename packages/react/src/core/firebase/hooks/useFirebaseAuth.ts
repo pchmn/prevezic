@@ -42,7 +42,7 @@ export function useFirebaseAuth() {
     try {
       await callFunction('sendMagicLink', {
         email,
-        validationUrl: encodeURI(`${window.location.origin}/signin/validate-link`),
+        validationUrl: encodeURI(`${window.location.origin}/validate-email-link`),
         from: from ? encodeURI(from) : undefined,
       });
       return setLoading(false);
@@ -92,10 +92,23 @@ export function useFirebaseAuth() {
     } catch (error) {
       setError(error as Error);
       setLoading(false);
+      throw error;
     }
   }, [auth, queryClient]);
 
-  const signOut = useCallback(() => firebaseSignOut(auth), [auth]);
+  const signOut = useCallback(async () => {
+    setLoading(true);
+    setError(undefined);
+    try {
+      await firebaseSignOut(auth);
+      queryClient.setQueryData<User | null>(['firebaseAuth'], null);
+      setLoading(false);
+    } catch (error) {
+      setError(error as Error);
+      setLoading(false);
+      throw error;
+    }
+  }, [auth, queryClient]);
 
   return {
     signInAnonymously,
