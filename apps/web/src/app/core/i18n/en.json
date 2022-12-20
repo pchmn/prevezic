@@ -39,7 +39,6 @@
     },
     "successFullSignIn": "You're now signed in. Welcome!",
     "invalidLink": "We couldn't validate the link."
-
   },
   "account": {
     "title": "Account",
@@ -51,6 +50,7 @@
     "fr": "French",
     "en": "English",
     "signOut": "Sign out",
-    "signIn": "Sign in"
+    "signIn": "Sign in",
+    "signedInAs": "Signed in as"
   }
 }

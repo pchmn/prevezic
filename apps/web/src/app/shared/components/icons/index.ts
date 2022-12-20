@@ -12,4 +12,5 @@ export * from './LeftArrowIcon';
 export * from './MagicIcon';
 export * from './MailCheckIcon';
 export * from './PaletteIcon';
+export * from './SignOutIcon';
 export * from './UserCheckIcon';

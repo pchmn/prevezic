@@ -50,6 +50,7 @@
     "fr": "Français",
     "en": "Anglais",
     "signOut": "Se déconnecter",
-    "signIn": "Se connecter"
+    "signIn": "Se connecter",
+    "signedInAs": "Connecté en tant que"
   }
 }
