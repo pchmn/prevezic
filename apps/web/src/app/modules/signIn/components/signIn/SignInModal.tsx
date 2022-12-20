@@ -1,18 +1,17 @@
 import { LeftArrowIcon } from '@app/shared/components';
 import { ActionIcon, Flex, Modal, Title } from '@mantine/core';
 import { useMediaQuery } from '@prevezic/react';
-import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Outlet, useLocation, useMatch, useNavigate } from 'react-router-dom';
+import { Outlet, useNavigate } from 'react-router-dom';
+
+import { useSignInRouteParams } from './useSignInRouteParams';
 
 export function SignInModal({ opened = true, onClose }: { opened?: boolean; onClose?: () => void }) {
   const { t } = useTranslation();
 
   const isMobile = useMediaQuery({ smallerThan: 'sm' });
 
-  const { state, pathname } = useLocation();
-  const match = useMatch('/:path/signin/*');
-  const [from] = useState(state?.from || match?.params?.path || '/home');
+  const { from, isMagicLinkRoute } = useSignInRouteParams();
   const navigate = useNavigate();
 
   const handleOnClose = () => {
@@ -24,12 +23,12 @@ export function SignInModal({ opened = true, onClose }: { opened?: boolean; onCl
     <Modal
       title={
         <Flex gap="sm" align="center">
-          {pathname.includes('magic-link') && (
+          {isMagicLinkRoute && (
             <ActionIcon onClick={() => navigate(-1)}>
               <LeftArrowIcon />
             </ActionIcon>
           )}
-          <Title order={4}>{t(pathname.includes('magic-link') ? 'signIn.magicLink' : 'signIn.title')}</Title>
+          <Title order={4}>{t(isMagicLinkRoute ? 'signIn.magicLink' : 'signIn.title')}</Title>
         </Flex>
       }
       opened={opened}

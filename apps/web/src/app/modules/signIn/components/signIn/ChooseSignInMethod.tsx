@@ -2,16 +2,16 @@ import { GoogleIcon, MagicIcon } from '@app/shared/components';
 import { Button, Flex } from '@mantine/core';
 import { useFirebaseAuth } from '@prevezic/react';
 import { useTranslation } from 'react-i18next';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+
+import { useSignInRouteParams } from './useSignInRouteParams';
 
 export function ChooseSignInMethod() {
   const { t } = useTranslation();
 
   const { signInWithGoogle } = useFirebaseAuth();
 
-  const {
-    state: { from },
-  } = useLocation();
+  const { from } = useSignInRouteParams();
   const navigate = useNavigate();
 
   const googleSignIn = async () => {
@@ -24,7 +24,7 @@ export function ChooseSignInMethod() {
       <Button leftIcon={<GoogleIcon />} onClick={googleSignIn}>
         {t('signIn.signInWithGoogle')}
       </Button>
-      <Button leftIcon={<MagicIcon />} onClick={() => navigate('magic-link')}>
+      <Button leftIcon={<MagicIcon />} onClick={() => navigate('magic-link', { state: { from } })}>
         {t('signIn.signInWithMagicLink')}
       </Button>
     </Flex>

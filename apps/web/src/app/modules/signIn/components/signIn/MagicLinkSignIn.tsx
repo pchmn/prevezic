@@ -7,6 +7,8 @@ import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { z } from 'zod';
 
+import { useSignInRouteParams } from './useSignInRouteParams';
+
 export function MagicLinkSignIn() {
   const { t } = useTranslation();
 
@@ -19,13 +21,15 @@ export function MagicLinkSignIn() {
 
   const { showError } = useNotification();
 
+  const { from } = useSignInRouteParams();
+
   const handleSubmit = async ({ email }: { email: string }) => {
     if (loading) {
       return;
     }
     setEmail(email);
     try {
-      await sendMagicLink(email, window.location.pathname);
+      await sendMagicLink(email, from);
       setEmailSent(true);
     } catch (error) {
       showError({ title: t('signIn.emailSentError.title'), message: t('signIn.emailSentError.description') });
