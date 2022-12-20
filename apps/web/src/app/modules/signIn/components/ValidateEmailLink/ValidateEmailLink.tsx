@@ -9,7 +9,7 @@ import { useNavigate, useSearchParams } from 'react-router-dom';
 import { ConfirmEmailForm } from './ConfirmEmailForm';
 
 export function ValidateEmailLink() {
-  const [email, setEmail, remove] = useLocalStorage({ key: 'emailForSignInn' });
+  const [email, setEmail, remove] = useLocalStorage({ key: 'emailForSignIn' });
   const { signInWithMagicLink } = useFirebaseAuth();
   const [validatedLink, setValidatedLink] = useState<boolean | undefined>();
 

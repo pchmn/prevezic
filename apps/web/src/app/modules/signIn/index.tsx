@@ -21,7 +21,7 @@ const signInRoutes: RouteObject[] = [
 
 const validateLinkRoutes: RouteObject[] = [
   {
-    path: 'validate-link',
+    path: 'validate-email-link',
     element: <ValidateEmailLink />,
   },
 ];

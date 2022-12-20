@@ -10,7 +10,7 @@ export function App() {
   const location = useLocation();
 
   return (
-    <AppLayout showNavbar={location.pathname !== '/signin/validate-link'}>
+    <AppLayout showNavbar={location.pathname !== '/validate-email-link'}>
       <Outlet />
     </AppLayout>
   );
