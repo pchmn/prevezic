@@ -1,12 +1,12 @@
 import { InvalidLinkIcon, UserCheckIcon } from '@app/shared/components';
-import { Button, Flex, Loader, Text, TextInput } from '@mantine/core';
-import { useForm, zodResolver } from '@mantine/form';
+import { Button, Flex, Loader, Text } from '@mantine/core';
 import { useLocalStorage, useTimeout } from '@mantine/hooks';
 import { useFirebaseAuth } from '@prevezic/react';
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useSearchParams } from 'react-router-dom';
-import { z } from 'zod';
+
+import { ConfirmEmailForm } from './ConfirmEmailForm';
 
 export function ValidateEmailLink() {
   const [email, setEmail, remove] = useLocalStorage({ key: 'emailForSignInn' });
@@ -47,36 +47,6 @@ export function ValidateEmailLink() {
         <ConfirmEmailForm onSubmit={(values) => setEmail(values.email)} />
       )}
     </Flex>
-  );
-}
-
-function ConfirmEmailForm({ onSubmit }: { onSubmit: (values: { email: string }) => void }) {
-  const { t } = useTranslation();
-
-  const formSchema = useMemo(
-    () =>
-      z.object({
-        email: z.string().email({ message: t('signIn.invalidEmail') }),
-      }),
-    [t]
-  );
-  const form = useForm({
-    validate: zodResolver(formSchema),
-    initialValues: {
-      email: '',
-    },
-  });
-
-  return (
-    <form onSubmit={form.onSubmit((values) => onSubmit(values))}>
-      <Flex direction="column" gap="md" maw={450}>
-        <Text mb="md">{t('signIn.differentDevice')}</Text>
-        <TextInput placeholder={t('signIn.emailPlaceholder') || ''} {...form.getInputProps('email')} />
-        <Button type="submit" disabled={!form.values.email}>
-          {t('common.confirm')}
-        </Button>
-      </Flex>
-    </form>
   );
 }
 

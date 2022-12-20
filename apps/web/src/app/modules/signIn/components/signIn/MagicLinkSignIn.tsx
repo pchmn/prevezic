@@ -1,8 +1,8 @@
 import { MailCheckIcon } from '@app/shared/components';
-import { Button, Flex, Text, TextInput, useMantineTheme } from '@mantine/core';
+import { Button, Flex, Text, TextInput } from '@mantine/core';
 import { useForm, zodResolver } from '@mantine/form';
-import { useLocalStorage, useMediaQuery } from '@mantine/hooks';
-import { useFirebaseAuth, useNotification } from '@prevezic/react';
+import { useLocalStorage } from '@mantine/hooks';
+import { useFirebaseAuth, useMediaQuery, useNotification } from '@prevezic/react';
 import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { z } from 'zod';
@@ -15,8 +15,7 @@ export function MagicLinkSignIn() {
   const { sendMagicLink, loading } = useFirebaseAuth();
   const [emailSent, setEmailSent] = useState(false);
 
-  const theme = useMantineTheme();
-  const isMobile = useMediaQuery(`(max-width: ${theme.breakpoints.sm}px)`);
+  const isMobile = useMediaQuery({ smallerThan: 'sm' });
 
   const { showError } = useNotification();
 

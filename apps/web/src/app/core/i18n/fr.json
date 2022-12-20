@@ -14,6 +14,7 @@
   },
   "signIn": {
     "title": "Se connecter",
+    "magicLink": "Lien magique",
     "description": "Nous enverrons un lien magique à votre email pour vous connecter automatiquement.",
     "emailPlaceholder": "Entrer votre email",
     "sendMagicLink": "Envoyer le lien",

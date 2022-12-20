@@ -1,13 +1,12 @@
 import { AppShell } from '@mantine/core';
-import { useMediaQuery } from '@mantine/hooks';
-import { breakpoints } from '@prevezic/react';
+import { useMediaQuery } from '@prevezic/react';
 import { PropsWithChildren } from 'react';
 
 import { DesktopNavbar, MobileNavbar } from './Navbar';
 
 export function AppLayout({ children, showNavbar = true }: PropsWithChildren<{ showNavbar?: boolean }>) {
-  const showLargeNav = useMediaQuery(`(min-width: ${breakpoints.lg}px)`);
-  const showMediumNav = useMediaQuery(`(min-width: ${breakpoints.sm}px) and (max-width: ${breakpoints.lg}px)`);
+  const showLargeNav = useMediaQuery({ largerThan: 'lg' });
+  const showMediumNav = useMediaQuery({ largerThan: 'sm', smallerThan: 'lg' });
   const showMobileNav = !showLargeNav && !showMediumNav;
 
   return (

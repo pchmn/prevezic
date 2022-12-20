@@ -12,8 +12,14 @@
     "light": "Light",
     "dark": "Dark"
   },
+  "navbar": {
+    "home": "Home",
+    "albums": "Albums",
+    "account": "Account"
+  },
   "signIn": {
     "title": "Sign in",
+    "magicLink": "Magic link",
     "description": "We'll send to your email a magic link to automatically sign in.",
     "emailPlaceholder": "Enter your email",
     "sendMagicLink": "Send the link",
@@ -34,11 +40,6 @@
     "successFullSignIn": "You're now signed in. Welcome!",
     "invalidLink": "We couldn't validate the link."
 
-  },
-  "navbar": {
-    "home": "Home",
-    "albums": "Albums",
-    "account": "Account"
   },
   "account": {
     "title": "Account",

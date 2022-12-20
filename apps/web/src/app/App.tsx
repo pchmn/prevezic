@@ -3,7 +3,7 @@ import { AppLayout } from '@app/core/layout';
 import accountRoutes from '@app/modules/account';
 import albumsRoutes from '@app/modules/albums';
 import homeRoutes from '@app/modules/home';
-import signInRoutes from '@app/modules/signIn';
+import { validateLinkRoutes } from '@app/modules/signIn';
 import { Navigate, Outlet, RouteObject, useLocation } from 'react-router-dom';
 
 export function App() {
@@ -24,7 +24,7 @@ const routes: RouteObject = {
   children: [
     ...albumsRoutes,
     ...homeRoutes,
-    ...signInRoutes,
+    ...validateLinkRoutes,
     ...accountRoutes,
     { path: '*', element: <Navigate to="home" /> },
   ],

@@ -1,21 +1,29 @@
 import { RouteObject } from 'react-router-dom';
 
-import { SignInModal, ValidateEmailLink } from './components';
-import { SignInModule } from './SignInModule';
+import { ChooseSignInMethod, MagicLinkSignIn, SignInModal, ValidateEmailLink } from './components';
 
 const signInRoutes: RouteObject[] = [
   {
     path: 'signin',
-    element: <SignInModule />,
+    element: <SignInModal />,
     children: [
       {
-        path: 'validate-link',
-        element: <ValidateEmailLink />,
+        path: '',
+        element: <ChooseSignInMethod />,
+      },
+      {
+        path: 'magic-link',
+        element: <MagicLinkSignIn />,
       },
     ],
   },
 ];
 
-export { SignInModal };
+const validateLinkRoutes: RouteObject[] = [
+  {
+    path: 'validate-link',
+    element: <ValidateEmailLink />,
+  },
+];
 
-export default signInRoutes;
+export { SignInModal, signInRoutes, validateLinkRoutes };

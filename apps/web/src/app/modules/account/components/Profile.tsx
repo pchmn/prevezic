@@ -1,23 +1,22 @@
-import { SignInModal } from '@app/modules/signIn';
 import { Button, Flex } from '@mantine/core';
 import { useFirebaseUser } from '@prevezic/react';
-import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 export function Profile() {
+  const { t } = useTranslation();
+
   const { currentUser } = useFirebaseUser();
 
-  const [open, setOpen] = useState(false);
-
-  const { t } = useTranslation();
+  const { pathname } = useLocation();
+  const navigate = useNavigate();
 
   if (currentUser?.isAnonymous) {
     return (
       <>
-        <Button variant="filled" onClick={() => setOpen(true)}>
+        <Button variant="filled" onClick={() => navigate('signin', { state: { from: pathname } })}>
           {t('account.signIn')}
         </Button>
-        <SignInModal opened={open} onClose={() => setOpen(false)} />
       </>
     );
   }
