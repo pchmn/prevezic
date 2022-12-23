@@ -12,4 +12,4 @@ export const FunctionValidation = {
 };
 
 export type CallableFunctionName = keyof FunctionParams;
-export type FunctionName = CallableFunctionName | 'processSignUp';
+export type FunctionName = CallableFunctionName | 'processAlbumCreation';
