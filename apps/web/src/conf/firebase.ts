@@ -19,7 +19,7 @@ if (import.meta.env.DEV) {
   connectAuthEmulator(auth, 'http://192.168.1.10:9099', { disableWarnings: true });
 
   const db = getFirestore();
-  connectFirestoreEmulator(db, '192.168.1.10', 8080);
+  connectFirestoreEmulator(db, '192.168.1.10', 8081);
 
   const functions = getFunctions(app);
   connectFunctionsEmulator(functions, '192.168.1.10', 5001);

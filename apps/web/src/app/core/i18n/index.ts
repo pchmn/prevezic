@@ -19,6 +19,7 @@ i18next.use(initReactI18next).init({
   interpolation: {
     escapeValue: false,
   },
+  fallbackLng: 'en',
 });
 
 export default i18next;

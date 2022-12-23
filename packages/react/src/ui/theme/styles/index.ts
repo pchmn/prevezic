@@ -48,6 +48,13 @@ export const componentsTheme: Record<string, ThemeComponent> = {
       },
     }),
   },
+  InputWrapper: {
+    styles: {
+      label: {
+        marginBottom: 5,
+      },
+    },
+  },
   Modal: {
     styles: (theme: MantineTheme) => ({
       modal: {
