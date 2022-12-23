@@ -8,6 +8,7 @@ const db = getFirestore(initializeApp());
 
 export default async function (user: UserRecord) {
   let type: UserType;
+  console.log('user', JSON.stringify(user, null, 2));
   if (user.email || user.phoneNumber || user.providerData.length > 0) {
     type = 'account';
   } else {
