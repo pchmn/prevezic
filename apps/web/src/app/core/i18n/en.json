@@ -3,7 +3,8 @@
     "close": "Close",
     "cancel": "Cancel",
     "confirm": "Confirm",
-    "gotToHome": "Go to home"
+    "gotToHome": "Go to home",
+    "create": "Create"
   },
   "themeEditor": {
     "title": "Theme editor",
@@ -56,5 +57,25 @@
     "signOut": "Sign out",
     "signIn": "Sign in",
     "signedInAs": "Signed in as"
+  },
+  "album": {
+    "albumList": {
+      "empty": "No albums yet",
+      "signInToCreateAnAlbum": "Sign in to create an album!",
+      "createAlbum": "Create album"
+    },
+    "createAlbum": {
+      "title": "Create album",
+      "name": "Name",
+      "namePlaceholder": "Enter a name",
+      "error": {
+        "title": "Oops!",
+        "description": "We couldn't create the album. Please try again later."
+      },
+      "success": {
+        "title": "Success!",
+        "description": "The album has been created"
+      }
+    }
   }
 }

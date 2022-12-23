@@ -17,7 +17,11 @@ export function useFirestoreDocument<T>(
     };
   }, []);
 
-  const { data, isLoading, isFetching, error } = useQuery<T | undefined | null, Error>(
+  const {
+    data,
+    isLoading: loading,
+    error,
+  } = useQuery<T | undefined | null, Error>(
     [ref.path],
     async () => {
       if (listen) {
@@ -44,7 +48,7 @@ export function useFirestoreDocument<T>(
     { staleTime: Infinity, enabled: enabled, initialData: defaultValue }
   );
 
-  return { data: data, isLoading, isFetching, error };
+  return { data: data, loading, error };
 }
 
 function getDataFromSnapshot<T>(snapshot: DocumentSnapshot<T>, defaultValue?: T) {

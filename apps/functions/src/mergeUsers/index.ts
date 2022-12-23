@@ -1,7 +1,7 @@
 import { FunctionParams, FunctionValidation, UserDocument, UserRole } from '@prevezic/core';
 import { initializeApp } from 'firebase-admin/app';
 import { getAuth } from 'firebase-admin/auth';
-import { getFirestore } from 'firebase-admin/firestore';
+import { FieldValue, getFirestore } from 'firebase-admin/firestore';
 import { CallableContext, HttpsError } from 'firebase-functions/v1/https';
 
 const db = getFirestore(initializeApp());
@@ -32,11 +32,19 @@ export default async (data: FunctionParams['mergeUsers'], context: CallableConte
   if (previousUser && previousUser.rights) {
     const currentUser = (await db.collection('users').doc(currentToken.uid).get()).data() as UserDocument;
 
-    const mergedRights = getMergedUserRights(previousUser, currentUser);
+    const rightsToUpdate = getRightsToUpdate(previousUser, currentUser);
 
     // Merge only if there are changes
-    if (mergedRights) {
-      await db.collection('users').doc(currentToken.uid).set({ rights: mergedRights }, { merge: true });
+    if (Object.keys(rightsToUpdate).length > 0) {
+      await db.collection('users').doc(currentToken.uid).set({ rights: rightsToUpdate }, { merge: true });
+
+      const batch = db.batch();
+      for (const key of Object.keys(rightsToUpdate)) {
+        const albumRef = db.collection('albums').doc(key);
+        batch.update(albumRef, { [`${rightsToUpdate[key]}s`]: FieldValue.arrayUnion(currentToken.uid) });
+        batch.update(albumRef, { [`${rightsToUpdate[key]}s`]: FieldValue.arrayRemove(priorToken.uid) });
+        await batch.commit();
+      }
     }
   }
 
@@ -46,44 +54,76 @@ export default async (data: FunctionParams['mergeUsers'], context: CallableConte
   return { success: true };
 };
 
-function getMergedUserRights(previousUserDoc: UserDocument, currentUserDoc: UserDocument) {
+function getRightsToUpdate(previousUserDoc: UserDocument, currentUserDoc: UserDocument) {
   const previousUserRights = previousUserDoc.rights || {};
   const currentUserRights = currentUserDoc.rights || {};
 
-  const mergedRights = { ...currentUserRights };
+  const rightsToUpdate: Record<string, UserRole> = {};
 
   Object.keys(previousUserRights).forEach((key) => {
-    if (mergedRights[key]) {
-      const higherRole = getHigherRole(mergedRights[key], previousUserRights[key]);
-      if (higherRole === 'none') {
-        delete mergedRights[key];
-      } else {
-        mergedRights[key] = higherRole;
+    if (currentUserRights[key]) {
+      if (isRoleHigher(previousUserRights[key], currentUserRights[key])) {
+        rightsToUpdate[key] = previousUserRights[key];
       }
     } else if (['owner', 'editor', 'member'].includes(previousUserRights[key])) {
-      mergedRights[key] = previousUserRights[key];
+      rightsToUpdate[key] = previousUserRights[key];
     }
   });
 
-  let hasChanges = false;
-  Object.keys(mergedRights).forEach((key) => {
-    if (mergedRights[key] !== currentUserRights[key]) {
-      hasChanges = true;
-    }
-  });
-
-  return hasChanges ? mergedRights : undefined;
+  return rightsToUpdate;
 }
 
-function getHigherRole(role1: UserRole, role2: UserRole) {
-  if (role1 === 'owner' || role2 === 'owner') {
-    return 'owner';
+function isRoleHigher(role1: UserRole, role2: UserRole) {
+  if (role1 === 'owner' && role2 !== 'owner') {
+    return true;
   }
-  if (role1 === 'editor' || role2 === 'editor') {
-    return 'editor';
+  if (role1 === 'editor' && !['owner', 'editor'].includes(role2)) {
+    return true;
   }
-  if (role1 === 'member' || role2 === 'member') {
-    return 'member';
+  if (role1 === 'member' && !['owner', 'editor', 'member'].includes(role2)) {
+    return true;
   }
-  return 'none';
+  return false;
 }
+
+// function getMergedUserRights(previousUserDoc: UserDocument, currentUserDoc: UserDocument) {
+//   const previousUserRights = previousUserDoc.rights || {};
+//   const currentUserRights = currentUserDoc.rights || {};
+
+//   const mergedRights = { ...currentUserRights };
+
+//   Object.keys(previousUserRights).forEach((key) => {
+//     if (mergedRights[key]) {
+//       const higherRole = getHigherRole(mergedRights[key], previousUserRights[key]);
+//       if (higherRole === 'none') {
+//         delete mergedRights[key];
+//       } else {
+//         mergedRights[key] = higherRole;
+//       }
+//     } else if (['owner', 'editor', 'member'].includes(previousUserRights[key])) {
+//       mergedRights[key] = previousUserRights[key];
+//     }
+//   });
+
+//   let hasChanges = false;
+//   Object.keys(mergedRights).forEach((key) => {
+//     if (mergedRights[key] !== currentUserRights[key]) {
+//       hasChanges = true;
+//     }
+//   });
+
+//   return hasChanges ? mergedRights : undefined;
+// }
+
+// function getHigherRole(role1: UserRole, role2: UserRole) {
+//   if (role1 === 'owner' || role2 === 'owner') {
+//     return 'owner';
+//   }
+//   if (role1 === 'editor' || role2 === 'editor') {
+//     return 'editor';
+//   }
+//   if (role1 === 'member' || role2 === 'member') {
+//     return 'member';
+//   }
+//   return 'none';
+// }
