@@ -9,8 +9,11 @@ const functions: Record<FunctionName, unknown> = {
   processSignUp: user().onCreate(async (user) => {
     await (await import('./processSignUp')).default(user);
   }),
+  mergeUsers: onCall(async (data, context) => {
+    await (await import('./mergeUsers')).default(data, context);
+  }),
 };
 
-const { sendMagicLink, processSignUp } = functions;
+const { sendMagicLink, processSignUp, mergeUsers } = functions;
 
-export { processSignUp, sendMagicLink };
+export { mergeUsers, processSignUp, sendMagicLink };
