@@ -1,0 +1,60 @@
+{
+  "common": {
+    "close": "Close",
+    "cancel": "Cancel",
+    "confirm": "Confirm",
+    "gotToHome": "Go to home"
+  },
+  "themeEditor": {
+    "title": "Theme editor",
+    "colorScheme": "Color scheme",
+    "baseColor": "Base color",
+    "light": "Light",
+    "dark": "Dark"
+  },
+  "navbar": {
+    "home": "Home",
+    "albums": "Albums",
+    "account": "Account"
+  },
+  "signIn": {
+    "title": "Sign in",
+    "magicLink": "Magic link",
+    "description": "We'll send to your email a magic link to automatically sign in.",
+    "emailPlaceholder": "Enter your email",
+    "sendMagicLink": "Send the link",
+    "emailSent": "We've sent a magic link to your email. Please check your inbox.",
+    "emailSentError": {
+      "title": "Oops!",
+      "description": "We couldn't send you the link. Please try again later."
+    },
+    "invalidEmail": "Please enter a valid email address.",
+    "signInWithGoogle": "Sign in with Google",
+    "signInWithMagicLink": "Sign in with a Magic link",
+    "validatingLink": "Validating the link...",
+    "differentDevice": "It seems you opened the link from a different device. Please confirm your email.",
+    "linkValidationError": {
+      "title": "Oops!",
+      "description": "We couldn't validate the link."
+    },
+    "googleSignInError": {
+      "title": "Oops!",
+      "description": "We couldn't sign you in with Google. Please try again later."
+    },
+    "successFullSignIn": "You're now signed in. Welcome!",
+    "invalidLink": "We couldn't validate the link."
+  },
+  "account": {
+    "title": "Account",
+    "preferences": "Preferences",
+    "theme": "Theme",
+    "darkMode": "Dark mode",
+    "lightMode": "Light mode",
+    "language": "Language",
+    "fr": "French",
+    "en": "English",
+    "signOut": "Sign out",
+    "signIn": "Sign in",
+    "signedInAs": "Signed in as"
+  }
+}

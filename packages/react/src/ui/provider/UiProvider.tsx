@@ -1,13 +1,25 @@
 import { ColorScheme, MantineProvider } from '@mantine/core';
-import { useColorScheme, useHotkeys, useLocalStorage } from '@mantine/hooks';
+import { useHotkeys, useLocalStorage } from '@mantine/hooks';
+import { NotificationsProvider } from '@mantine/notifications';
 import { PropsWithChildren } from 'react';
 import { Helmet, HelmetProvider } from 'react-helmet-async';
+
 import { ThemePreferencesProvider } from '../theme';
 import { componentsTheme } from '../theme/styles';
 import { generateThemeFromColor } from '../theme/utils';
 
+export const breakpoints = { xs: 576, sm: 768, md: 992, lg: 1200, xl: 1400 };
+export const spacing = {
+  xs: 4,
+  sm: 8,
+  md: 16,
+  lg: 24,
+  xl: 32,
+};
+
 export function UiProvider({ children }: PropsWithChildren) {
-  const preferredColorScheme = useColorScheme();
+  const preferredColorScheme =
+    window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
   const [colorScheme, setColorScheme] = useLocalStorage<ColorScheme>({
     key: 'theme-color-scheme',
     defaultValue: preferredColorScheme,
@@ -16,7 +28,7 @@ export function UiProvider({ children }: PropsWithChildren) {
 
   const [baseColor, setBaseColor] = useLocalStorage<string>({
     key: 'theme-base-color',
-    defaultValue: '#E6DEFF',
+    defaultValue: '#E7DEFF',
     getInitialValueInEffect: true,
   });
 
@@ -49,16 +61,23 @@ export function UiProvider({ children }: PropsWithChildren) {
             other: { schemes: theme.schemes },
             defaultRadius: 'md',
             components: componentsTheme,
+            fontFamily: 'Readex Pro, sans-serif',
+            headings: {
+              fontFamily: 'Readex Pro, sans-serif',
+            },
+            spacing,
+            breakpoints,
             globalStyles: (theme) => ({
               body: {
                 backgroundColor: theme.other.schemes[theme.colorScheme].background,
                 color: theme.other.schemes[theme.colorScheme].onBackground,
                 WebkitFontSmoothing: 'antialiased',
+                height: '100%',
               },
             }),
           }}
         >
-          {children}
+          <NotificationsProvider>{children}</NotificationsProvider>
         </MantineProvider>
       </ThemePreferencesProvider>
     </HelmetProvider>

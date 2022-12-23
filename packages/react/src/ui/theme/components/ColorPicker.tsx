@@ -1,5 +1,6 @@
 import styled from '@emotion/styled';
 import { Group } from '@mantine/core';
+
 import { Icon } from '../../components';
 
 const baseColors = [
@@ -18,36 +19,42 @@ const baseColors = [
 
 export function ColorPicker({ baseColor, onChange }: { baseColor: string; onChange: (color: string) => void }) {
   return (
-    <Group position="center">
-      {baseColors.map((color) => (
-        <ColorItem key={color} color={color} onClick={() => onChange(color)} isSelected={baseColor === color} />
-      ))}
-    </Group>
+    <>
+      <Group position="center">
+        {baseColors.map((color) => (
+          <ColorItem key={color} color={color} onClick={() => onChange(color)} isSelected={baseColor === color} />
+        ))}
+      </Group>
+    </>
   );
 }
 
-const Round = styled.div<{ color: string; isSelected: boolean }>(({ color, isSelected, theme }) => ({
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'center',
-  height: '35px',
-  width: '35px',
-  backgroundColor: color,
-  borderRadius: '100%',
-  cursor: 'pointer',
-  color:
-    theme.colorScheme === 'dark'
-      ? theme.fn.darken(theme.other.schemes.dark.primary, 0.6)
-      : theme.other.schemes.light.primary,
-  boxShadow: `0 0 0 3px ${
-    isSelected ? theme.fn[`${theme.colorScheme}en`](theme.other.schemes[theme.colorScheme].primary, 0.5) : 'transparent'
-  }`,
-}));
+export const ColorDot = styled.div<{ color: string; isSelected?: boolean; size?: number }>(
+  ({ color, isSelected, theme, size = 35 }) => ({
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    height: size,
+    width: size,
+    backgroundColor: color,
+    borderRadius: '100%',
+    cursor: 'pointer',
+    color:
+      theme.colorScheme === 'dark'
+        ? theme.fn.darken(theme.other.schemes.dark.primary, 0.6)
+        : theme.other.schemes.light.primary,
+    boxShadow: `0 0 0 3px ${
+      isSelected
+        ? theme.fn[`${theme.colorScheme}en`](theme.other.schemes[theme.colorScheme].primary, 0.5)
+        : 'transparent'
+    }`,
+  })
+);
 function ColorItem({ color, onClick, isSelected }: { color: string; onClick: () => void; isSelected: boolean }) {
   return (
-    <Round color={color} isSelected={isSelected} onClick={onClick}>
+    <ColorDot color={color} isSelected={isSelected} onClick={onClick}>
       {isSelected && <CheckIcon />}
-    </Round>
+    </ColorDot>
   );
 }
 

@@ -1,5 +1,5 @@
 {
-  "extends": "@prevezic/tsconfig/base.json",
+  "extends": "@prevezic/tsconfig/vite.json",
   "compilerOptions": {
     "jsx": "react-jsx",
   },

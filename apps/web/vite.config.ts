@@ -20,7 +20,8 @@ export default defineConfig({
         name: 'Prevezic',
         short_name: 'Prevezic',
         description: 'My Awesome App description',
-        theme_color: '#FFE8CC',
+        background_color: '#1c1b1e',
+        theme_color: '#1c1b1e',
         icons: [
           {
             src: 'pwa-192x192.png',

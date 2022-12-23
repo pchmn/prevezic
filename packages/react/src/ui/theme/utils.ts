@@ -6,6 +6,7 @@ import {
   TonalPalette,
 } from '@importantimport/material-color-utilities';
 import { MantineTheme, Tuple } from '@mantine/core';
+
 import { MaterialColor, MaterialScheme } from './types';
 
 export function generateThemeFromColor(color: string) {
@@ -15,7 +16,7 @@ export function generateThemeFromColor(color: string) {
       primary: generatePaletteFrom(theme.palettes.primary),
       secondary: generatePaletteFrom(theme.palettes.secondary),
       tertiary: generatePaletteFrom(theme.palettes.tertiary),
-      error: generatePaletteFrom(theme.palettes.error),
+      error: getErrorPalette(),
       neutral: generatePaletteFrom(theme.palettes.neutral),
       neutralVariant: generatePaletteFrom(theme.palettes.neutralVariant),
     },
@@ -38,6 +39,21 @@ function generatePaletteFrom(tonalPalette: TonalPalette) {
     hexFromArgb(tonalPalette.tone(30)),
     hexFromArgb(tonalPalette.tone(20)),
     hexFromArgb(tonalPalette.tone(10)),
+  ] as Tuple<string, 10>;
+}
+
+function getErrorPalette() {
+  return [
+    '#FFEDEA',
+    '#FFDAD6',
+    '#FFB4AB',
+    '#FF897D',
+    '#FF5449',
+    '#DE3730',
+    '#BA1A1A',
+    '#93000A',
+    '#690005',
+    '#410002',
   ] as Tuple<string, 10>;
 }
 

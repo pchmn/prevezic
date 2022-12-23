@@ -1,5 +1,7 @@
 import '@emotion/react';
+
 import { MantineTheme, Tuple } from '@mantine/core';
+
 import { MaterialColor, MaterialScheme } from './src/ui/theme/types';
 
 declare module '@mantine/core' {

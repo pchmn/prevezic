@@ -10,8 +10,11 @@ module.exports = {
     'plugin:prettier/recommended',
     'prettier'
   ],
-  plugins: ['prettier'],
+  plugins: ['prettier', 'unused-imports', 'simple-import-sort'],
   rules: {
-    'prettier/prettier': ['error']
+    'prettier/prettier': ['error'],
+    'unused-imports/no-unused-imports': 'warn',
+    'simple-import-sort/imports': 'warn',
+    'simple-import-sort/exports': 'warn'
   }
 };

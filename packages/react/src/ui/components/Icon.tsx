@@ -1,5 +1,6 @@
 import { MantineNumberSize, useMantineTheme } from '@mantine/core';
 import { ReactNode } from 'react';
+
 import { MaterialColor } from '../theme/types';
 
 export const sizes = {
@@ -10,13 +11,15 @@ export const sizes = {
   xl: 34,
 };
 
-interface IconProps {
+export interface IconProps {
   size?: MantineNumberSize;
   color?: MaterialColor | string;
+  viewBox?: string;
+  strokeWidth?: number;
   children: ReactNode;
 }
 
-export function Icon({ size = 'md', color, children }: IconProps) {
+export function Icon({ size = 'md', color, children, viewBox = '0 0 24 24' }: IconProps) {
   const theme = useMantineTheme();
   size = theme.fn.size({ size, sizes });
   color = color && color in theme.colors ? theme.fn.themeColor(color) : color;
@@ -25,7 +28,7 @@ export function Icon({ size = 'md', color, children }: IconProps) {
     <svg
       xmlns="http://www.w3.org/2000/svg"
       xmlnsXlink="http://www.w3.org/1999/xlink"
-      viewBox="0 0 24 24"
+      viewBox={viewBox}
       width={size}
       height={size}
       color={color}

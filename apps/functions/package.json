@@ -1,0 +1,40 @@
+{
+  "name": "@prevezic/functions",
+  "version": "0.0.0",
+  "private": true,
+  "author": "pchmn",
+  "license": "MIT",
+  "main": "dist/apps/functions/src/index.js",
+  "scripts": {
+    "build": "rm -rf ./dist && tsc && tsc-alias",
+    "build:watch": "rm -rf ./dist && tsc-watch --onSuccess \"tsc-alias\"",
+    "esbuild": "esbuild `find ./src \\( -name '*.ts' \\)` --platform=node --target=node16.0 --format=cjs --outdir=dist",
+    "dev": "pnpm run build:watch | firebase emulators:start --only functions",
+    "shell": "pnpm run build && firebase functions:shell",
+    "start": "pnpm run shell",
+    "deploy": "firebase deploy --only functions",
+    "logs": "firebase functions:log"
+  },
+  "engines": {
+    "node": "16"
+  },
+  "dependencies": {
+    "@sendgrid/mail": "^7.7.0",
+    "firebase-admin": "^11.3.0",
+    "firebase-functions": "^4.1.0",
+    "mjml": "^4.13.0",
+    "ua-parser-js": "^1.0.32",
+    "zod": "^3.19.1"
+  },
+  "devDependencies": {
+    "@prevezic/tsconfig": "workspace:*",
+    "@types/mjml": "^4.7.0",
+    "@types/ua-parser-js": "^0.7.36",
+    "esbuild": "^0.15.15",
+    "eslint-config-prevezic-ts": "workspace:*",
+    "firebase-functions-test": "^0.2.0",
+    "tsc-alias": "^1.8.1",
+    "tsc-watch": "^5.0.3",
+    "typescript": "^4.6.4"
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "extends": "@prevezic/tsconfig/base.json",
+  "compilerOptions": {
+    "declaration": false,
+    "declarationMap": false,
+    "sourceMap": true,
+    "outDir": "dist",
+    "baseUrl": ".",
+    "paths": {
+      "@prevezic/core": ["../../packages/core/src/index"]
+    }
+  },
+}

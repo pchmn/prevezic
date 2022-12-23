@@ -1,28 +1,33 @@
-import { AppShell, Button, Header, Navbar } from '@mantine/core';
-import { ThemeEditor } from '@prevezic/react';
-import { useState } from 'react';
-import './App.css';
+import { withAuth } from '@app/core/auth';
+import { AppLayout } from '@app/core/layout';
+import accountRoutes from '@app/modules/account';
+import albumsRoutes from '@app/modules/albums';
+import homeRoutes from '@app/modules/home';
+import { validateLinkRoutes } from '@app/modules/signIn';
+import { Navigate, Outlet, RouteObject, useLocation } from 'react-router-dom';
 
-function App() {
-  const [open, setOpen] = useState(false);
+export function App() {
+  const location = useLocation();
+
   return (
-    <AppShell
-      padding="md"
-      navbar={
-        <Navbar width={{ base: 300 }} p="sx">
-          {/* Navbar content */}
-        </Navbar>
-      }
-      header={
-        <Header height={60} p="xs">
-          {/* Header content */}
-        </Header>
-      }
-    >
-      <Button onClick={() => setOpen(true)}>Hello</Button>
-      <ThemeEditor opened={open} onClose={() => setOpen(false)} />
-    </AppShell>
+    <AppLayout showNavbar={location.pathname !== '/validate-email-link'}>
+      <Outlet />
+    </AppLayout>
   );
 }
 
-export default App;
+const AppWithAuth = withAuth(App);
+
+const routes: RouteObject = {
+  path: '/',
+  element: <AppWithAuth />,
+  children: [
+    ...albumsRoutes,
+    ...homeRoutes,
+    ...validateLinkRoutes,
+    ...accountRoutes,
+    { path: '*', element: <Navigate to="home" /> },
+  ],
+};
+
+export default routes;

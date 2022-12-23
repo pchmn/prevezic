@@ -1,5 +1,6 @@
 {
   "projects": {
-    "default": "prevezic"
+    "default": "prevezic",
+    "development": "prevezic-dev"
   }
 }
