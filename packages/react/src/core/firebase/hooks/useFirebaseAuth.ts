@@ -103,10 +103,8 @@ export function useFirebaseAuth() {
     setError(undefined);
     try {
       await firebaseSignOut(auth);
-      console.log('firebaseSignOut', auth.currentUser);
       setLoading(false);
     } catch (error) {
-      console.log('error', error);
       setError(error as Error);
       setLoading(false);
       throw error;

@@ -32,7 +32,6 @@ export function useFirebaseUser() {
         unsubscribe.current = onAuthStateChanged(
           auth,
           (firebaseUser) => {
-            console.log('onAuthStateChanged', firebaseUser);
             if (!resolved) {
               resolved = true;
               return resolve(firebaseUser);

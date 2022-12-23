@@ -13,7 +13,7 @@ export function Profile() {
   const { pathname } = useLocation();
   const navigate = useNavigate();
 
-  if (currentUser?.isAnonymous) {
+  if (!currentUser || currentUser.isAnonymous) {
     return (
       <>
         <Button variant="filled" onClick={() => navigate('signin', { state: { from: pathname } })}>
