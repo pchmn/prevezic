@@ -8,10 +8,10 @@ export function withAuth(Component: React.ElementType) {
     const { signInAnonymously, loading } = useFirebaseAuth();
 
     useEffect(() => {
-      if (currentUser === null) {
+      if (currentUser === null && !loading) {
         signInAnonymously();
       }
-    }, [currentUser, signInAnonymously]);
+    }, [currentUser, signInAnonymously, loading]);
 
     if (loading || !currentUser) {
       return (
