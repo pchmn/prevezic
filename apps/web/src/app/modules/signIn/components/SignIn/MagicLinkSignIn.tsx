@@ -3,13 +3,16 @@ import { Button, Flex, Text, TextInput } from '@mantine/core';
 import { useForm, zodResolver } from '@mantine/form';
 import { useLocalStorage } from '@mantine/hooks';
 import { useFirebaseAuth, useMediaQuery, useNotification } from '@prevezic/react';
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { z } from 'zod';
 
+import { useSignInContext } from './SignInContext';
 import { useSignInRouteParams } from './useSignInRouteParams';
 
 export function MagicLinkSignIn() {
+  const { setLoading } = useSignInContext();
+
   const { t } = useTranslation();
 
   const [, setEmail] = useLocalStorage({ key: 'emailForSignIn' });
@@ -22,6 +25,10 @@ export function MagicLinkSignIn() {
   const { showError } = useNotification();
 
   const { from } = useSignInRouteParams();
+
+  useEffect(() => {
+    setLoading(loading);
+  }, [loading, setLoading]);
 
   const handleSubmit = async ({ email }: { email: string }) => {
     if (loading) {

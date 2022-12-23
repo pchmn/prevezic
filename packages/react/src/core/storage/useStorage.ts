@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { HTML5Store, StorageChangeEvent, StorageType } from './html5Store';
 
@@ -27,11 +27,14 @@ export function useStorage<T>(
     };
   }, [key, store, value]);
 
-  const set = (newValue: T | ((prevState: T | undefined) => T)) => {
-    store.set(key, newValue instanceof Function ? newValue(value) : newValue);
-  };
+  const set = useCallback(
+    (newValue: T | ((prevState: T | undefined) => T)) => {
+      store.set(key, newValue instanceof Function ? newValue(value) : newValue);
+    },
+    [key, store, value]
+  );
 
-  const remove = () => store.remove(key);
+  const remove = useCallback(() => store.remove(key), [key, store]);
 
   return [value, set, remove];
 }

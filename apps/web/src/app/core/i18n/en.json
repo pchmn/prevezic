@@ -37,6 +37,10 @@
       "title": "Oops!",
       "description": "We couldn't validate the link."
     },
+    "googleSignInError": {
+      "title": "Oops!",
+      "description": "We couldn't sign you in with Google. Please try again later."
+    },
     "successFullSignIn": "You're now signed in. Welcome!",
     "invalidLink": "We couldn't validate the link."
   },

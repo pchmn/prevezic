@@ -1,16 +1,12 @@
 import { useQueryClient } from '@tanstack/react-query';
 import {
-  EmailAuthProvider,
   getAuth,
   GoogleAuthProvider,
-  linkWithCredential,
-  linkWithPopup,
   signInAnonymously as firebaseSignInAnonymously,
   signInWithEmailLink,
   signInWithPopup,
   signOut as firebaseSignOut,
   User,
-  UserCredential,
 } from 'firebase/auth';
 import { useCallback, useMemo, useState } from 'react';
 
@@ -57,17 +53,19 @@ export function useFirebaseAuth() {
     async (email: string) => {
       setLoading(true);
       setError(undefined);
+
       try {
-        let result: UserCredential;
-        if (auth.currentUser) {
-          const credential = EmailAuthProvider.credentialWithLink(email, window.location.href);
-          result = await linkWithCredential(auth.currentUser, credential);
-        } else {
-          result = await signInWithEmailLink(auth, email, window.location.href);
+        if (!auth.currentUser) {
+          throw new Error('No current user');
         }
+
+        const priorTokenId = await auth.currentUser?.getIdToken(true);
+
+        const result = await signInWithEmailLink(auth, email, window.location.href);
         queryClient.setQueryData<User | null>(['firebaseAuth'], result.user);
+
+        await callFunction('mergeUsers', { priorTokenId });
         setLoading(false);
-        return result;
       } catch (error) {
         setError(error as Error);
         setLoading(false);
@@ -80,14 +78,18 @@ export function useFirebaseAuth() {
   const signInWithGoogle = useCallback(async () => {
     setLoading(true);
     setError(undefined);
+
     try {
-      let result: UserCredential;
-      if (auth.currentUser) {
-        result = await linkWithPopup(auth.currentUser, new GoogleAuthProvider());
-      } else {
-        result = await signInWithPopup(auth, new GoogleAuthProvider());
+      if (!auth.currentUser) {
+        throw new Error('No current user');
       }
+
+      const priorTokenId = await auth.currentUser?.getIdToken(true);
+
+      const result = await signInWithPopup(auth, new GoogleAuthProvider());
       queryClient.setQueryData<User | null>(['firebaseAuth'], result.user);
+
+      await callFunction('mergeUsers', { priorTokenId });
       setLoading(false);
     } catch (error) {
       setError(error as Error);
@@ -101,14 +103,15 @@ export function useFirebaseAuth() {
     setError(undefined);
     try {
       await firebaseSignOut(auth);
-      queryClient.setQueryData<User | null>(['firebaseAuth'], null);
+      console.log('firebaseSignOut', auth.currentUser);
       setLoading(false);
     } catch (error) {
+      console.log('error', error);
       setError(error as Error);
       setLoading(false);
       throw error;
     }
-  }, [auth, queryClient]);
+  }, [auth]);
 
   return {
     signInAnonymously,

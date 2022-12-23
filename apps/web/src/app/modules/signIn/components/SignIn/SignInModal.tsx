@@ -4,9 +4,20 @@ import { useMediaQuery } from '@prevezic/react';
 import { useTranslation } from 'react-i18next';
 import { Outlet, useNavigate } from 'react-router-dom';
 
+import { SignInContextProvider, useSignInContext } from './SignInContext';
 import { useSignInRouteParams } from './useSignInRouteParams';
 
 export function SignInModal({ opened = true, onClose }: { opened?: boolean; onClose?: () => void }) {
+  return (
+    <SignInContextProvider>
+      <SignInModalContent opened={opened} onClose={onClose} />
+    </SignInContextProvider>
+  );
+}
+
+export function SignInModalContent({ opened = true, onClose }: { opened?: boolean; onClose?: () => void }) {
+  const { loading } = useSignInContext();
+
   const { t } = useTranslation();
 
   const isMobile = useMediaQuery({ smallerThan: 'sm' });
@@ -15,8 +26,10 @@ export function SignInModal({ opened = true, onClose }: { opened?: boolean; onCl
   const navigate = useNavigate();
 
   const handleOnClose = () => {
-    onClose?.();
-    navigate(from);
+    if (!loading) {
+      onClose?.();
+      navigate(from);
+    }
   };
 
   return (
@@ -33,6 +46,7 @@ export function SignInModal({ opened = true, onClose }: { opened?: boolean; onCl
       }
       opened={opened}
       onClose={handleOnClose}
+      centered
       fullScreen={isMobile}
       styles={{ modal: { display: 'flex', flexDirection: 'column' }, body: { flex: 1, padding: 24 } }}
     >

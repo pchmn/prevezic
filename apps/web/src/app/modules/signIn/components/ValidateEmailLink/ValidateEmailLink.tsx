@@ -1,7 +1,7 @@
 import { InvalidLinkIcon, UserCheckIcon } from '@app/shared/components';
 import { Button, Flex, Loader, Text } from '@mantine/core';
 import { useLocalStorage, useTimeout } from '@mantine/hooks';
-import { useFirebaseAuth } from '@prevezic/react';
+import { useFirebaseAuth, useFirebaseUser } from '@prevezic/react';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useSearchParams } from 'react-router-dom';
@@ -9,30 +9,34 @@ import { useNavigate, useSearchParams } from 'react-router-dom';
 import { ConfirmEmailForm } from './ConfirmEmailForm';
 
 export function ValidateEmailLink() {
-  const [email, setEmail, remove] = useLocalStorage({ key: 'emailForSignIn' });
-  const { signInWithMagicLink } = useFirebaseAuth();
+  const [email, setEmail, remove] = useLocalStorage({ key: 'emailForSignIn', getInitialValueInEffect: false });
+
+  const { signInWithMagicLink, loading } = useFirebaseAuth();
+  const { currentUser } = useFirebaseUser();
+
   const [validatedLink, setValidatedLink] = useState<boolean | undefined>();
 
   const { t } = useTranslation();
 
   useEffect(() => {
-    if (email) {
+    if (email && currentUser?.isAnonymous) {
       signInWithMagicLink(email)
         .then(() => {
           remove();
           setValidatedLink(true);
         })
-        .catch(() => {
+        .catch((err) => {
+          console.log('error validating link', err);
           setValidatedLink(false);
         });
     }
-  }, [email, remove, signInWithMagicLink]);
+  }, [email, currentUser, remove, signInWithMagicLink]);
 
   return (
     <Flex direction="column" justify="center" align="center" h="100%" gap="md" p="md">
       {email ? (
         <>
-          {validatedLink === undefined ? (
+          {loading || validatedLink === undefined ? (
             <>
               <Loader size="xl" />
               <Text>{t('signIn.validatingLink')}</Text>

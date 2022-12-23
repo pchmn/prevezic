@@ -29,8 +29,12 @@
     "validatingLink": "Validation du lien...",
     "differentDevice": "Il semblerait que vous ayez ouvert le lien sur un autre appareil. Veuillez confirmer l'email de connexion.",
     "linkValidationError": {
-      "title": "Oops!",
+      "title": "Oups!",
       "description": "Une erreur est survenue lors de la validation du lien."
+    },
+    "googleSignInError": {
+      "title": "Oups!",
+      "description": "Une erreur est survenue lors de la connexion avec Google. Veuillez réessayer."
     },
     "successFullSignIn": "Vous êtes maintenant connecté !",
     "invalidLink": "Le lien est invalide ou a expiré."

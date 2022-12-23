@@ -8,6 +8,15 @@ export const componentsTheme: Record<string, ThemeComponent> = {
     styles: (theme, params: ButtonProps) => ({
       root: {
         color: params.variant === 'filled' ? getOnColor(params.color as MaterialColor, theme) : undefined,
+        ':disabled': {
+          color: theme.fn.darken(getOnColor(params.color as MaterialColor, theme), 0.6),
+          '.mantine-Button-icon': {
+            color: theme.fn.darken(getOnColor(params.color as MaterialColor, theme), 0.6),
+            svg: {
+              stroke: theme.fn.darken(getOnColor(params.color as MaterialColor, theme), 0.6),
+            },
+          },
+        },
       },
       icon: {
         color: params.variant === 'filled' ? getOnColor(params.color as MaterialColor, theme) : undefined,

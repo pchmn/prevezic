@@ -7,7 +7,7 @@ export function Profile() {
   const { t } = useTranslation();
 
   const { currentUser } = useFirebaseUser();
-  console.log(currentUser);
+
   const { signOut, loading } = useFirebaseAuth();
 
   const { pathname } = useLocation();
