@@ -1,12 +1,12 @@
 import { useQuery, useQueryClient } from '@tanstack/react-query';
-import { getDocs, onSnapshot, Query, Unsubscribe } from 'firebase/firestore';
+import { CollectionReference, getDocs, onSnapshot, Query, Unsubscribe } from 'firebase/firestore';
 import { useEffect, useRef } from 'react';
 
 import { UseFirestoreOptions } from './types';
 
 export function useFirestoreCollection<T>(
-  query: Query,
-  { listen = true, defaultValue, enabled = true }: UseFirestoreOptions<T>
+  query: Query<T> | CollectionReference<T>,
+  { listen = true, defaultValue, enabled = true }: UseFirestoreOptions<T[]>
 ) {
   const queryClient = useQueryClient();
   const unsubscribe = useRef<Unsubscribe>();
@@ -17,7 +17,11 @@ export function useFirestoreCollection<T>(
     };
   }, []);
 
-  const { data, isLoading, isFetching, error } = useQuery<T[], Error>(
+  const {
+    data,
+    isLoading: loading,
+    error,
+  } = useQuery<T[], Error>(
     [query],
     async () => {
       if (listen) {
@@ -30,7 +34,7 @@ export function useFirestoreCollection<T>(
               const value: T[] = [];
               if (!querySnapshot.empty) {
                 querySnapshot.forEach((doc) => {
-                  value.push(doc.data() as T);
+                  value.push(doc.data());
                 });
               }
               if (!resolved) {
@@ -48,13 +52,13 @@ export function useFirestoreCollection<T>(
       const value: T[] = [];
       if (!querySnapshot.empty) {
         querySnapshot.forEach((doc) => {
-          value.push(doc.data() as T);
+          value.push(doc.data());
         });
       }
       return value;
     },
-    { staleTime: Infinity, enabled: enabled }
+    { staleTime: Infinity, enabled, initialData: defaultValue }
   );
 
-  return { data: data || defaultValue || [], isLoading, isFetching, error };
+  return { data: data || [], loading, error };
 }
