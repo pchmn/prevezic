@@ -1,11 +1,11 @@
 import { useQuery, useQueryClient } from '@tanstack/react-query';
-import { DocumentReference, getDoc, onSnapshot, Unsubscribe } from 'firebase/firestore';
+import { DocumentReference, DocumentSnapshot, getDoc, onSnapshot, Unsubscribe } from 'firebase/firestore';
 import { useEffect, useRef } from 'react';
 
 import { UseFirestoreOptions } from './types';
 
 export function useFirestoreDocument<T>(
-  ref: DocumentReference,
+  ref: DocumentReference<T>,
   { listen = true, defaultValue, enabled = true }: UseFirestoreOptions<T>
 ) {
   const queryClient = useQueryClient();
@@ -17,21 +17,21 @@ export function useFirestoreDocument<T>(
     };
   }, []);
 
-  const { data, isLoading, isFetching, error } = useQuery<T | undefined, Error>(
+  const { data, isLoading, isFetching, error } = useQuery<T | undefined | null, Error>(
     [ref.path],
     async () => {
       if (listen) {
         let resolved = false;
 
-        return new Promise<T | undefined>((resolve, reject) => {
+        return new Promise<T | undefined | null>((resolve, reject) => {
           unsubscribe.current = onSnapshot(
             ref,
             (doc) => {
               if (!resolved) {
                 resolved = true;
-                return resolve(doc.data() as T);
+                return resolve(getDataFromSnapshot(doc, defaultValue));
               }
-              queryClient.setQueryData<T | undefined>([ref.path], doc.data() as T);
+              queryClient.setQueryData<T | undefined | null>([ref.path], getDataFromSnapshot(doc, defaultValue));
             },
             reject
           );
@@ -39,10 +39,14 @@ export function useFirestoreDocument<T>(
       }
 
       const doc = await getDoc(ref);
-      return doc.data() as T;
+      return getDataFromSnapshot(doc, defaultValue);
     },
     { staleTime: Infinity, enabled: enabled, initialData: defaultValue }
   );
 
-  return { data: data || defaultValue, isLoading, isFetching, error };
+  return { data: data, isLoading, isFetching, error };
+}
+
+function getDataFromSnapshot<T>(snapshot: DocumentSnapshot<T>, defaultValue?: T) {
+  return snapshot.data() || defaultValue || null;
 }

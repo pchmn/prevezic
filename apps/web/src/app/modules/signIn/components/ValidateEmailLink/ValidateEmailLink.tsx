@@ -25,8 +25,7 @@ export function ValidateEmailLink() {
           remove();
           setValidatedLink(true);
         })
-        .catch((err) => {
-          console.log('error validating link', err);
+        .catch(() => {
           setValidatedLink(false);
         });
     }
