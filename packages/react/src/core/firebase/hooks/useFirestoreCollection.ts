@@ -6,7 +6,7 @@ import { UseFirestoreOptions } from './types';
 
 export function useFirestoreCollection<T>(
   query: Query<T> | CollectionReference<T>,
-  { listen = true, defaultValue, enabled = true }: UseFirestoreOptions<T[]>
+  { listen = true, defaultValue, enabled = true, queryKey }: UseFirestoreOptions<T[]> & { queryKey: string }
 ) {
   const queryClient = useQueryClient();
   const unsubscribe = useRef<Unsubscribe>();
@@ -22,7 +22,7 @@ export function useFirestoreCollection<T>(
     isLoading: loading,
     error,
   } = useQuery<T[], Error>(
-    [query],
+    [queryKey],
     async () => {
       if (listen) {
         let resolved = false;
@@ -41,7 +41,7 @@ export function useFirestoreCollection<T>(
                 resolved = true;
                 return resolve(value);
               }
-              queryClient.setQueryData<T[]>([query], value);
+              queryClient.setQueryData<T[]>([queryKey], value);
             },
             reject
           );
