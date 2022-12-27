@@ -64,6 +64,7 @@ export function useFirestoreData<T>(
     {
       enabled,
       initialData,
+      placeholderData: previousData.current,
       staleTime: Infinity,
       retry: false,
       refetchInterval: undefined,
