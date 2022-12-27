@@ -1,8 +1,8 @@
 import { InvalidLinkIcon, UserCheckIcon } from '@app/shared/components';
 import { Button, Flex, Loader, Text } from '@mantine/core';
 import { useLocalStorage, useTimeout } from '@mantine/hooks';
-import { useFirebaseAuth, useFirebaseUser } from '@prevezic/react';
-import { useEffect, useState } from 'react';
+import { useFirebaseUser, useSignInWithMagicLink } from '@prevezic/react';
+import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 
@@ -11,36 +11,28 @@ import { ConfirmEmailForm } from './ConfirmEmailForm';
 export function ValidateEmailLink() {
   const [email, setEmail, remove] = useLocalStorage({ key: 'emailForSignIn', getInitialValueInEffect: false });
 
-  const { signInWithMagicLink, loading } = useFirebaseAuth();
+  const { mutate: signInWithMagicLink, isLoading, isSuccess, isIdle } = useSignInWithMagicLink();
+  console.log('status', isIdle);
   const { currentUser } = useFirebaseUser();
-
-  const [validatedLink, setValidatedLink] = useState<boolean | undefined>();
 
   const { t } = useTranslation();
 
   useEffect(() => {
     if (email && currentUser?.isAnonymous) {
-      signInWithMagicLink(email)
-        .then(() => {
-          remove();
-          setValidatedLink(true);
-        })
-        .catch(() => {
-          setValidatedLink(false);
-        });
+      signInWithMagicLink(email, { onSuccess: () => remove() });
     }
-  }, [email, currentUser, remove, signInWithMagicLink]);
+  }, [currentUser, email, signInWithMagicLink, remove]);
 
   return (
     <Flex direction="column" justify="center" align="center" h="100%" gap="md" p="md">
       {email ? (
         <>
-          {loading || validatedLink === undefined ? (
+          {isLoading || isIdle ? (
             <>
               <Loader size="xl" />
               <Text>{t('signIn.validatingLink')}</Text>
             </>
-          ) : validatedLink ? (
+          ) : isSuccess ? (
             <ValidLink />
           ) : (
             <InvalidLink />

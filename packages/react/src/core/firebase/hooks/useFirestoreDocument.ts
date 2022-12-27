@@ -1,56 +1,32 @@
-import { useQuery, useQueryClient } from '@tanstack/react-query';
-import { DocumentReference, DocumentSnapshot, getDoc, onSnapshot, Unsubscribe } from 'firebase/firestore';
-import { useEffect, useRef } from 'react';
+import { QueryKey } from '@tanstack/react-query';
+import { DocumentReference, getDoc, onSnapshot } from 'firebase/firestore';
+import { useCallback } from 'react';
 
 import { UseFirestoreOptions } from './types';
+import { useFirestoreData } from './useFirestoreData';
 
 export function useFirestoreDocument<T>(
+  queryKey: QueryKey,
   ref: DocumentReference<T>,
-  { listen = true, defaultValue, enabled = true }: UseFirestoreOptions<T>
+  options?: UseFirestoreOptions<T>
 ) {
-  const queryClient = useQueryClient();
-  const unsubscribe = useRef<Unsubscribe>();
-
-  useEffect(() => {
-    return () => {
-      unsubscribe.current?.();
-    };
-  }, []);
-
-  const {
-    data,
-    isLoading: loading,
-    error,
-  } = useQuery<T | undefined | null, Error>(
-    [ref.path],
-    async () => {
-      if (listen) {
-        let resolved = false;
-
-        return new Promise<T | undefined | null>((resolve, reject) => {
-          unsubscribe.current = onSnapshot(
-            ref,
-            (doc) => {
-              if (!resolved) {
-                resolved = true;
-                return resolve(getDataFromSnapshot(doc, defaultValue));
-              }
-              queryClient.setQueryData<T | undefined | null>([ref.path], getDataFromSnapshot(doc, defaultValue));
-            },
-            reject
-          );
-        });
-      }
-
-      const doc = await getDoc(ref);
-      return getDataFromSnapshot(doc, defaultValue);
+  const subscribeFn = useCallback(
+    (onData: (data: T | null) => void, onError: (error: Error) => void) => {
+      return onSnapshot(
+        ref,
+        (querySnapshot) => {
+          onData(querySnapshot.data() || null);
+        },
+        (error) => onError(error)
+      );
     },
-    { staleTime: Infinity, enabled: enabled, initialData: defaultValue }
+    [ref]
   );
 
-  return { data: data, loading, error };
-}
+  const fetchFn = useCallback(async () => {
+    const snapshot = await getDoc(ref);
+    return snapshot.data() || null;
+  }, [ref]);
 
-function getDataFromSnapshot<T>(snapshot: DocumentSnapshot<T>, defaultValue?: T) {
-  return snapshot.data() || defaultValue || null;
+  return useFirestoreData<T | null>(queryKey, fetchFn, subscribeFn, options);
 }
