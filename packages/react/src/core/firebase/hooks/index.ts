@@ -1,4 +1,3 @@
-export * from './useAuth';
 export * from './useFirebaseAuth';
 export * from './useFirebaseUser';
 export * from './useFirestoreActions';

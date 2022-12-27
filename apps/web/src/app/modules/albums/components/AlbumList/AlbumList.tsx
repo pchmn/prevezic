@@ -19,7 +19,6 @@ const getAlbumAccessIds = (currentUser: (User & UserDocument) | null | undefined
       albumIds.push(key);
     }
   }
-  console.log('albumIds', albumIds);
   return albumIds;
 };
 
@@ -27,26 +26,8 @@ export function AlbumList() {
   const { t } = useTranslation();
 
   const { currentUser } = useFirebaseUser();
-  console.log('currentUser', currentUser?.rights);
+
   const albumAccessIds = useMemo(() => getAlbumAccessIds(currentUser), [currentUser]);
-  // const { data: albums, loading } = useFirestoreCollection(
-  //   query(
-  //     collection(getFirestore(), 'albums'),
-  //     where(documentId(), 'in', albumAccessIds.length ? albumAccessIds : ['unknown'])
-  //   ),
-  //   {
-  //     queryKey: `albums-${albumAccessIds.join('-')}`,
-  //     enabled: !!albumAccessIds.length,
-  //   }
-  // );
-  // const { data } = useFirestoreQueryData(
-  //   ['albums', albumAccessIds.join('-')],
-  //   query(
-  //     collection(getFirestore(), 'albums'),
-  //     where(documentId(), 'in', albumAccessIds.length ? albumAccessIds : ['unknown'])
-  //   ),
-  //   { subscribe: true }
-  // );
   const { data, isLoading } = useFirestoreQuery(
     ['albums', albumAccessIds.join('-')],
     query(

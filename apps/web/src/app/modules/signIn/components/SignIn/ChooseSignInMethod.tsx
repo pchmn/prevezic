@@ -1,6 +1,6 @@
 import { GoogleIcon, MagicIcon } from '@app/shared/components';
 import { Button, Flex } from '@mantine/core';
-import { useFirebaseAuth, useNotification, useSignInWithGoogle } from '@prevezic/react';
+import { useNotification, useSignInWithGoogle } from '@prevezic/react';
 import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
@@ -13,8 +13,6 @@ export function ChooseSignInMethod() {
   const { t } = useTranslation();
 
   const { mutate: signInWithGoogle, isLoading } = useSignInWithGoogle();
-  const { signInWithGoogle: signInWithGoogle2 } = useFirebaseAuth();
-  console.log('isLoading', { isLoading });
 
   const { from } = useSignInRouteParams();
   const navigate = useNavigate();
@@ -25,17 +23,12 @@ export function ChooseSignInMethod() {
     setLoadingContext(isLoading);
   }, [isLoading, setLoadingContext]);
 
-  const googleSignIn = async () => {
-    try {
-      signInWithGoogle({
-        onSuccess: () => navigate(from),
-        onError: () =>
-          showError({ title: t('signIn.googleSignInError.title'), message: t('signIn.googleSignInError.description') }),
-      });
-      await signInWithGoogle2();
-    } catch (err) {
-      console.log('err', err);
-    }
+  const googleSignIn = () => {
+    signInWithGoogle(undefined, {
+      onSuccess: () => navigate(from),
+      onError: () =>
+        showError({ title: t('signIn.googleSignInError.title'), message: t('signIn.googleSignInError.description') }),
+    });
   };
 
   return (

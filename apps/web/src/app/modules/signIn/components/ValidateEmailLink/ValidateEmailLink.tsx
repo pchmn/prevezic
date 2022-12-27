@@ -1,7 +1,7 @@
 import { InvalidLinkIcon, UserCheckIcon } from '@app/shared/components';
 import { Button, Flex, Loader, Text } from '@mantine/core';
 import { useLocalStorage, useTimeout } from '@mantine/hooks';
-import { useFirebaseUser, useSignInWithMagicLink } from '@prevezic/react';
+import { useEffectOnce, useFirebaseUser, useSignInWithMagicLink } from '@prevezic/react';
 import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useSearchParams } from 'react-router-dom';
@@ -11,23 +11,26 @@ import { ConfirmEmailForm } from './ConfirmEmailForm';
 export function ValidateEmailLink() {
   const [email, setEmail, remove] = useLocalStorage({ key: 'emailForSignIn', getInitialValueInEffect: false });
 
-  const { mutate: signInWithMagicLink, isLoading, isSuccess, isIdle } = useSignInWithMagicLink();
-  console.log('status', isIdle);
+  const { mutate: signInWithMagicLink, isSuccess, isError } = useSignInWithMagicLink();
   const { currentUser } = useFirebaseUser();
 
   const { t } = useTranslation();
 
-  useEffect(() => {
+  const validateLink = (email: string) => {
+    signInWithMagicLink(email, { onSuccess: () => remove() });
+  };
+
+  useEffectOnce(() => {
     if (email && currentUser?.isAnonymous) {
-      signInWithMagicLink(email, { onSuccess: () => remove() });
+      validateLink(email);
     }
-  }, [currentUser, email, signInWithMagicLink, remove]);
+  });
 
   return (
     <Flex direction="column" justify="center" align="center" h="100%" gap="md" p="md">
       {email ? (
         <>
-          {isLoading || isIdle ? (
+          {!isSuccess && !isError ? (
             <>
               <Loader size="xl" />
               <Text>{t('signIn.validatingLink')}</Text>
@@ -39,7 +42,12 @@ export function ValidateEmailLink() {
           )}
         </>
       ) : (
-        <ConfirmEmailForm onSubmit={(values) => setEmail(values.email)} />
+        <ConfirmEmailForm
+          onSubmit={(values) => {
+            setEmail(values.email);
+            validateLink(values.email);
+          }}
+        />
       )}
     </Flex>
   );

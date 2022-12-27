@@ -1,123 +1,92 @@
-import { useQueryClient } from '@tanstack/react-query';
+import { FunctionParams } from '@prevezic/core';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import {
   getAuth,
   GoogleAuthProvider,
-  signInAnonymously as firebaseSignInAnonymously,
+  onAuthStateChanged,
+  signInAnonymously,
   signInWithEmailLink,
   signInWithPopup,
-  signOut as firebaseSignOut,
   User,
 } from 'firebase/auth';
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback } from 'react';
 
 import { callFunction } from '../functions';
+import { useFirestoreData } from './useFirestoreData';
 
-export function useFirebaseAuth() {
-  const queryClient = useQueryClient();
+export function useFirebaseAuthUser() {
+  const subscribeFn = useCallback((onData: (data: User | null) => void, onError: (error: Error) => void) => {
+    return onAuthStateChanged(
+      getAuth(),
+      (firebaseUser) => {
+        onData(firebaseUser);
+      },
+      (error) => onError(error)
+    );
+  }, []);
 
-  const auth = useMemo(() => getAuth(), []);
+  const fetchFn = useCallback(async () => {
+    return getAuth().currentUser;
+  }, []);
 
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<Error | undefined>();
+  return useFirestoreData<User | null>(['firebaseAuth'], fetchFn, subscribeFn);
+}
 
-  const signInAnonymously = useCallback(async () => {
-    setLoading(true);
-    setError(undefined);
-    try {
-      await firebaseSignInAnonymously(auth);
-      setLoading(false);
-    } catch (error) {
-      setError(error as Error);
-      setLoading(false);
-    }
-  }, [auth]);
+export function useSignInAnonymously() {
+  return useMutation({ mutationFn: () => signInAnonymously(getAuth()) });
+}
 
-  const sendMagicLink = useCallback(async (email: string, from?: string) => {
-    setLoading(true);
-    setError(undefined);
-    try {
-      await callFunction('sendMagicLink', {
+export function useSendMagicLink() {
+  return useMutation({
+    mutationFn: ({ email, from }: Omit<FunctionParams['sendMagicLink'], 'validationUrl'>) =>
+      callFunction('sendMagicLink', {
         email,
         validationUrl: encodeURI(`${window.location.origin}/validate-email-link`),
         from: from ? encodeURI(from) : undefined,
-      });
-      return setLoading(false);
-    } catch (error) {
-      setError(error as Error);
-      setLoading(false);
-      throw error;
-    }
-  }, []);
+      }),
+  });
+}
 
-  const signInWithMagicLink = useCallback(
-    async (email: string) => {
-      setLoading(true);
-      setError(undefined);
+export function useSignInWithMagicLink() {
+  const queryClient = useQueryClient();
 
-      try {
-        if (!auth.currentUser) {
-          throw new Error('No current user');
-        }
-
-        const priorTokenId = await auth.currentUser?.getIdToken(true);
-
-        const result = await signInWithEmailLink(auth, email, window.location.href);
-        queryClient.setQueryData<User | null>(['firebaseAuth'], result.user);
-
-        await callFunction('mergeUsers', { priorTokenId });
-        setLoading(false);
-      } catch (error) {
-        setError(error as Error);
-        setLoading(false);
-        throw error;
-      }
-    },
-    [auth, queryClient]
-  );
-
-  const signInWithGoogle = useCallback(async () => {
-    setLoading(true);
-    setError(undefined);
-
-    try {
+  return useMutation({
+    mutationFn: async (email: string) => {
+      const auth = getAuth();
       if (!auth.currentUser) {
         throw new Error('No current user');
       }
+      const priorTokenId = await auth.currentUser.getIdToken(true);
+      const result = await signInWithEmailLink(auth, email, window.location.href);
+      return { user: result.user, priorTokenId };
+    },
+    onSuccess: ({ user, priorTokenId }: { user: User; priorTokenId: string }) => {
+      queryClient.setQueryData<User | null>(['firebaseAuth'], user);
+      return callFunction('mergeUsers', { priorTokenId });
+    },
+  });
+}
 
-      const priorTokenId = await auth.currentUser?.getIdToken(true);
+export function useSignInWithGoogle() {
+  const queryClient = useQueryClient();
 
+  return useMutation({
+    mutationFn: async () => {
+      const auth = getAuth();
+      if (!auth.currentUser) {
+        throw new Error('No current user');
+      }
+      const priorTokenId = await auth.currentUser.getIdToken(true);
       const result = await signInWithPopup(auth, new GoogleAuthProvider());
-      queryClient.setQueryData<User | null>(['firebaseAuth'], result.user);
+      return { user: result.user, priorTokenId };
+    },
+    onSuccess: ({ user, priorTokenId }: { user: User; priorTokenId: string }) => {
+      queryClient.setQueryData<User | null>(['firebaseAuth'], user);
+      return callFunction('mergeUsers', { priorTokenId });
+    },
+  });
+}
 
-      await callFunction('mergeUsers', { priorTokenId });
-      setLoading(false);
-    } catch (error) {
-      setError(error as Error);
-      setLoading(false);
-      throw error;
-    }
-  }, [auth, queryClient]);
-
-  const signOut = useCallback(async () => {
-    setLoading(true);
-    setError(undefined);
-    try {
-      await firebaseSignOut(auth);
-      setLoading(false);
-    } catch (error) {
-      setError(error as Error);
-      setLoading(false);
-      throw error;
-    }
-  }, [auth]);
-
-  return {
-    signInAnonymously,
-    signOut,
-    sendMagicLink,
-    signInWithMagicLink,
-    signInWithGoogle,
-    loading,
-    error,
-  };
+export function useSignOut() {
+  return useMutation({ mutationFn: () => getAuth().signOut() });
 }

@@ -1,11 +1,11 @@
 import { AppShell, Flex, Loader } from '@mantine/core';
-import { useAuth } from '@prevezic/react';
+import { useFirebaseAuthUser } from '@prevezic/react';
 import { useSignInAnonymously } from '@prevezic/react';
 import { useEffect } from 'react';
 
 export function withAuth(Component: React.ElementType) {
   return function Render() {
-    const { data: currentUser } = useAuth();
+    const { data: currentUser } = useFirebaseAuthUser();
     const { mutate, isLoading } = useSignInAnonymously();
 
     useEffect(() => {

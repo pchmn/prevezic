@@ -17,7 +17,6 @@ export function useFirestoreData<T>(
   const { listen = true, initialData, enabled = true } = options || {};
   const queryKeyHash = hashQueryKey(queryKey);
   const previousQueryKeyHash = useRef<string>(queryKeyHash);
-  const previousData = useRef<T>();
 
   const queryClient = useQueryClient();
 
@@ -50,7 +49,6 @@ export function useFirestoreData<T>(
 
         return new Promise<T>((resolve, reject) => {
           unsubscribes[queryKeyHash] = subscribeFn((data) => {
-            previousData.current = data;
             if (!resolved) {
               resolved = true;
               return resolve(data);
@@ -64,7 +62,7 @@ export function useFirestoreData<T>(
     {
       enabled,
       initialData,
-      placeholderData: enabled ? previousData.current : undefined,
+      keepPreviousData: enabled,
       staleTime: Infinity,
       retry: false,
       refetchInterval: undefined,
