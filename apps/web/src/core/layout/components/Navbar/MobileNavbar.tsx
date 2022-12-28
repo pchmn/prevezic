@@ -16,11 +16,11 @@ export function MobileNavbar() {
 
   return (
     <Footer
-      height={80}
+      height={72}
       sx={(theme) => ({ borderBottom: 'none', backgroundColor: theme.other.schemes[theme.colorScheme].surface1 })}
     >
       <Flex align="center" justify="center" h="100%">
-        <Flex justify="space-between" align="center" gap={48}>
+        <Flex justify="space-between" align="center" h="100%" gap="md">
           {items.map((item) => (
             <Item
               key={item.label}
@@ -57,18 +57,19 @@ function Item({
       direction="column"
       py="sm"
       px="sm"
+      h="100%"
       sx={(theme) => ({
         position: 'relative',
         color: isActive
           ? theme.other.schemes[theme.colorScheme].primary
           : theme.other.schemes[theme.colorScheme].onBackground,
-        borderRadius: theme.radius.md,
+        borderRadius: theme.radius.xl,
         transition: 'background-color 300ms ease-in-out, color 300ms ease-in-out',
         '&:active': {
-          backgroundColor: theme.other.schemes[theme.colorScheme].surface1,
+          backgroundColor: theme.other.schemes[theme.colorScheme].surface2,
           outline: 'none',
         },
-        width: 70,
+        width: 108,
         WebkitTapHighlightColor: 'transparent',
         userSelect: 'none',
       })}

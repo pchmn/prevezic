@@ -10,7 +10,7 @@ import { Profile } from './Profile';
 
 const PreferenceItem = styled(Flex)(({ theme }) => ({
   '&:active': {
-    backgroundColor: theme.other.schemes[theme.colorScheme].surface1,
+    backgroundColor: theme.other.schemes[theme.colorScheme].surface2,
     outline: 'none',
   },
   transition: 'background-color 300ms ease-in-out',
