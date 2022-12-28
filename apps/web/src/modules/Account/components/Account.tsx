@@ -13,7 +13,7 @@ const PreferenceItem = styled(Flex)(({ theme }) => ({
     backgroundColor: theme.other.schemes[theme.colorScheme].surface1,
     outline: 'none',
   },
-  transition: 'background-color 0.2s ease',
+  transition: 'background-color 300ms ease-in-out',
   borderRadius: 8,
   cursor: 'pointer',
   WebkitTapHighlightColor: 'transparent',

@@ -3,24 +3,24 @@ import { useEffect, useMemo, useState } from 'react';
 import { breakpoints } from '../provider';
 
 type LargerThanOptions = {
-  largerThan: keyof typeof breakpoints;
-  smallerThan?: keyof typeof breakpoints;
+  largerThan: keyof typeof breakpoints | number;
+  smallerThan?: keyof typeof breakpoints | number;
 };
 type SmallerThanOptions = {
-  smallerThan: keyof typeof breakpoints;
-  largerThan?: keyof typeof breakpoints;
+  smallerThan: keyof typeof breakpoints | number;
+  largerThan?: keyof typeof breakpoints | number;
 };
 type UseMediaQueryOptions = LargerThanOptions | SmallerThanOptions;
 
 function getQuery({ largerThan, smallerThan }: UseMediaQueryOptions) {
   let query = '';
   if (largerThan) {
-    query = `(min-width: ${breakpoints[largerThan]}px)`;
+    query = `(min-width: ${typeof largerThan !== 'number' ? breakpoints[largerThan] : largerThan}px)`;
   }
   if (smallerThan) {
     query = query
-      ? `${query} and (max-width: ${breakpoints[smallerThan]}px)`
-      : `(max-width: ${breakpoints[smallerThan]}px)`;
+      ? `${query} and (max-width: ${typeof smallerThan !== 'number' ? breakpoints[smallerThan] : smallerThan}px)`
+      : `(max-width: ${typeof smallerThan !== 'number' ? breakpoints[smallerThan] : smallerThan}px)`;
   }
   return query;
 }

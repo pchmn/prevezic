@@ -15,28 +15,22 @@ export function MobileNavbar() {
   const navigate = useNavigate();
 
   return (
-    <Footer height={72} sx={{ borderBottom: 'none' }}>
-      <Flex
-        justify="space-between"
-        align="center"
-        px={50}
-        py="md"
-        sx={(theme) => ({
-          position: 'fixed',
-          bottom: 0,
-          left: 0,
-          right: 0,
-          backgroundColor: theme.other.schemes[theme.colorScheme].surface1,
-        })}
-      >
-        {items.map((item) => (
-          <Item
-            key={item.label}
-            {...item}
-            isActive={window.location.pathname.includes(item.href)}
-            onClick={() => navigate(item.href)}
-          />
-        ))}
+    <Footer
+      height={80}
+      sx={(theme) => ({ borderBottom: 'none', backgroundColor: theme.other.schemes[theme.colorScheme].surface1 })}
+    >
+      <Flex align="center" justify="center" px="md" py="sm">
+        <Flex justify="space-between" align="center" gap={48}>
+          {items.map((item) => (
+            <Item
+              key={item.label}
+              {...item}
+              icon={window.location.pathname.includes(item.href) ? item.filledIcon : item.icon}
+              isActive={window.location.pathname.includes(item.href)}
+              onClick={() => navigate(item.href)}
+            />
+          ))}
+        </Flex>
       </Flex>
     </Footer>
   );
@@ -57,30 +51,32 @@ function Item({
 
   return (
     <Flex
-      gap="sm"
+      gap="xs"
       align="center"
       justify="center"
+      direction="column"
       py="sm"
-      px="md"
+      px="sm"
       sx={(theme) => ({
         position: 'relative',
         color: isActive
           ? theme.other.schemes[theme.colorScheme].primary
           : theme.other.schemes[theme.colorScheme].onBackground,
-        backgroundColor: isActive ? theme.other.schemes[theme.colorScheme].surface5 : 'transparent',
-        borderRadius: theme.radius.xl,
-        transition: 'background-color 300ms ease-in-out, width 300ms ease-in-out, color 300ms ease-in-out',
-        width: isActive ? 130 : 48,
-        overflow: 'hidden',
-        '& svg': {
-          overflow: 'visible !important',
+        borderRadius: theme.radius.md,
+        transition: 'background-color 300ms ease-in-out, color 300ms ease-in-out',
+        '&:active': {
+          backgroundColor: theme.other.schemes[theme.colorScheme].surface1,
+          outline: 'none',
         },
+        width: 70,
+        WebkitTapHighlightColor: 'transparent',
+        userSelect: 'none',
       })}
       onClick={onClick}
     >
       {icon}
       {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
-      {isActive && <Text>{t(label as any) as string}</Text>}
+      <Text size="sm">{t(label as any) as string}</Text>
     </Flex>
   );
 }
