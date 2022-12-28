@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { GoogleIcon, MagicIcon } from 'src/shared/components';
 
-import { useSignInRouteParams } from '../useSignInRouteParams';
+import { useSignInRouteParams } from '../hooks';
 import { useSignInContext } from './SignInContext';
 
 export function ChooseSignInMethod() {

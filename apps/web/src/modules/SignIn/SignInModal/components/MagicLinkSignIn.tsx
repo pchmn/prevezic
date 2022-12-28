@@ -7,8 +7,8 @@ import { useTranslation } from 'react-i18next';
 import { MailCheckIcon } from 'src/shared/components';
 import { z } from 'zod';
 
+import { useSignInRouteParams } from '../hooks';
 import { useSignInContext } from './SignInContext';
-import { useSignInRouteParams } from './useSignInRouteParams';
 
 export function MagicLinkSignIn() {
   const { setLoading: setLoadingContext } = useSignInContext();
