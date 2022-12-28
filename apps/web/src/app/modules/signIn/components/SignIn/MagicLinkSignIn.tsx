@@ -2,8 +2,8 @@ import { MailCheckIcon } from '@app/shared/components';
 import { Button, Flex, Text, TextInput } from '@mantine/core';
 import { useForm, zodResolver } from '@mantine/form';
 import { useLocalStorage } from '@mantine/hooks';
-import { useFirebaseAuth, useMediaQuery, useNotification } from '@prevezic/react';
-import { useEffect, useMemo, useState } from 'react';
+import { useMediaQuery, useNotification, useSendMagicLink } from '@prevezic/react';
+import { useEffect, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { z } from 'zod';
 
@@ -11,14 +11,13 @@ import { useSignInContext } from './SignInContext';
 import { useSignInRouteParams } from './useSignInRouteParams';
 
 export function MagicLinkSignIn() {
-  const { setLoading } = useSignInContext();
+  const { setLoading: setLoadingContext } = useSignInContext();
 
   const { t } = useTranslation();
 
   const [, setEmail] = useLocalStorage({ key: 'emailForSignIn' });
 
-  const { sendMagicLink, loading } = useFirebaseAuth();
-  const [emailSent, setEmailSent] = useState(false);
+  const { mutate: sendMagicLink, isLoading, isSuccess: emailSent } = useSendMagicLink();
 
   const isMobile = useMediaQuery({ smallerThan: 'sm' });
 
@@ -27,20 +26,21 @@ export function MagicLinkSignIn() {
   const { from } = useSignInRouteParams();
 
   useEffect(() => {
-    setLoading(loading);
-  }, [loading, setLoading]);
+    setLoadingContext(isLoading);
+  }, [isLoading, setLoadingContext]);
 
   const handleSubmit = async ({ email }: { email: string }) => {
-    if (loading) {
+    if (isLoading) {
       return;
     }
     setEmail(email);
-    try {
-      await sendMagicLink(email, from);
-      setEmailSent(true);
-    } catch (error) {
-      showError({ title: t('signIn.emailSentError.title'), message: t('signIn.emailSentError.description') });
-    }
+    sendMagicLink(
+      { email, from },
+      {
+        onError: () =>
+          showError({ title: t('signIn.emailSentError.title'), message: t('signIn.emailSentError.description') }),
+      }
+    );
   };
 
   return (
@@ -50,7 +50,7 @@ export function MagicLinkSignIn() {
           <Text sx={{ position: isMobile ? 'absolute' : undefined, top: isMobile ? 0 : undefined }}>
             {t('signIn.description')}
           </Text>
-          <SignInForm loading={loading} onSubmit={handleSubmit} />{' '}
+          <SignInForm loading={isLoading} onSubmit={handleSubmit} />{' '}
         </>
       ) : (
         <Flex direction="column" align="center" gap="md">

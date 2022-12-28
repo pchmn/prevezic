@@ -14,25 +14,28 @@ export default async (data: FunctionParams['mergeUsers'], context: CallableConte
     throw new HttpsError('invalid-argument', 'Invalid data', error.issues);
   }
 
-  const priorToken = await getAuth().verifyIdToken(data.priorTokenId);
+  const previousToken = await getAuth().verifyIdToken(data.previousTokenId);
   const currentToken = context.auth?.token;
 
   if (!currentToken) {
     throw new HttpsError('unauthenticated', 'User must be authenticated');
   }
-  if (priorToken.firebase.sign_in_provider !== 'anonymous') {
+  if (previousToken.firebase.sign_in_provider !== 'anonymous') {
     throw new HttpsError('internal', 'Prior user to merge must be anonymous');
   }
   if (currentToken.firebase.sign_in_provider === 'anonymous') {
     throw new HttpsError('internal', 'Current user to merge cannot be anonymous');
   }
 
-  const previousUser = (await db.collection('users').doc(priorToken.uid).get()).data() as UserDocument;
+  const previousUser = (await db.collection('users').doc(previousToken.uid).get()).data() as UserDocument;
   // Don't merge if prior user has no rights
   if (previousUser && previousUser.rights) {
     const currentUser = (await db.collection('users').doc(currentToken.uid).get()).data() as UserDocument;
 
-    const rightsToUpdate = getRightsToUpdate(previousUser, currentUser);
+    const { rightsToUpdate, rightsToDelete } = getRightsToUpdate(
+      { ...previousUser, uid: previousToken.uid },
+      { ...currentUser, uid: currentToken.uid }
+    );
 
     // Merge only if there are changes
     if (Object.keys(rightsToUpdate).length > 0) {
@@ -42,35 +45,41 @@ export default async (data: FunctionParams['mergeUsers'], context: CallableConte
       for (const key of Object.keys(rightsToUpdate)) {
         const albumRef = db.collection('albums').doc(key);
         batch.update(albumRef, { [`${rightsToUpdate[key]}s`]: FieldValue.arrayUnion(currentToken.uid) });
-        batch.update(albumRef, { [`${rightsToUpdate[key]}s`]: FieldValue.arrayRemove(priorToken.uid) });
-        await batch.commit();
       }
+      for (const key of Object.keys(rightsToDelete)) {
+        const albumRef = db.collection('albums').doc(key);
+        batch.update(albumRef, { [`${rightsToUpdate[key]}s`]: FieldValue.arrayRemove(rightsToDelete[key]) });
+      }
+      await batch.commit();
     }
   }
 
-  await getAuth().deleteUser(priorToken.uid);
-  await db.collection('users').doc(priorToken.uid).delete();
+  await getAuth().deleteUser(previousToken.uid);
+  await db.collection('users').doc(previousToken.uid).delete();
 
   return { success: true };
 };
 
-function getRightsToUpdate(previousUserDoc: UserDocument, currentUserDoc: UserDocument) {
-  const previousUserRights = previousUserDoc.rights || {};
-  const currentUserRights = currentUserDoc.rights || {};
+function getRightsToUpdate(previousUser: UserDocument & { uid: string }, currentUser: UserDocument & { uid: string }) {
+  const previousUserRights = previousUser.rights || {};
+  const currentUserRights = currentUser.rights || {};
 
   const rightsToUpdate: Record<string, UserRole> = {};
+  const rightsToDelete: Record<string, string[]> = {};
 
   Object.keys(previousUserRights).forEach((key) => {
     if (currentUserRights[key]) {
       if (isRoleHigher(previousUserRights[key], currentUserRights[key])) {
         rightsToUpdate[key] = previousUserRights[key];
+        rightsToDelete[key] = rightsToDelete[key] ? [...rightsToDelete[key], currentUser.uid] : [currentUser.uid];
       }
     } else if (['owner', 'editor', 'member'].includes(previousUserRights[key])) {
       rightsToUpdate[key] = previousUserRights[key];
     }
+    rightsToDelete[key] = rightsToDelete[key] ? [...rightsToDelete[key], previousUser.uid] : [previousUser.uid];
   });
 
-  return rightsToUpdate;
+  return { rightsToUpdate, rightsToDelete };
 }
 
 function isRoleHigher(role1: UserRole, role2: UserRole) {

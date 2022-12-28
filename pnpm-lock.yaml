@@ -80,6 +80,7 @@ importers:
       '@mantine/form': ^5.9.4
       '@mantine/hooks': ^5.9.4
       '@mantine/notifications': ^5.9.4
+      '@prevezic/core': workspace:*
       '@prevezic/react': workspace:*
       '@prevezic/tsconfig': workspace:*
       '@tanstack/react-query': ^4.18.0
@@ -114,6 +115,7 @@ importers:
       '@mantine/form': 5.9.4_react@18.2.0
       '@mantine/hooks': 5.9.4_react@18.2.0
       '@mantine/notifications': 5.9.4_akxvflpdc4qclfp7ngtfppkada
+      '@prevezic/core': link:../../packages/core
       '@prevezic/react': link:../../packages/react
       '@tanstack/react-query': 4.18.0_biqbaboplfbrettd7655fr4n2y
       firebase: 9.14.0

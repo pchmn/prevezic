@@ -1,8 +1,8 @@
 import { InvalidLinkIcon, UserCheckIcon } from '@app/shared/components';
 import { Button, Flex, Loader, Text } from '@mantine/core';
 import { useLocalStorage, useTimeout } from '@mantine/hooks';
-import { useFirebaseAuth, useFirebaseUser } from '@prevezic/react';
-import { useEffect, useState } from 'react';
+import { useEffectOnce, useFirebaseUser, useSignInWithMagicLink } from '@prevezic/react';
+import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 
@@ -11,43 +11,43 @@ import { ConfirmEmailForm } from './ConfirmEmailForm';
 export function ValidateEmailLink() {
   const [email, setEmail, remove] = useLocalStorage({ key: 'emailForSignIn', getInitialValueInEffect: false });
 
-  const { signInWithMagicLink, loading } = useFirebaseAuth();
+  const { mutate: signInWithMagicLink, isSuccess, isError } = useSignInWithMagicLink();
   const { currentUser } = useFirebaseUser();
-
-  const [validatedLink, setValidatedLink] = useState<boolean | undefined>();
 
   const { t } = useTranslation();
 
-  useEffect(() => {
+  const validateLink = (email: string) => {
+    signInWithMagicLink(email, { onSuccess: () => remove() });
+  };
+
+  useEffectOnce(() => {
     if (email && currentUser?.isAnonymous) {
-      signInWithMagicLink(email)
-        .then(() => {
-          remove();
-          setValidatedLink(true);
-        })
-        .catch(() => {
-          setValidatedLink(false);
-        });
+      validateLink(email);
     }
-  }, [email, currentUser, remove, signInWithMagicLink]);
+  });
 
   return (
     <Flex direction="column" justify="center" align="center" h="100%" gap="md" p="md">
       {email ? (
         <>
-          {loading || validatedLink === undefined ? (
+          {!isSuccess && !isError ? (
             <>
               <Loader size="xl" />
               <Text>{t('signIn.validatingLink')}</Text>
             </>
-          ) : validatedLink ? (
+          ) : isSuccess ? (
             <ValidLink />
           ) : (
             <InvalidLink />
           )}
         </>
       ) : (
-        <ConfirmEmailForm onSubmit={(values) => setEmail(values.email)} />
+        <ConfirmEmailForm
+          onSubmit={(values) => {
+            setEmail(values.email);
+            validateLink(values.email);
+          }}
+        />
       )}
     </Flex>
   );
