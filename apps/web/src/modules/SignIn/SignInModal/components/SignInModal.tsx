@@ -4,8 +4,8 @@ import { useTranslation } from 'react-i18next';
 import { Outlet, useNavigate } from 'react-router-dom';
 import { LeftArrowIcon } from 'src/shared/components';
 
+import { useSignInRouteParams } from '../hooks';
 import { SignInContextProvider, useSignInContext } from './SignInContext';
-import { useSignInRouteParams } from './useSignInRouteParams';
 
 export function SignInModal({ opened = true, onClose }: { opened?: boolean; onClose?: () => void }) {
   return (
