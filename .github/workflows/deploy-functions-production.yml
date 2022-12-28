@@ -71,9 +71,9 @@ jobs:
           echo SENDGRID_API_KEY=${{ secrets.SENDGRID_API_KEY_PROD }} >> .env
           cat .env
 
-      - name: Deploy to prevezic-dev
+      - name: Deploy to prevezic
         run: |
-          firebase use prevezic-dev
+          firebase use prevezic
           cd apps/functions
           pnpm remove -D @prevezic/tsconfig eslint-config-prevezic-ts
           pnpm deploy
