@@ -19,7 +19,7 @@ export function MobileNavbar() {
       height={80}
       sx={(theme) => ({ borderBottom: 'none', backgroundColor: theme.other.schemes[theme.colorScheme].surface1 })}
     >
-      <Flex align="center" justify="center" px="md" py="sm">
+      <Flex align="center" justify="center" h="100%">
         <Flex justify="space-between" align="center" gap={48}>
           {items.map((item) => (
             <Item
