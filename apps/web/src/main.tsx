@@ -1,4 +1,4 @@
-import '@/firebase';
+import '@/core/firebase';
 import '@/core/i18n';
 import './index.css';
 
