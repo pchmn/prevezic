@@ -34,7 +34,7 @@ jobs:
       - name: BUILD
         run: pnpm build:web
         env:
-          VITE_FIREBASE_API_KEY: ${{ secrets.VITE_FIREBASE_API_KEY_PROD }}
+          VITE_FIREBASE_CONFIG: ${{ secrets.VITE_FIREBASE_CONFIG_PROD }}
 
       # Test
       - name: TEST
