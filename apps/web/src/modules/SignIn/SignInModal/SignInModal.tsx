@@ -1,8 +1,8 @@
-import { LeftArrowIcon } from '@app/shared/components';
 import { ActionIcon, Flex, Modal, Title } from '@mantine/core';
 import { useMediaQuery } from '@prevezic/react';
 import { useTranslation } from 'react-i18next';
 import { Outlet, useNavigate } from 'react-router-dom';
+import { LeftArrowIcon } from 'src/shared/components';
 
 import { SignInContextProvider, useSignInContext } from './SignInContext';
 import { useSignInRouteParams } from './useSignInRouteParams';

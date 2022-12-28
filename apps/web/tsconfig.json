@@ -4,9 +4,7 @@
     "types": ["vite/client", "vitest/globals", "@prevezic/react/types"],
     "baseUrl": ".",
     "paths": {
-      "@app/*": ["src/app/*"],
-      "@assets/*": ["src/assets/*"],
-      "@lib/*": ["src/lib/*"],
+      "@/*": ["src/*"],
     },
   },
   "include": ["src", "vite.config.ts"]

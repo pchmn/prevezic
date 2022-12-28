@@ -1,6 +1,6 @@
 import { RouteObject } from 'react-router-dom';
 
-import { signInRoutes } from '../signIn';
+import { signInRoutes } from '../SignIn';
 import { AccountModule } from './AccountModule';
 
 const accountRoutes: RouteObject[] = [

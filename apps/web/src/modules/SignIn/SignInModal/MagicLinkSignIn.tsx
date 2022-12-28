@@ -1,10 +1,10 @@
-import { MailCheckIcon } from '@app/shared/components';
 import { Button, Flex, Text, TextInput } from '@mantine/core';
 import { useForm, zodResolver } from '@mantine/form';
 import { useLocalStorage } from '@mantine/hooks';
 import { useMediaQuery, useNotification, useSendMagicLink } from '@prevezic/react';
 import { useEffect, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
+import { MailCheckIcon } from 'src/shared/components';
 import { z } from 'zod';
 
 import { useSignInContext } from './SignInContext';
