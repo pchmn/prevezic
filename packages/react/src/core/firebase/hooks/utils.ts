@@ -1,13 +1,15 @@
 import { DocumentSnapshot } from 'firebase/firestore';
 
-export function getDataFromSnapshot<T>({
+import { DataWithId } from './types';
+
+type Data<T, Nullable> = Nullable extends true ? T | null : T;
+
+export function getDataFromSnapshot<T, Nullable extends boolean = true>({
   snapshot,
-  nullable = true,
-  withId = true,
+  nullable,
 }: {
   snapshot: DocumentSnapshot<T>;
-  nullable?: boolean;
-  withId?: boolean;
+  nullable?: Nullable;
 }) {
   const data = snapshot.data() || null;
 
@@ -15,5 +17,5 @@ export function getDataFromSnapshot<T>({
     throw new Error('Document does not exist');
   }
 
-  return withId && data ? { ...data, id: snapshot.id } : data;
+  return (data ? { ...data, id: snapshot.id } : data) as Data<DataWithId<T>, Nullable>;
 }

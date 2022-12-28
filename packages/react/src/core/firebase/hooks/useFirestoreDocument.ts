@@ -2,34 +2,32 @@ import { QueryKey } from '@tanstack/react-query';
 import { DocumentReference, getDoc, onSnapshot } from 'firebase/firestore';
 import { useCallback } from 'react';
 
-import { UseFirestoreOptions } from './types';
+import { DataWithId, UseFirestoreOptions } from './types';
 import { useFirestoreData } from './useFirestoreData';
 import { getDataFromSnapshot } from './utils';
 
 export function useFirestoreDocument<T>(
   queryKey: QueryKey,
   ref: DocumentReference<T>,
-  options?: UseFirestoreOptions<T> & { withId?: boolean }
+  options?: UseFirestoreOptions<DataWithId<T>>
 ) {
-  const { withId = true } = options || {};
-
   const subscribeFn = useCallback(
-    (onData: (data: T | null) => void, onError: (error: Error) => void) => {
+    (onData: (data: DataWithId<T> | null) => void, onError: (error: Error) => void) => {
       return onSnapshot(
         ref,
         (snapshot) => {
-          onData(getDataFromSnapshot({ snapshot, withId }));
+          onData(getDataFromSnapshot({ snapshot }));
         },
         (error) => onError(error)
       );
     },
-    [withId, ref]
+    [ref]
   );
 
   const fetchFn = useCallback(async () => {
     const snapshot = await getDoc(ref);
-    return getDataFromSnapshot({ snapshot, withId });
-  }, [ref, withId]);
+    return getDataFromSnapshot({ snapshot });
+  }, [ref]);
 
-  return useFirestoreData<T | null>(queryKey, fetchFn, subscribeFn, options);
+  return useFirestoreData<DataWithId<T> | null>(queryKey, fetchFn, subscribeFn, options);
 }

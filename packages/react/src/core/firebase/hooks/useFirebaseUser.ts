@@ -14,7 +14,6 @@ export function useFirebaseUser() {
     error: userError,
   } = useFirestoreDocument<UserDocument>(['users', firebaseUser?.uid], userRef, {
     enabled: !!firebaseUser,
-    withId: false,
   });
 
   return {

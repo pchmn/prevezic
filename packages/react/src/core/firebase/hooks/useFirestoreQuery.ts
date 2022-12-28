@@ -2,26 +2,24 @@ import { QueryKey } from '@tanstack/react-query';
 import { getDocs, onSnapshot, Query } from 'firebase/firestore';
 import { useCallback } from 'react';
 
-import { UseFirestoreOptions } from './types';
+import { DataWithId, UseFirestoreOptions } from './types';
 import { useFirestoreData } from './useFirestoreData';
 import { getDataFromSnapshot } from './utils';
 
 export function useFirestoreQuery<T>(
   queryKey: QueryKey,
   query: Query<T>,
-  options?: UseFirestoreOptions<T[]> & { withId?: boolean }
+  options?: UseFirestoreOptions<DataWithId<T>[]>
 ) {
-  const { withId = true } = options || {};
-
   const subscribeFn = useCallback(
-    (onData: (data: T[]) => void, onError: (error: Error) => void) => {
+    (onData: (data: DataWithId<T>[]) => void, onError: (error: Error) => void) => {
       return onSnapshot(
         query,
         (querySnapshot) => {
-          const value: T[] = [];
+          const value: DataWithId<T>[] = [];
           if (!querySnapshot.empty) {
             querySnapshot.forEach((snapshot) => {
-              value.push(getDataFromSnapshot({ snapshot, withId, nullable: false }) as T);
+              value.push(getDataFromSnapshot({ snapshot, nullable: false }));
             });
           }
           onData(value);
@@ -29,19 +27,22 @@ export function useFirestoreQuery<T>(
         (error) => onError(error)
       );
     },
-    [query, withId]
+    [query]
   );
 
   const fetchFn = useCallback(async () => {
     const querySnapshot = await getDocs(query);
-    const value: T[] = [];
+    const value: DataWithId<T>[] = [];
     if (!querySnapshot.empty) {
       querySnapshot.forEach((snapshot) => {
-        value.push(getDataFromSnapshot({ snapshot, withId, nullable: false }) as T);
+        value.push(getDataFromSnapshot({ snapshot, nullable: false }));
       });
     }
     return value;
-  }, [query, withId]);
+  }, [query]);
 
-  return useFirestoreData<T[]>(queryKey, fetchFn, subscribeFn, options);
+  return useFirestoreData<DataWithId<T>[]>(queryKey, fetchFn, subscribeFn, {
+    ...options,
+    initialData: [],
+  });
 }

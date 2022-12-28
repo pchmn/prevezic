@@ -5,4 +5,4 @@ export interface UseFirestoreOptions<T> {
   enabled?: boolean;
 }
 
-export type DocumentWithId<T> = T & { id: string };
+export type DataWithId<T> = T & { id: string };
