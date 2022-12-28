@@ -4,8 +4,15 @@ import { useCallback } from 'react';
 
 import { UseFirestoreOptions } from './types';
 import { useFirestoreData } from './useFirestoreData';
+import { getDataFromSnapshot } from './utils';
 
-export function useFirestoreQuery<T>(queryKey: QueryKey, query: Query<T>, options?: UseFirestoreOptions<T[]>) {
+export function useFirestoreQuery<T>(
+  queryKey: QueryKey,
+  query: Query<T>,
+  options?: UseFirestoreOptions<T[]> & { withId?: boolean }
+) {
+  const { withId = true } = options || {};
+
   const subscribeFn = useCallback(
     (onData: (data: T[]) => void, onError: (error: Error) => void) => {
       return onSnapshot(
@@ -13,8 +20,8 @@ export function useFirestoreQuery<T>(queryKey: QueryKey, query: Query<T>, option
         (querySnapshot) => {
           const value: T[] = [];
           if (!querySnapshot.empty) {
-            querySnapshot.forEach((doc) => {
-              value.push(doc.data());
+            querySnapshot.forEach((snapshot) => {
+              value.push(getDataFromSnapshot({ snapshot, withId, nullable: false }) as T);
             });
           }
           onData(value);
@@ -22,68 +29,19 @@ export function useFirestoreQuery<T>(queryKey: QueryKey, query: Query<T>, option
         (error) => onError(error)
       );
     },
-    [query]
+    [query, withId]
   );
 
   const fetchFn = useCallback(async () => {
-    console.log('fetchFn');
     const querySnapshot = await getDocs(query);
     const value: T[] = [];
     if (!querySnapshot.empty) {
-      querySnapshot.forEach((doc) => {
-        value.push(doc.data());
+      querySnapshot.forEach((snapshot) => {
+        value.push(getDataFromSnapshot({ snapshot, withId, nullable: false }) as T);
       });
     }
     return value;
-  }, [query]);
+  }, [query, withId]);
 
   return useFirestoreData<T[]>(queryKey, fetchFn, subscribeFn, options);
-
-  // return useQuery<T[], Error>(
-  //   queryKey,
-  //   async () => {
-  //     if (listen) {
-  //       let resolved = false;
-
-  //       return new Promise<T[]>((resolve, reject) => {
-  //         unsubscribes[queryKeyHash] = onSnapshot(
-  //           query,
-  //           (querySnapshot) => {
-  //             const value: T[] = [];
-  //             if (!querySnapshot.empty) {
-  //               querySnapshot.forEach((doc) => {
-  //                 value.push(doc.data());
-  //               });
-  //             }
-  //             if (!resolved) {
-  //               resolved = true;
-  //               return resolve(value);
-  //             }
-  //             queryClient.setQueryData<T[]>([queryKey], value);
-  //           },
-  //           reject
-  //         );
-  //       });
-  //     }
-
-  //     const querySnapshot = await getDocs(query);
-  //     const value: T[] = [];
-  //     if (!querySnapshot.empty) {
-  //       querySnapshot.forEach((doc) => {
-  //         value.push(doc.data());
-  //       });
-  //     }
-  //     return value;
-  //   },
-  //   {
-  //     enabled,
-  //     initialData,
-  //     staleTime: Infinity,
-  //     retry: false,
-  //     refetchInterval: undefined,
-  //     refetchOnMount: true,
-  //     refetchOnReconnect: false,
-  //     refetchOnWindowFocus: false,
-  //   }
-  // );
 }

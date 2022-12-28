@@ -12,7 +12,10 @@ export function useFirebaseUser() {
     data: user,
     isLoading: userLoading,
     error: userError,
-  } = useFirestoreDocument<UserDocument>(['users', firebaseUser?.uid], userRef, { enabled: !!firebaseUser });
+  } = useFirestoreDocument<UserDocument>(['users', firebaseUser?.uid], userRef, {
+    enabled: !!firebaseUser,
+    withId: false,
+  });
 
   return {
     currentUser: firebaseUser ? { ...firebaseUser, ...user } : firebaseUser,

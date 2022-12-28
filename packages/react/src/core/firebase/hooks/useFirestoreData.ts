@@ -41,7 +41,7 @@ export function useFirestoreData<T>(
     return () => unsubscribe(queryKeyHash);
   }, [listen, queryKeyHash]);
 
-  return useQuery<T, Error>(
+  const { data = initialData, ...others } = useQuery<T, Error>(
     queryKey,
     async () => {
       if (listen) {
@@ -61,7 +61,6 @@ export function useFirestoreData<T>(
     },
     {
       enabled,
-      initialData,
       keepPreviousData: enabled,
       staleTime: Infinity,
       retry: false,
@@ -71,4 +70,6 @@ export function useFirestoreData<T>(
       refetchOnWindowFocus: false,
     }
   );
+
+  return { data, ...others };
 }
