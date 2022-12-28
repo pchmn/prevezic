@@ -56,13 +56,13 @@ export function useSignInWithMagicLink() {
       if (!auth.currentUser) {
         throw new Error('No current user');
       }
-      const priorTokenId = await auth.currentUser.getIdToken(true);
+      const previousTokenId = await auth.currentUser.getIdToken(true);
       const result = await signInWithEmailLink(auth, email, window.location.href);
-      return { user: result.user, priorTokenId };
+      return { user: result.user, previousTokenId };
     },
-    onSuccess: ({ user, priorTokenId }: { user: User; priorTokenId: string }) => {
+    onSuccess: ({ user, previousTokenId }: { user: User; previousTokenId: string }) => {
       queryClient.setQueryData<User | null>(['firebaseAuth'], user);
-      return callFunction('mergeUsers', { priorTokenId });
+      return callFunction('mergeUsers', { previousTokenId });
     },
   });
 }
@@ -76,13 +76,13 @@ export function useSignInWithGoogle() {
       if (!auth.currentUser) {
         throw new Error('No current user');
       }
-      const priorTokenId = await auth.currentUser.getIdToken(true);
+      const previousTokenId = await auth.currentUser.getIdToken(true);
       const result = await signInWithPopup(auth, new GoogleAuthProvider());
-      return { user: result.user, priorTokenId };
+      return { user: result.user, previousTokenId };
     },
-    onSuccess: ({ user, priorTokenId }: { user: User; priorTokenId: string }) => {
+    onSuccess: ({ user, previousTokenId }: { user: User; previousTokenId: string }) => {
       queryClient.setQueryData<User | null>(['firebaseAuth'], user);
-      return callFunction('mergeUsers', { priorTokenId });
+      return callFunction('mergeUsers', { previousTokenId });
     },
   });
 }
