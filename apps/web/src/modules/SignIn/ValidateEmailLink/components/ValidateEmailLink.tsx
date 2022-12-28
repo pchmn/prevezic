@@ -1,10 +1,10 @@
-import { InvalidLinkIcon, UserCheckIcon } from '@app/shared/components';
 import { Button, Flex, Loader, Text } from '@mantine/core';
 import { useLocalStorage, useTimeout } from '@mantine/hooks';
 import { useEffectOnce, useFirebaseUser, useSignInWithMagicLink } from '@prevezic/react';
 import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useSearchParams } from 'react-router-dom';
+import { InvalidLinkIcon, UserCheckIcon } from 'src/shared/components';
 
 import { ConfirmEmailForm } from './ConfirmEmailForm';
 

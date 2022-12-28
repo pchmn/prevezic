@@ -1,10 +1,11 @@
-import { withAuth } from '@app/core/auth';
-import { AppLayout } from '@app/core/layout';
-import accountRoutes from '@app/modules/account';
-import albumsRoutes from '@app/modules/albums';
-import homeRoutes from '@app/modules/home';
-import { validateLinkRoutes } from '@app/modules/signIn';
 import { Navigate, Outlet, RouteObject, useLocation } from 'react-router-dom';
+
+import { withAuth } from '@/core/auth';
+import { AppLayout } from '@/core/layout';
+import accountRoutes from '@/modules/Account';
+import albumsRoutes from '@/modules/Albums';
+import homeRoutes from '@/modules/Home';
+import { validateLinkRoutes } from '@/modules/SignIn';
 
 export function App() {
   const location = useLocation();

@@ -1,12 +1,12 @@
-import { GoogleIcon, MagicIcon } from '@app/shared/components';
 import { Button, Flex } from '@mantine/core';
 import { useNotification, useSignInWithGoogle } from '@prevezic/react';
 import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
+import { GoogleIcon, MagicIcon } from 'src/shared/components';
 
+import { useSignInRouteParams } from '../hooks';
 import { useSignInContext } from './SignInContext';
-import { useSignInRouteParams } from './useSignInRouteParams';
 
 export function ChooseSignInMethod() {
   const { setLoading: setLoadingContext } = useSignInContext();

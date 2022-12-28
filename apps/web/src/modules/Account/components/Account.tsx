@@ -1,9 +1,9 @@
-import { LanguageIcon, PaletteIcon } from '@app/shared/components';
 import styled from '@emotion/styled';
 import { Flex, Text, Title } from '@mantine/core';
 import { ColorDot, ThemeEditor, useThemePreferences } from '@prevezic/react';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { LanguageIcon, PaletteIcon } from 'src/shared/components';
 
 import { LanguageSelector } from './LanguageSelector';
 import { Profile } from './Profile';

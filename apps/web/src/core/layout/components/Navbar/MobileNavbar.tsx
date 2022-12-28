@@ -1,3 +1,7 @@
+import { Flex, Footer, Text } from '@mantine/core';
+import { ReactNode } from 'react';
+import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
 import {
   AccountFilledIcon,
   AccountIcon,
@@ -5,11 +9,7 @@ import {
   AlbumsIcon,
   HomeFilledIcon,
   HomeIcon,
-} from '@app/shared/components';
-import { Flex, Footer, Text } from '@mantine/core';
-import { ReactNode } from 'react';
-import { useTranslation } from 'react-i18next';
-import { useNavigate } from 'react-router-dom';
+} from 'src/shared/components';
 
 export function MobileNavbar() {
   const navigate = useNavigate();

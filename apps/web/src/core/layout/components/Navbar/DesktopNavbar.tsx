@@ -1,3 +1,8 @@
+import styled from '@emotion/styled';
+import { Flex, Image, Navbar as MantineNavbar, Space, Text, Title } from '@mantine/core';
+import { ReactNode } from 'react';
+import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
 import {
   AccountFilledIcon,
   AccountIcon,
@@ -5,12 +10,7 @@ import {
   AlbumsIcon,
   HomeFilledIcon,
   HomeIcon,
-} from '@app/shared/components';
-import styled from '@emotion/styled';
-import { Flex, Image, Navbar as MantineNavbar, Space, Text, Title } from '@mantine/core';
-import { ReactNode } from 'react';
-import { useTranslation } from 'react-i18next';
-import { useNavigate } from 'react-router-dom';
+} from 'src/shared/components';
 
 export function DesktopNavbar({ size }: { size: 'large' | 'medium' }) {
   return (
