@@ -1,10 +1,12 @@
-import { Button, Flex } from '@mantine/core';
+import { Box, Button, Flex, Group, Title } from '@mantine/core';
 import { UserDocument } from '@prevezic/core';
 import { useFirebaseUser, useFirestoreQuery } from '@prevezic/react';
 import { User } from 'firebase/auth';
 import { collection, documentId, getFirestore, query, where } from 'firebase/firestore';
 import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+
+import { PlusIcon } from '@/shared/components';
 
 import { CreateAlbum } from './CreateAlbum';
 
@@ -45,9 +47,120 @@ export function AlbumList() {
   const [createAlbumOpened, setCreateAlbumOpened] = useState(false);
 
   return (
-    <Flex h="100%" justify="center" align="center">
+    <Flex direction="column" h="100%" gap="md" sx={{ position: 'relative' }}>
+      <Title order={4}>{t('album.albumList.title')}</Title>
+      <Group>
+        <Flex
+          justify="center"
+          align="center"
+          sx={(theme) => ({
+            borderRadius: 8,
+            backgroundColor: theme.other.schemes[theme.colorScheme].surface2,
+            // minWidth: 150,
+            maxWidth: 175,
+            aspectRatio: '1 / 1',
+          })}
+          onClick={() => setCreateAlbumOpened(true)}
+        >
+          <PlusIcon size="lg" />
+        </Flex>
+        <Flex
+          justify="center"
+          align="center"
+          sx={(theme) => ({
+            borderRadius: 8,
+            backgroundColor: theme.other.schemes[theme.colorScheme].surface2,
+            // minWidth: 150,
+            maxWidth: 175,
+            aspectRatio: '1 / 1',
+          })}
+          onClick={() => setCreateAlbumOpened(true)}
+        >
+          <PlusIcon size="lg" />
+        </Flex>
+        <Flex
+          justify="center"
+          align="center"
+          sx={(theme) => ({
+            borderRadius: 8,
+            backgroundColor: theme.other.schemes[theme.colorScheme].surface2,
+            // minWidth: 150,
+            maxWidth: 175,
+            aspectRatio: '1 / 1',
+          })}
+          onClick={() => setCreateAlbumOpened(true)}
+        >
+          <PlusIcon size="lg" />
+        </Flex>
+        <Flex
+          justify="center"
+          align="center"
+          sx={(theme) => ({
+            borderRadius: 8,
+            backgroundColor: theme.other.schemes[theme.colorScheme].surface2,
+            // minWidth: 150,
+            maxWidth: 175,
+            aspectRatio: '1 / 1',
+          })}
+          onClick={() => setCreateAlbumOpened(true)}
+        >
+          <PlusIcon size="lg" />
+        </Flex>
+      </Group>
+      <Box sx={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(120px, 1fr))', gap: 16 }}>
+        <Flex
+          justify="center"
+          align="center"
+          sx={(theme) => ({
+            borderRadius: 8,
+            backgroundColor: theme.other.schemes[theme.colorScheme].surface2,
+            aspectRatio: '1 / 1',
+          })}
+          onClick={() => setCreateAlbumOpened(true)}
+        >
+          <PlusIcon size="lg" />
+        </Flex>
+        <Flex
+          justify="center"
+          align="center"
+          sx={(theme) => ({
+            borderRadius: 8,
+            backgroundColor: theme.other.schemes[theme.colorScheme].surface2,
+            aspectRatio: '1 / 1',
+          })}
+          onClick={() => setCreateAlbumOpened(true)}
+        >
+          <PlusIcon size="lg" />
+        </Flex>
+      </Box>
+      {/* <Grid>
+        <Grid.Col span={6}>
+          <Flex
+            justify="center"
+            align="center"
+            sx={(theme) => ({
+              borderRadius: 8,
+              backgroundColor: theme.other.schemes[theme.colorScheme].surface2,
+              aspectRatio: '1 / 1',
+            })}
+            onClick={() => setCreateAlbumOpened(true)}
+          >
+            <PlusIcon size="lg" />
+          </Flex>
+        </Grid.Col>
+      </Grid> */}
       {!currentUser?.isAnonymous && (
-        <Button onClick={() => setCreateAlbumOpened(true)}>{t('album.createAlbum.title')}</Button>
+        <>
+          <Button
+            sx={{ position: 'absolute', bottom: 0, right: 0 }}
+            radius="lg"
+            size="md"
+            onClick={() => setCreateAlbumOpened(true)}
+            leftIcon={<PlusIcon size="lg" />}
+          >
+            {t('album.createAlbum.title')}
+          </Button>
+        </>
       )}
       <CreateAlbum opened={createAlbumOpened} onClose={() => setCreateAlbumOpened(false)} />
     </Flex>

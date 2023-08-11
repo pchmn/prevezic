@@ -11,7 +11,7 @@ export function AppLayout({ children, showNavbar = true }: PropsWithChildren<{ s
 
   return (
     <AppShell
-      padding="md"
+      padding="xl"
       navbar={
         <>
           {showNavbar && showLargeNav && <DesktopNavbar size="large" />}
@@ -21,7 +21,7 @@ export function AppLayout({ children, showNavbar = true }: PropsWithChildren<{ s
       styles={{
         main: {
           minHeight: '100dvh',
-          paddingBottom: showMobileNav ? 72 + 16 : 16,
+          paddingBottom: showMobileNav ? 72 + 32 : 32,
         },
       }}
       footer={<>{showNavbar && showMobileNav && <MobileNavbar />}</>}

@@ -1,6 +1,6 @@
-import { Button, Flex, Modal, TextInput } from '@mantine/core';
+import { Button, Drawer, Flex, Modal, TextInput } from '@mantine/core';
 import { useForm, zodResolver } from '@mantine/form';
-import { useFirebaseUser, useFirestoreAddDoc, useNotification } from '@prevezic/react';
+import { useFirebaseUser, useFirestoreAddDoc, useMediaQuery, useNotification } from '@prevezic/react';
 import { collection, getFirestore } from 'firebase/firestore';
 import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -8,6 +8,15 @@ import { z } from 'zod';
 
 export function CreateAlbum({ opened, onClose }: { opened: boolean; onClose: () => void }) {
   const { t } = useTranslation();
+  const matches = useMediaQuery({ smallerThan: 'sm' });
+
+  if (matches) {
+    return (
+      <Drawer opened={opened} onClose={onClose} title={t('album.createAlbum.title')} position="bottom">
+        <CreateAlbumContent onSuccess={onClose} />
+      </Drawer>
+    );
+  }
 
   return (
     <Modal opened={opened} onClose={onClose} title={t('album.createAlbum.title')}>

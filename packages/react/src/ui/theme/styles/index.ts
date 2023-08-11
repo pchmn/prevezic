@@ -62,7 +62,20 @@ export const componentsTheme: Record<string, ThemeComponent> = {
       },
     }),
     defaultProps: {
-      padding: 30,
+      padding: 32,
+    },
+  },
+  Drawer: {
+    styles: (theme: MantineTheme) => ({
+      drawer: {
+        backgroundColor: theme.other.schemes[theme.colorScheme].background,
+        borderTopLeftRadius: 8,
+        borderTopRightRadius: 8,
+      },
+    }),
+    defaultProps: {
+      padding: 32,
+      size: -1,
     },
   },
   SegmentedControl: {

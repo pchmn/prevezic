@@ -16,7 +16,7 @@ export function generateThemeFromColor(color: string) {
       primary: generatePaletteFrom(theme.palettes.primary),
       secondary: generatePaletteFrom(theme.palettes.secondary),
       tertiary: generatePaletteFrom(theme.palettes.tertiary),
-      error: getErrorPalette(),
+      error: generatePaletteFrom(theme.palettes.error),
       neutral: generatePaletteFrom(theme.palettes.neutral),
       neutralVariant: generatePaletteFrom(theme.palettes.neutralVariant),
     },
@@ -42,6 +42,7 @@ function generatePaletteFrom(tonalPalette: TonalPalette) {
   ] as Tuple<string, 10>;
 }
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 function getErrorPalette() {
   return [
     '#FFEDEA',

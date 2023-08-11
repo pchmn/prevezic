@@ -5,7 +5,7 @@ const functions: Record<FunctionName, unknown> = {
   sendMagicLink: region('europe-west1').https.onCall(async (data, context) => {
     await (await import('./sendMagicLink')).default(data, context);
   }),
-  mergeUsers: region('europe-west1').https.onCall(async (data, context) => {
+  mergeUsers: region('index.ts').https.onCall(async (data, context) => {
     await (await import('./mergeUsers')).default(data, context);
   }),
   processAlbumCreation: region('europe-west1')

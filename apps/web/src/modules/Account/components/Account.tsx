@@ -28,7 +28,7 @@ export function Account() {
   const { baseColor, colorScheme } = useThemePreferences();
 
   return (
-    <Flex p="md" direction="column" justify="space-between" h="100%">
+    <Flex direction="column" justify="space-between" h="100%">
       <Flex direction="column" gap="sm">
         <Title order={4}>{t('account.preferences')}</Title>
         <Flex direction="column">

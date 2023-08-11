@@ -4,6 +4,7 @@ import { connectFirestoreEmulator, getFirestore } from 'firebase/firestore';
 import { connectFunctionsEmulator, getFunctions } from 'firebase/functions';
 
 const firebaseConfig = JSON.parse(import.meta.env.VITE_FIREBASE_CONFIG);
+console.log(JSON.stringify(firebaseConfig));
 
 const app = initializeApp(firebaseConfig);
 
@@ -14,6 +15,6 @@ if (import.meta.env.DEV) {
   const db = getFirestore();
   connectFirestoreEmulator(db, '192.168.1.10', 8081);
 
-  const functions = getFunctions(app);
+  const functions = getFunctions(app, 'europe-west1');
   connectFunctionsEmulator(functions, '192.168.1.10', 5001);
 }

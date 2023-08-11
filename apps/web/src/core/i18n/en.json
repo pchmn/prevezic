@@ -60,6 +60,7 @@
   },
   "album": {
     "albumList": {
+      "title": "Albums",
       "empty": "No albums yet",
       "signInToCreateAnAlbum": "Sign in to create an album!",
       "createAlbum": "Create album"
