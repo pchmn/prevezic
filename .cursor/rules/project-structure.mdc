@@ -1,0 +1,103 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+# Project Structure
+
+## Main Structure
+
+- Monorepo managed with PNPM workspaces
+- Main frontend app is in `apps/web` (React 19, Vite, PWA)
+- Main backend app is in `apps/backend` (Convex with Better Auth)
+- Shared packages and libraries are in `packages/`
+- Task management and rules in `.tasks/` and `/rules`
+
+```tree
+.
+├── apps
+│   ├── web/                  # Frontend (React 19, Vite, PWA, React Router 7)
+│   │   ├── src/
+│   │   │   ├── components/       # UI components (colocated or shared)
+│   │   │   ├── modules/          # Feature/domain logic (e.g., auth, memories)
+│   │   │   ├── lib/              # App-level utilities (config, convex, theme, react-query)
+│   │   │   ├── routes/           # App routes (file-based routing)
+│   │   │   ├── i18n/             # i18next config and translations
+│   │   │   ├── hooks/            # Custom React hooks
+│   │   │   └── ... (other app files)
+│   │   ├── public/               # Static assets (images, icons, manifest)
+│   │   ├── vite.config.ts
+│   │   ├── package.json
+│   │   └── ... (config files)
+│   ├── backend/              # Backend (Convex with Better Auth)
+│   │   ├── convex/
+│   │   │   ├── _generated/       # Auto-generated Convex files
+│   │   │   ├── auth/             # Authentication logic (Better Auth)
+│   │   │   ├── ai/               # AI-related utilities and functions
+│   │   │   ├── memories/         # Memory domain logic (queries, mutations, actions)
+│   │   │   │   ├── git-repo/     # Git repository memory handling
+│   │   │   │   ├── memories.queries.ts
+│   │   │   │   ├── memories.mutations.ts
+│   │   │   │   ├── memories.actions.ts
+│   │   │   │   └── ... (other memory files)
+│   │   │   ├── schema.ts         # Convex database schema
+│   │   │   ├── auth.ts           # Auth configuration
+│   │   │   ├── auth.config.ts    # Auth config
+│   │   │   ├── convex.config.ts  # Convex configuration
+│   │   │   ├── http.ts           # HTTP endpoints
+│   │   │   └── ... (other Convex files)
+│   │   ├── package.json
+│   │   └── tsconfig.json
+│   └── firecrawl/            # Firecrawl Docker setup
+│       └── docker-compose-firecrawl.yml
+├── packages/
+│   ├── ui/                   # Shared UI components (with src/components)
+│   ├── tsconfig/             # Shared TypeScript config
+│   └── ... (other packages)
+├── .tasks/
+│   ├── TRACKER.md            # Task tracker and status
+│   ├── todo/                 # Tasks to do
+│   ├── doing/                # Tasks in progress
+│   ├── done/                 # Completed tasks
+│   └── backlog/              # Backlog/ideas
+├── rules/                    # Project rules and guidelines
+├── .env*                     # Environment variables
+├── package.json
+├── pnpm-workspace.yaml
+└── README.md
+```
+
+## File Naming and Organization
+
+- Use kebab-case for folders and files (e.g., `memory-list.tsx`, `add-memory.ts`)
+- Use PascalCase for React components (e.g., `MemoryCard.tsx`)
+- Colocate files with their usage when possible; use `packages/` for cross-app utilities or types
+- Place AI-related logic in `ai/` (frontend modules or backend convex folder)
+- Place database schema in `convex/schema.ts`
+- Place authentication logic in `auth/` (frontend modules or backend convex folder)
+- Place custom hooks in `hooks/`
+- Place context providers in `providers/` (if used)
+- Place static assets in `public/`
+
+## New Pages & Features
+
+- Create new frontend pages in `apps/web/src/routes/`
+- Components for a page are colocated in the same folder or in `components/` if shared
+- For new backend endpoints or features, add logic in `apps/backend/convex/`
+- For new memory types, update both backend convex functions and frontend UI as needed
+- Use Convex queries, mutations, and actions pattern for backend logic
+
+## Utility Functions
+
+- Place reusable logic in `lib/` folders (frontend) or directly in convex functions (backend)
+- For shared utilities, use `packages/`
+- Import only what you need to keep bundle size small
+
+## Task & Rule Management
+
+- All tasks are tracked in `.tasks/` (see `.tasks/TRACKER.md`)
+- Project rules and guidelines are in `/rules/` as `.mdc` files
+
+---
+
+This structure ensures clear separation of frontend, backend, and shared code, and supports efficient development for Kipzat's multi-source, AI-powered memory hub with Convex as the reactive backend.

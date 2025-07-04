@@ -1,131 +1,128 @@
-<div align="center">
+# Kipzat
 
-[![license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/pchmn/prevezic/blob/main/license)
-[![ci](https://github.com/pchmn/prevezic/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/pchmn/prevezic/actions)
-[![codecov.io](https://codecov.io/gh/pchmn/prevezic/coverage.svg?branch=main)](https://codecov.io/gh/pchmn/prevezic?branch=master)
-<!-- [![Codacy Badge](https://app.codacy.com/project/badge/Grade/4c695ce061c34c1bb1698acc19278f0e)](https://www.codacy.com/gh/pchmn/prevezic/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=pchmn/prevezic&amp;utm_campaign=Badge_Grade) -->
-
-<!-- # React - TypeScript and Github Actions Template with Vite -->
-# Vite, React and Github Actions
-
-This a React v18 + TypeScript + Vitest and React Testing Library + Github Actions starter template built with Vite.
-
-[Demo](https://pchmn.github.io/prevezic/)
-
-</div>
+This is a modern full-stack web application template built with TypeScript and organized as a monorepo.
 
 ## Features
-### Overview
 
-- ⚡️&nbsp; [Vite](https://vitejs.dev/)
-- ⚛️&nbsp; [React v18](https://beta.reactjs.org/) with [TypeScript](https://www.typescriptlang.org/)
-- 🧪&nbsp; [Vitest](https://vitest.dev/) + [React Testing Library](https://testing-library.com/docs/react-testing-library/intro)
-- 🚀&nbsp; [Github Actions](https://docs.github.com/en/actions) with deployment on [Github Pages](https://pages.github.com/)
+- 📦 [pnpm](https://pnpm.io/) for fast, disk space efficient package management  
+- 🏗️ [Turborepo](https://turbo.build/) for efficient build system and task running
+- 🔷 [TypeScript](https://www.typescriptlang.org/) for type safety
+- 🔨 [Biome](https://biomejs.dev/) for fast consistent code formatting and linting
+- 🎨 [Tailwind CSS](https://tailwindcss.com/) support with Radix UI components
+- 🚀 [Release It](https://github.com/release-it/release-it) for automated releases
+- 🔄 [Syncpack](https://github.com/syncpack/syncpack) for automated dependency version synchronization
+- 📱 [React Router 7](https://reactrouter.com/) for the frontend application
+- 🔥 [Hono](https://hono.dev/) for the backend API server
+- 🗄️ [Drizzle ORM](https://orm.drizzle.team/) with PostgreSQL for database management
+- 🔐 [Better Auth](https://better-auth.com/) for authentication with Google OAuth
+- 🤖 [AI SDK](https://sdk.vercel.ai/) with Google Generative AI integration
+- 🐳 Docker containers for both web and server applications
+- 📦 Workspace structure for apps and packages
+- 🛠️ VS Code configuration for optimal developer experience
 
-### Coding Style
+## Code organization
 
-- VSCode settings & extensions recommendations
-- [EditorConfig](https://editorconfig.org/)
-- [ESLint](https://eslint.org/) & [Prettier](https://prettier.io/) configured (with [`eslint-plugin-prettier`](https://github.com/prettier/eslint-plugin-prettier))
+The monorepo is organized into three main directories:
 
-### Git Hooks
+- `apps/`: Contains all the applications that can be deployed independently
+  - `web/`: React Router 7 frontend application with Tailwind CSS and Radix UI
+  - `server/`: Hono API server with Drizzle ORM and Better Auth
+  - `compose/`: Docker Compose configuration for deployment
+- `packages/`: Contains shared packages/libraries used across applications
+  - `ui/`: Shared React components built with Radix UI and Tailwind CSS
+  - `tsconfig/`: Shared TypeScript configurations
 
-- [Husky](https://typicode.github.io/husky/#/)
-  - [`commitlint`](https://commitlint.js.org/) @ `commit-msg`
-  - [`lint-staged`](https://github.com/okonet/lint-staged) @ `precommit`
+## Prerequisites
 
-### Github Actions
-
-- **Build**, **Test** and **Coverage Analysis** (with [Codecov](https://about.codecov.io/)) at each commit
-- **Deploy** to [Github Pages](https://pages.github.com/) on main branch (see deployment of this repo [here](https://pchmn.github.io/prevezic/))
-
-
-<br>
+- [`Dokploy`](https://docs.dokploy.com/docs/core) server for deployment
+- [`PostgreSQL`](https://www.postgresql.org/) database (local via Supabase or remote)
+- [`Docker`](https://www.docker.com/) registry for building and storing images
+- [`Google Cloud Console`](https://console.cloud.google.com/) account for OAuth configuration and AI API
 
 ## Getting Started
 
-### Copy template
+Once this template is cloned, follow this task list to set up a fresh project:
 
-```
-npx degit pchmn/prevezic app_name
-```
+- [ ] 1. Reset project (set version to 0.0.0 and rename project): `pnpm reset-project <new_project_name>`
+- [ ] 2. Install dependencies: `pnpm i`
+- [ ] 3. Set up local database: `pnpm sup:start` (starts local Supabase)
+- [ ] 4. Run database migrations: `pnpm db:migrate`
+- [ ] 5. Start development servers: `pnpm dev`
+- [ ] 6. Create a new project on your `Dokploy` server and replace `project-id` in workflows
+- [ ] 7. Update domain configurations in `production.yml` workflow
+- [ ] 8. Create these repository secrets on GitHub:
+  - [ ] `DOCKER_USERNAME`: Your Docker registry username
+  - [ ] `DOCKER_PASSWORD`: Your Docker registry password
+  - [ ] `DOKPLOY_BASE_URL`: The base URL of your Dokploy instance
+  - [ ] `DOKPLOY_TOKEN`: Authentication token for Dokploy API access
+  - [ ] `PREVIEW_DATABASE_URL`: PostgreSQL connection string for preview environment
+  - [ ] `PRODUCTION_DATABASE_URL`: PostgreSQL connection string for production environment
+  - [ ] `PRODUCTION_BETTER_AUTH_SECRET`: Secret key for production authentication
+  - [ ] `GOOGLE_CLIENT_ID`: Google OAuth client ID
+  - [ ] `GOOGLE_CLIENT_SECRET`: Google OAuth client secret
+  - [ ] `GOOGLE_GENERATIVE_AI_API_KEY`: Google AI API key for AI features
+- [ ] 9. Configure Google OAuth 2.0 credentials in Google Cloud Console
+- [ ] 10. Set "Read and write permissions" on Workflow permissions in your GitHub repository (Settings → Actions → General → Workflow permissions)
 
-### Usage
+You should be good to go with a fresh new project!
 
-> Project was built using [`pnpm`](https://pnpm.io/installation#using-npm). If you want to use `npm` or `yarn`, just don't forget to update Github Actions workflow (`.github/workflows/ci.yml`).
+## Development
 
-#### Install
+### Available Scripts
 
-```sh
-pnpm i
-```
+- `pnpm dev`: Start all development servers
+- `pnpm dev:web`: Start only the web application
+- `pnpm dev:server`: Start only the API server
+- `pnpm build`: Build all applications for production
+- `pnpm check`: Format and lint all code with Biome
+- `pnpm check-types`: Run TypeScript type checking
+- `pnpm db:push`: Push database schema changes to the database
+- `pnpm db:studio`: Open Drizzle Studio for database management
+- `pnpm db:generate`: Generate database migration files
+- `pnpm db:migrate`: Run database migrations
+- `pnpm sup:start`: Start local Supabase instance
+- `pnpm sup:stop`: Stop local Supabase instance
+- `pnpm sup:restart`: Restart local Supabase instance
 
-#### Dev
+### Database Management
 
-```sh
-pnpm dev
-```
+The project uses Drizzle ORM with PostgreSQL. For local development, Supabase provides a local PostgreSQL instance. Database schemas are defined in `apps/server/src/db/schema/` and migrations are stored in `apps/server/src/db/migrations/`.
 
-#### Build
+### Authentication
 
+Authentication is handled by Better Auth with support for:
+- Email/password authentication
+- Google OAuth integration
+- Session management with PostgreSQL storage
 
-```sh
-# normal build
-pnpm build
+## CI/CD
 
-# build with 404.html file added for Github Pages included
-pnpm build:ci
-```
-> See explanation of `404.html` file [here](#github-pages)
-#### Test
+### Preview Deployments
 
-```sh
-# without coverage
-pnpm test
+The repository includes automated preview deployment workflows:
 
-# with coverage
-pnpm test:ci
-```
-#### Serve
+#### Preview Creation (`preview-up.yml`)
 
-```sh
-pnpm serve
-```
+When a PR is opened, reopened, synchronized, or marked ready for review:
 
-<br>
+1. Runs database migrations on the preview database
+2. Builds Docker images for both web and server applications
+3. Deploys to Dokploy with a unique preview URL
+4. Comments on the PR with the preview URL
 
-## Configuration for Github Actions
+#### Preview Cleanup (`preview-down.yml`)
 
-If you want to use Github Actions in your repo, you'll need to make little configuration.
+When a PR is closed, automatically cleans up the preview deployment.
 
-Actual [workflow](https://github.com/pchmn/prevezic/blob/main/.github/workflows/ci.yml) is:
+### Production Deployment
 
-![image](https://user-images.githubusercontent.com/12658241/142628675-1f9e9617-e5da-4dff-aa79-abc0883cf037.png)
+#### Production Deployment (`production.yml`)
 
-### Build & Test job
+When a PR is merged to main:
 
-> Build and test application on all commits
+1. Runs database migrations on the production database
+2. Creates a new release with automated versioning and changelog
+3. Builds and pushes Docker images with the new version
+4. Deploys to Dokploy production environment
 
-Create a [Github personal access token](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token) (with `repo` and `workflow` permissions) and add it as a `PERSONAL_ACCESS_TOKEN` secret in your repo
-
-### Coverage job
-
-> Run Codecov analysis on all commits
-
-Create a [Codecov](https://about.codecov.io/) token for your repo and add it as a `CODECOV_TOKEN` secret in your repo
-
-### **Deploy** job
-
-> Manual deploy to Github Pages (only main branch)
-
-- Replace `base` config in `vite.config.ts` to match your repo name
-- Create `GIT_AUTHOR_NAME` and `GIT_AUTHOR_EMAIL` secrets in your repo (it will be the author of commits to `gh-pages` branch)
-- If you want to keep manual deployments, you need to create a [new environment with manual approve](https://devblogs.microsoft.com/devops/i-need-manual-approvers-for-github-actions-and-i-got-them-now/) in your repo, and then replace `environment` config in the `deploy` job in `.github/workflows/ci.yml`:
-  - `environment.name` = name of the environment created in your repo
-  - `environment.url` = link to your github pages
-
-## Github Pages
-
-There are modifications on `index.html`, and a new `404.html` file in the project to make it work well with Github Pages.
-
-> See https://github.com/rafgraph/spa-github-pages for more info.
+The deployment uses Docker Compose with Traefik for load balancing and automatic HTTPS certificates.

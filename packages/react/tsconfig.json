@@ -1,7 +1,0 @@
-{
-  "extends": "@prevezic/tsconfig/vite.json",
-  "compilerOptions": {
-    "jsx": "react-jsx",
-  },
-  "include": ["src", "types.d.ts"]
-}

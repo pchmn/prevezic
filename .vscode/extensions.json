@@ -1,7 +1,7 @@
 {
   "recommendations": [
-    "dbaeumer.vscode-eslint",
-    "zixuanchen.vitest-explorer",
-    "editorconfig.editorconfig"
+    "biomejs.biome",
+    "bradlc.vscode-tailwindcss",
+    "lokalise.i18n-ally"
   ]
 }

@@ -1,0 +1,46 @@
+name: Keep Supabase Projects Alive
+
+on:
+  schedule:
+    # Every day at 00:00 UTC
+    - cron: '0 0 * * *'
+  workflow_dispatch:
+
+jobs:
+  ping:
+    name: 🏓 Ping Supabase projects
+    runs-on: ubuntu-latest
+    steps:
+      - name: 🏓 Ping Supabase Staging
+        env:
+          SUPABASE_URL: ${{ secrets.PREVIEW_SUPABASE_URL }}
+          SUPABASE_KEY: ${{ secrets.PREVIEW_SUPABASE_ANON_KEY }}
+        run: |
+          response=$(curl -X POST '${{ env.SUPABASE_URL }}/rest/v1/rpc/ping' \
+            -H "Content-Type: application/json" \
+            -H "apikey: ${{ env.SUPABASE_KEY }}" \
+            -H "Authorization: Bearer ${{ env.SUPABASE_KEY }}")
+          
+          if echo "$response" | jq -e 'if type=="string" then . == "pong" else false end' > /dev/null; then
+            echo "$response"
+          else
+            echo "Ping failed: $response"
+            exit 1
+          fi
+
+      - name: 🏓 Ping Supabase Production
+        env:
+          SUPABASE_URL: ${{ secrets.PRODUCTION_SUPABASE_URL }}
+          SUPABASE_KEY: ${{ secrets.PRODUCTION_SUPABASE_ANON_KEY }}
+        run: |
+          response=$(curl -X POST '${{ env.SUPABASE_URL }}/rest/v1/rpc/ping' \
+            -H "Content-Type: application/json" \
+            -H "apikey: ${{ env.SUPABASE_KEY }}" \
+            -H "Authorization: Bearer ${{ env.SUPABASE_KEY }}")
+          
+          if echo "$response" | jq -e 'if type=="string" then . == "pong" else false end' > /dev/null; then
+            echo "$response"
+          else
+            echo "Ping failed: $response"
+            exit 1
+          fi

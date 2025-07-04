@@ -1,0 +1,23 @@
+name: Destroy Preview
+
+on:
+  pull_request:
+    types:
+      - closed
+
+jobs:
+  destroy-preview:
+    name: 🚮 Destroy preview
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: 🚮 Destroy application on Dokploy
+        uses: ./.github/actions/dokploy
+        with:
+          dokploy-base-url: ${{ secrets.DOKPLOY_BASE_URL }}
+          dokploy-token: ${{ secrets.DOKPLOY_TOKEN }}
+          project-id: 9Q2mI4ygVsQzgTdtlbhjO
+          application-name: pr-${{ github.event.number }}
+          action: destroy

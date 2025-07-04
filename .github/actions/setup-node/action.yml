@@ -1,0 +1,47 @@
+name: Setup Node
+description: Setup Node, pnpm and turbo
+
+inputs:
+  node-version:
+    description: Version of Node to use
+    default: 22.13.0
+
+  pnpm-version:
+    description: Version of pnpm to use
+    required: false
+
+  install:
+    description: Run pnpm install
+    default: "false"
+
+  turbo-cache:
+    description: Enable turbo cache
+    default: "false"
+
+runs:
+  using: composite
+  steps:
+    - name: Setup pnpm
+      uses: pnpm/action-setup@v4
+      with:
+        version: ${{ inputs.pnpm-version }}
+
+    - name: Setup Node
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ inputs.node-version }}
+        cache: pnpm
+
+    - if: ${{ inputs.install == 'true' }}
+      name: Install dependencies
+      shell: bash
+      run: pnpm install
+
+    - if: ${{ inputs.turbo-cache == 'true' }}
+      name: Cache turbo build
+      uses: actions/cache@v4
+      with:
+        path: .turbo
+        key: ${{ runner.os }}-turbo-${{ github.sha }}
+        restore-keys: |
+          ${{ runner.os }}-turbo-

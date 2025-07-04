@@ -1,0 +1,107 @@
+@import url("https://fonts.googleapis.com/css2?family=DM+Sans:wght@200;300;400;500;600;700&display=swap");
+
+@import "tailwindcss";
+
+/* Tell tailwind to include the ui folder in the scan when using it in the monorepo (from apps/web for example)
+   https://stackoverflow.com/a/79416262
+ */
+@source "./";
+
+@plugin "tailwindcss-animate";
+
+@custom-variant dark (&:is(.dark *));
+
+:root {
+  --background: rgb(255 247 250);
+  --foreground: rgb(31 26 31);
+  --card: rgba(255, 255, 255);
+  --card-foreground: rgb(31 26 31);
+  --popover: rgb(255 255 255);
+  --popover-foreground: rgb(31 26 31);
+  --primary: rgb(124 78 126);
+  --primary-foreground: rgb(255 255 255);
+  --secondary: rgb(108 88 106);
+  --secondary-foreground: rgb(255 255 255);
+  --tertiary: rgb(130 82 73);
+  --tertiary-foreground: rgb(255 255 255);
+  --muted: rgb(255 255 255);
+  --muted-foreground: rgb(127 116 124);
+  --accent: rgb(237 223 232);
+  --accent-foreground: rgb(77 68 76);
+  --destructive: rgb(230 77 77);
+  --destructive-foreground: rgb(255 255 255);
+  --border: rgb(242 232 238);
+  --input: rgb(237, 223, 235);
+  --ring: rgb(124 78 126);
+  --radius: 0.6rem;
+}
+
+.dark {
+  --background: rgb(23 18 22);
+  --foreground: rgb(235 223 230);
+  --card: rgb(31 26 31);
+  --card-foreground: rgb(235 223 230);
+  --popover: rgb(31 26 31);
+  --popover-foreground: rgb(235 223 230);
+  --primary: rgb(236 180 235);
+  --primary-foreground: rgb(73 32 77);
+  --secondary: rgb(216 191 212);
+  --secondary-foreground: rgb(60 43 59);
+  --tertiary: rgb(246 184 172);
+  --tertiary-foreground: rgb(76 37 30);
+  --muted: rgb(60 43 59);
+  --muted-foreground: rgb(153 141 150);
+  --accent: rgb(77 68 76);
+  --accent-foreground: rgb(208 195 204);
+  --destructive: rgb(234 105 105);
+  --destructive-foreground: rgb(105 0 5);
+  --border: rgb(49, 44, 48);
+  --input: rgb(69 61 68);
+  --ring: rgb(236 180 235);
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-tertiary: var(--tertiary);
+  --color-tertiary-foreground: var(--tertiary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  --radius-xs: calc(var(--radius) - 5px);
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  html {
+    font-family: "DM Sans", sans-serif;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
