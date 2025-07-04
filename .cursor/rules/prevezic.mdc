@@ -3,3 +3,132 @@ description:
 globs: 
 alwaysApply: true
 ---
+# Prevezic - Collaborative Event Photo Sharing
+
+## Project Overview
+
+Prevezic is a Progressive Web App (PWA) designed for collaborative photo sharing at private events. It enables event organizers to create photo collection projects and invite participants to contribute photos through a simple, mobile-friendly interface.
+
+## Core Concept
+
+The app revolves around **Projects** - private photo collections for specific events (e.g., "Anniversaire Paul", "Wedding Reception", "Birthday Party"). Each project acts as a collaborative space where multiple people can contribute and view photos.
+
+## Key Features
+
+### Project Creation
+- Users can create new photo projects with custom names
+- Each project is private and accessible only to invited members
+- Project creators act as organizers/administrators
+
+### Invitation System
+- Project creators generate shareable invitation links
+- Anyone with the link can join the project as a member
+- No complex registration process - seamless onboarding via invitation links
+
+### Photo Contribution
+- Members can add photos by taking pictures directly with their phone camera
+- Native camera integration for optimal mobile experience
+- Photos are instantly uploaded and shared with all project members
+
+### Gallery Experience
+- All project members can view all uploaded photos in a gallery layout
+- Photos are displayed in an organized, visually appealing grid
+- Click/tap to open photos in fullscreen view for better detail
+- Smooth, responsive interface optimized for mobile and desktop
+
+## Technical Architecture
+
+### Frontend (PWA)
+- **Location**: `apps/web/`
+- **Technology**: React 19, Vite, PWA capabilities
+- **Routing**: React Router 7 with file-based routing
+- **Features**: 
+  - Offline support through PWA
+  - Camera access for photo capture
+  - Responsive design for all devices
+  - Installation prompt for mobile home screen
+
+### Backend
+- **Location**: `apps/backend/`
+- **Technology**: Convex with Better Auth
+- **Features**:
+  - Real-time photo synchronization
+  - Secure invitation link generation
+  - Photo storage and serving
+  - Member management
+
+### Core Data Models
+
+#### Projects
+- Project ID
+- Project name (e.g., "Anniversaire Paul")
+- Creation date
+- Creator/organizer
+- Invitation token/link
+- Member list
+
+#### Photos
+- Photo ID
+- Project association
+- Uploader information
+- Upload timestamp
+- Photo metadata (size, format, etc.)
+- File storage reference
+
+#### Members
+- Member ID
+- Project association
+- Join date
+- Basic profile information
+
+## User Flow
+
+1. **Project Creation**: Organizer creates a new project with a descriptive name
+2. **Invitation**: System generates a unique invitation link for the project
+3. **Sharing**: Organizer shares the invitation link with intended participants
+4. **Joining**: Participants open the link and automatically become project members
+5. **Contributing**: Members use their phones to take and upload photos
+6. **Viewing**: All members can browse the shared photo gallery
+7. **Fullscreen**: Members can view photos in fullscreen for better detail
+
+## Key Use Cases
+
+- **Birthday Parties**: Collect photos from all guests in one place
+- **Weddings**: Allow all attendees to contribute their perspective
+- **Family Gatherings**: Create a shared album for extended family
+- **Corporate Events**: Gather photos from team members and colleagues
+- **Travel Groups**: Collect photos from all participants during trips
+
+## Technical Requirements
+
+### Mobile-First Design
+- Optimized for phone cameras and touch interfaces
+- Fast photo upload and processing
+- Responsive gallery layout
+
+### Performance
+- Quick photo loading and display
+- Efficient image optimization and serving
+- Smooth scrolling in gallery views
+
+### Security & Privacy
+- Private projects accessible only to invited members
+- Secure invitation token system
+- No public photo exposure
+
+### Offline Capabilities
+- PWA features for offline access
+- Photo queue for upload when connection is restored
+- Cached gallery for offline viewing
+
+## Development Priorities
+
+1. **Core MVP**: Project creation, invitation system, basic photo upload/gallery
+2. **Mobile Experience**: Camera integration, touch-optimized interface
+3. **Performance**: Image optimization, fast loading, smooth interactions
+4. **PWA Features**: Offline support, installation prompts, native feel
+5. **Enhanced Features**: Photo organization, search, advanced gallery views
+
+---
+
+This project transforms event photo sharing from scattered individual collections into a unified, collaborative experience that ensures no moment is missed and everyone can contribute to and enjoy the complete photo story of the event.
