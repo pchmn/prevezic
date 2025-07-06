@@ -1,5 +1,5 @@
 {
-  "name": "web",
+  "name": "@prevezic/web",
   "private": true,
   "type": "module",
   "files": ["build", "public", ".docker"],
