@@ -4,8 +4,8 @@ import { v } from 'convex/values';
 export default defineSchema({
   // Users table - basic profile information
   users: defineTable({
-    // TODO: Add user fields
-  }),
+    name: v.optional(v.string()),
+  }).index('by_name', ['name']),
 
   // Projects table - private photo collections for events
   projects: defineTable({
@@ -49,9 +49,7 @@ export default defineSchema({
     // EXIF data
     cameraMake: v.optional(v.string()),
     cameraModel: v.optional(v.string()),
-    dateTaken: v.optional(v.number()), // timestamp when photo was taken
   })
     .index('by_project', ['projectId'])
-    .index('by_uploader', ['uploaderId'])
-    .index('by_project_and_upload_time', ['projectId', '_creationTime']),
+    .index('by_uploader', ['uploaderId']),
 });
