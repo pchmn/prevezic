@@ -1,0 +1,25 @@
+{
+  "extends": "@prevezic/tsconfig/base.json",
+  "include": [
+    "**/*",
+    "**/.server/**/*",
+    "**/.client/**/*",
+    ".react-router/types/**/*"
+  ],
+  "compilerOptions": {
+    "allowImportingTsExtensions": true,
+    "lib": ["DOM", "DOM.Iterable", "ES2022"],
+    "types": [
+      "node",
+      "vite/client",
+      "vite-plugin-pwa/pwa-assets",
+      "vite-plugin-pwa/info"
+    ],
+    "rootDirs": [".", "./.react-router/types"],
+    "noEmit": true,
+    "baseUrl": ".",
+    "paths": {
+      "~/*": ["./src/*"]
+    }
+  }
+}
