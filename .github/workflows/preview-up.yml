@@ -26,7 +26,7 @@ jobs:
           password: ${{ secrets.DOCKER_PASSWORD }}
           context: .
           file: ./apps/web/.docker/Dockerfile
-          tags: pchmn/kipzat-web:${{ github.sha }}
+          tags: pchmn/prevezic-web:${{ github.sha }}
           push: true
 
   deploy-convex:
@@ -45,12 +45,7 @@ jobs:
         working-directory: ./apps/backend
         run: |
           npx convex env set BETTER_AUTH_SECRET ${{ secrets.PREVIEW_BETTER_AUTH_SECRET }}
-          npx convex env set GOOGLE_CLIENT_ID ${{ secrets.GOOGLE_CLIENT_ID }}
-          npx convex env set GOOGLE_CLIENT_SECRET ${{ secrets.GOOGLE_CLIENT_SECRET }}
-          npx convex env set GITHUB_TOKEN ${{ secrets.PAT_GITHUB }}
-          npx convex env set VOYAGE_API_KEY ${{ secrets.VOYAGE_API_KEY }}
-          npx convex env set GOOGLE_GENERATIVE_AI_API_KEY ${{ secrets.GOOGLE_GENERATIVE_AI_API_KEY }}
-          npx convex env set SITE_URL https://pr-${{ github.event.number }}.preview.kipzat.app
+          npx convex env set SITE_URL https://pr-${{ github.event.number }}.preview.prevezic.app
         env:
           CONVEX_DEPLOY_KEY: ${{ secrets.PREVIEW_CONVEX_DEPLOY_KEY }}
           # CONVEX_SELF_HOSTED_URL: ${{ secrets.CONVEX_SELF_HOSTED_URL }}
@@ -83,8 +78,8 @@ jobs:
           dokploy-token: ${{ secrets.DOKPLOY_TOKEN }}
           project-id: 9Q2mI4ygVsQzgTdtlbhjO
           application-name: pr-${{ github.event.number }}
-          application-domain: pr-${{ github.event.number }}.preview.kipzat.app
-          docker-image: pchmn/kipzat-web:${{ github.sha }}
+          application-domain: pr-${{ github.event.number }}.preview.prevezic.app
+          docker-image: pchmn/prevezic-web:${{ github.sha }}
           docker-username: ${{ secrets.DOCKER_USERNAME }}
           docker-password: ${{ secrets.DOCKER_PASSWORD }}
           docker-port: 8080

@@ -41,7 +41,7 @@ jobs:
           password: ${{ secrets.DOCKER_PASSWORD }}
           context: .
           file: ./apps/web/.docker/Dockerfile
-          tags: pchmn/kipzat-web:${{ needs.get-version.outputs.app_version }}
+          tags: pchmn/prevezic-web:${{ needs.get-version.outputs.app_version }}
           push: true
 
   deploy-convex:
@@ -60,12 +60,7 @@ jobs:
         working-directory: ./apps/backend
         run: |
           npx convex env set BETTER_AUTH_SECRET ${{ secrets.PRODUCTION_BETTER_AUTH_SECRET }}
-          npx convex env set GOOGLE_CLIENT_ID ${{ secrets.GOOGLE_CLIENT_ID }}
-          npx convex env set GOOGLE_CLIENT_SECRET ${{ secrets.GOOGLE_CLIENT_SECRET }}
-          npx convex env set GITHUB_TOKEN ${{ secrets.PAT_GITHUB }}
-          npx convex env set VOYAGE_API_KEY ${{ secrets.VOYAGE_API_KEY }}
-          npx convex env set GOOGLE_GENERATIVE_AI_API_KEY ${{ secrets.GOOGLE_GENERATIVE_AI_API_KEY }}
-          npx convex env set SITE_URL https://kipzat.app
+          npx convex env set SITE_URL https://prevezic.app
         env:
           CONVEX_DEPLOY_KEY: ${{ secrets.PRODUCTION_CONVEX_DEPLOY_KEY }}
           # CONVEX_SELF_HOSTED_URL: ${{ secrets.CONVEX_SELF_HOSTED_URL }}
@@ -97,8 +92,8 @@ jobs:
           dokploy-token: ${{ secrets.DOKPLOY_TOKEN }}
           project-id: 9Q2mI4ygVsQzgTdtlbhjO
           application-name: Production
-          application-domain: kipzat.app
-          docker-image: pchmn/kipzat-web:${{ needs.get-version.outputs.app_version }}
+          application-domain: prevezic.app
+          docker-image: pchmn/prevezic-web:${{ needs.get-version.outputs.app_version }}
           docker-username: ${{ secrets.DOCKER_USERNAME }}
           docker-password: ${{ secrets.DOCKER_PASSWORD }}
           docker-port: 8080
