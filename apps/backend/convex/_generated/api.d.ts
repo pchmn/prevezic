@@ -10,6 +10,9 @@
 
 import type * as auth from "../auth.js";
 import type * as http from "../http.js";
+import type * as member from "../member.js";
+import type * as photo from "../photo.js";
+import type * as project from "../project.js";
 
 import type {
   ApiFromModules,
@@ -28,6 +31,9 @@ import type {
 declare const fullApi: ApiFromModules<{
   auth: typeof auth;
   http: typeof http;
+  member: typeof member;
+  photo: typeof photo;
+  project: typeof project;
 }>;
 declare const fullApiWithMounts: typeof fullApi;
 

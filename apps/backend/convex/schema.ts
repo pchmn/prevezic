@@ -35,9 +35,8 @@ export default defineSchema({
   photos: defineTable({
     projectId: v.id('projects'),
     uploaderId: v.id('users'),
-    storageId: v.id('_storage'), // reference to Convex file storage
-    originalFilename: v.string(),
-    contentType: v.string(), // e.g., "image/jpeg", "image/png"
+    storageId: v.id('_storage'),
+    contentType: v.string(),
     fileSize: v.number(),
     caption: v.optional(v.string()),
     // Photo metadata
