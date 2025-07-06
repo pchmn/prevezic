@@ -1,7 +1,7 @@
 #! /bin/sh
 set -e
 
-TARGET_DIR="/app/build"
+TARGET_DIR="/usr/share/nginx/html"
 
 echo "Replacing all VITE_ variables in the app build"
 

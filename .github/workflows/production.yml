@@ -96,7 +96,7 @@ jobs:
           docker-image: pchmn/prevezic-web:${{ needs.get-version.outputs.app_version }}
           docker-username: ${{ secrets.DOCKER_USERNAME }}
           docker-password: ${{ secrets.DOCKER_PASSWORD }}
-          docker-port: 8080
+          docker-port: 80
           env: |
             VITE_APP_VERSION=${{ needs.get-version.outputs.app_version }}
             VITE_APP_ENV=production

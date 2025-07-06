@@ -82,7 +82,7 @@ jobs:
           docker-image: pchmn/prevezic-web:${{ github.sha }}
           docker-username: ${{ secrets.DOCKER_USERNAME }}
           docker-password: ${{ secrets.DOCKER_PASSWORD }}
-          docker-port: 8080
+          docker-port: 80
           env: |
             VITE_APP_VERSION=${{ github.sha }}
             VITE_APP_ENV=preview
