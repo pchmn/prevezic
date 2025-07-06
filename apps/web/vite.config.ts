@@ -54,4 +54,9 @@ export default defineConfig({
       },
     }),
   ],
+  define: {
+    __BUILD_DATE__: JSON.stringify(
+      process.env.BUILD_DATE || new Date().toISOString(),
+    ),
+  },
 });

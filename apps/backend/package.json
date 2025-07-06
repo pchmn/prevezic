@@ -7,7 +7,7 @@
     "configure": "convex dev --configure"
   },
   "dependencies": {
-    "@convex-dev/better-auth": "0.7.0-alpha.10",
+    "@convex-dev/better-auth": "0.7.0-alpha.11",
     "better-auth": "^1.2.8",
     "convex": "^1.25.0",
     "zod": "^3.25.30"

@@ -5,13 +5,14 @@ import {
 } from '@convex-dev/better-auth';
 import { convex, crossDomain } from '@convex-dev/better-auth/plugins';
 import { betterAuth } from 'better-auth';
+import { anonymous } from 'better-auth/plugins';
 import { components, internal } from './_generated/api';
 import type { Id } from './_generated/dataModel';
 import { type GenericCtx, query } from './_generated/server';
 
 // Typesafe way to pass Convex functions defined in this file
 const authFunctions: AuthFunctions = internal.auth;
-const siteUrl = process.env.SITE_URL || 'http://localhost:5174';
+const siteUrl = process.env.SITE_URL || 'http://localhost:3500';
 
 // Initialize the component
 export const betterAuthComponent = new BetterAuth(components.betterAuth, {
@@ -27,20 +28,20 @@ export const createAuth = (ctx: GenericCtx) =>
 
     trustedOrigins: [siteUrl],
     // Simple non-verified email/password to get started
-    socialProviders: {
-      google: {
-        clientId: process.env.GOOGLE_CLIENT_ID || '',
-        clientSecret: process.env.GOOGLE_CLIENT_SECRET || '',
-      },
-    },
+    // socialProviders: {
+    //   google: {
+    //     clientId: process.env.GOOGLE_CLIENT_ID || '',
+    //     clientSecret: process.env.GOOGLE_CLIENT_SECRET || '',
+    //   },
+    // },
     plugins: [
       // The Convex plugin is required
       convex(),
-
       // The cross domain plugin is required for client side frameworks
       crossDomain({
         siteUrl,
       }),
+      anonymous(),
     ],
   });
 
