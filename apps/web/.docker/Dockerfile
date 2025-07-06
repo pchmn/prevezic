@@ -21,7 +21,7 @@ RUN --mount=type=cache,target=${TURBO_CACHE_DIR} \
 FROM nginx:alpine AS production
 WORKDIR /app
 COPY --from=build /app/apps/web/dist /usr/share/nginx/html
-COPY apps/web/.docker/nginx.conf /etc/nginx/nginx.conf
+COPY apps/web/.docker/nginx.conf /etc/nginx/conf.d/default.conf
 COPY apps/web/.docker/envsubset.sh /usr/local/bin/envsubset.sh
 COPY apps/web/.docker/healthcheck.sh /usr/local/bin/healthcheck.sh
 EXPOSE 80
