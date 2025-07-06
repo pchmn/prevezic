@@ -2,6 +2,7 @@
   "name": "web",
   "private": true,
   "type": "module",
+  "files": ["build", "public", ".docker"],
   "scripts": {
     "dev": "vite --port 3500",
     "start": "vite --port 3000",
