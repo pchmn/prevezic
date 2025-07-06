@@ -1,8 +1,4 @@
 #!/bin/sh
 set -e
 
-node -e "
-  require('http').get('http://localhost/health', (res) => {
-    process.exit(res.statusCode === 200 ? 0 : 1);
-  });
-"
+wget --no-verbose --tries=1 --spider http://localhost/health || exit 1
