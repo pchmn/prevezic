@@ -1,14 +1,12 @@
 import { v } from 'convex/values';
-import { mutation, query } from './_generated/server';
+import { internalQuery, mutation } from './_generated/server';
 import { requireUserIsProjectMember } from './projects/projects.utils';
 
-export const list = query({
+export const list = internalQuery({
   args: {
     projectId: v.id('projects'),
   },
   handler: async (ctx, { projectId }) => {
-    await requireUserIsProjectMember(ctx, projectId);
-
     const photos = await ctx.db
       .query('photos')
       .withIndex('by_project', (q) => q.eq('projectId', projectId))

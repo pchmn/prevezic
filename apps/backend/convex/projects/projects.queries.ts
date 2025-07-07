@@ -1,5 +1,7 @@
+import { v } from 'convex/values';
 import { query } from '../_generated/server';
 import { requireAuth } from '../auth/auth.utils';
+import { requireUserIsProjectMember } from './projects.utils';
 
 export const list = query({
   handler: async (ctx) => {
@@ -24,5 +26,43 @@ export const list = query({
     }
 
     return projects;
+  },
+});
+
+export const get = query({
+  args: {
+    projectId: v.id('projects'),
+  },
+  handler: async (ctx, { projectId }) => {
+    await requireUserIsProjectMember(ctx, projectId);
+
+    const project = await ctx.db.get(projectId);
+
+    if (!project) {
+      throw new Error('Project not found');
+    }
+
+    const photos = await ctx.db
+      .query('photos')
+      .withIndex('by_project', (q) => q.eq('projectId', projectId))
+      .collect();
+
+    const photosWithUrl = await Promise.all(
+      photos.map(async (photo) => ({
+        ...photo,
+        url: await ctx.storage.getUrl(photo.storageId),
+      })),
+    );
+
+    const members = await ctx.db
+      .query('members')
+      .withIndex('by_project', (q) => q.eq('projectId', projectId))
+      .collect();
+
+    return {
+      ...project,
+      photos: photosWithUrl,
+      members,
+    };
   },
 });
