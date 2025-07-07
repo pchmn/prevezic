@@ -2,7 +2,11 @@
   "name": "@prevezic/web",
   "private": true,
   "type": "module",
-  "files": ["build", "public", ".docker"],
+  "files": [
+    "build",
+    "public",
+    ".docker"
+  ],
   "scripts": {
     "dev": "vite --port 3500 --host",
     "start": "vite --port 3000",
@@ -22,6 +26,7 @@
     "@tanstack/router-plugin": "^1.121.2",
     "better-auth": "^1.2.8",
     "convex": "^1.25.0",
+    "is-network-error": "^1.1.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "tailwindcss": "^4.1.7"

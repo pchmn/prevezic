@@ -39,14 +39,14 @@ async function addPhoto() {
   const sendImageUrl = new URL(`${appConfig.convexSiteUrl}/add-photo`);
   sendImageUrl.searchParams.set('author', 'Jack Smith');
 
-  const { data: session } = await authClient.getSession();
+  const { data } = await authClient.convex.token();
 
   await fetch(sendImageUrl, {
     method: 'POST',
     headers: {
       'Content-Type': 'image/png',
-      Authorization: `Bearer ${session?.session.token}`,
+      Authorization: `Bearer ${data?.token}`,
     },
-    body: session?.user.id,
+    body: 'test',
   });
 }
