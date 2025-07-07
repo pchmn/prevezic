@@ -5,7 +5,13 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from '@prevezic/ui/carousel';
-import { Dialog, DialogContent } from '@prevezic/ui/dialog';
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from '@prevezic/ui/dialog';
 import { cn } from '@prevezic/ui/utils';
 
 interface SlideShowProps {
@@ -29,6 +35,12 @@ export function SlideShowDialog({
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className='h-full max-w-full w-full rounded-none p-0 bg-black border-none shadow-none'>
+        <div hidden>
+          <DialogHeader>
+            <DialogTitle>SlideShow</DialogTitle>
+            <DialogDescription>Slideshow description</DialogDescription>
+          </DialogHeader>
+        </div>
         <SlideShow
           images={images}
           initialIndex={initialIndex}

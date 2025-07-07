@@ -3,7 +3,7 @@ import { api } from '@prevezic/backend/_generated/api';
 import type { Id } from '@prevezic/backend/_generated/dataModel';
 import { Flex } from '@prevezic/ui/flex';
 import { useMutation, useQuery } from '@tanstack/react-query';
-import { createFileRoute } from '@tanstack/react-router';
+import { Outlet, createFileRoute } from '@tanstack/react-router';
 import { useState } from 'react';
 import { ImageEditor } from '~/components/ImageEditor';
 import { appConfig } from '~/config/config';
@@ -17,9 +17,7 @@ function RouteComponent() {
   const { projectId } = Route.useParams();
   const navigate = Route.useNavigate();
 
-  const { data: project } = useQuery({
-    ...convexQuery(api.project.get, { projectId: projectId as Id<'projects'> }),
-  });
+  const { project, photos } = useProject(projectId as Id<'projects'>);
 
   const { mutate: addPhotoMutation, isPending: isAddingPhoto } = useMutation({
     mutationFn: (croppedFile: File | Blob) =>
@@ -62,7 +60,7 @@ function RouteComponent() {
         </Flex>
       </Flex>
       <div className='w-full grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2'>
-        {project?.photos.map((photo) => (
+        {photos.map((photo) => (
           <div
             key={photo._id}
             className='aspect-square'
@@ -92,6 +90,8 @@ function RouteComponent() {
         onSave={addPhotoMutation}
         onCancel={handleCancelCrop}
       />
+
+      <Outlet />
     </Flex>
   );
 }
@@ -110,4 +110,17 @@ async function addPhoto(file: File | Blob, projectId: Id<'projects'>) {
     },
     body: file,
   });
+}
+
+function useProject(projectId: Id<'projects'>) {
+  const { data: project } = useQuery({
+    ...convexQuery(api.project.get, { projectId: projectId as Id<'projects'> }),
+  });
+
+  const { data: photos } = useQuery({
+    ...convexQuery(api.photo.list, { projectId: projectId as Id<'projects'> }),
+    initialData: [],
+  });
+
+  return { project, photos };
 }

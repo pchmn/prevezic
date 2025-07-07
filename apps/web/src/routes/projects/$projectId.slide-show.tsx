@@ -27,10 +27,6 @@ function RouteComponent() {
     initialData: [],
   });
 
-  console.log(photos);
-
-  // if (!photos) return null;
-
   return (
     <SlideShowDialog
       open={true}
