@@ -1,5 +1,6 @@
 {
   "extends": "@prevezic/tsconfig/base.json",
+  "include": ["src", "."],
   "compilerOptions": {
     "allowImportingTsExtensions": true,
     "lib": ["DOM", "DOM.Iterable", "ES2022"],
