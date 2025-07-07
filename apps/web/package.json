@@ -32,7 +32,8 @@
     "react": "^19.0.0",
     "react-advanced-cropper": "^0.20.1",
     "react-dom": "^19.0.0",
-    "tailwindcss": "^4.1.7"
+    "tailwindcss": "^4.1.7",
+    "zod": "^3.25.30"
   },
   "devDependencies": {
     "@prevezic/tsconfig": "workspace:*",

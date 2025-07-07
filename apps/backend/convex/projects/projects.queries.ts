@@ -45,6 +45,7 @@ export const get = query({
     const photos = await ctx.db
       .query('photos')
       .withIndex('by_project', (q) => q.eq('projectId', projectId))
+      .order('desc')
       .collect();
 
     const photosWithUrl = await Promise.all(

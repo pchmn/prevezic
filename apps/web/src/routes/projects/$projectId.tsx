@@ -15,6 +15,7 @@ export const Route = createFileRoute('/projects/$projectId')({
 
 function RouteComponent() {
   const { projectId } = Route.useParams();
+  const navigate = Route.useNavigate();
 
   const { data: project } = useQuery({
     ...convexQuery(api.project.get, { projectId: projectId as Id<'projects'> }),
@@ -66,6 +67,13 @@ function RouteComponent() {
             key={photo._id}
             className='aspect-square'
             style={{ contentVisibility: 'auto' }}
+            onClick={() => {
+              navigate({
+                to: '/projects/$projectId/slide-show',
+                params: { projectId },
+                search: { mediaId: photo._id },
+              });
+            }}
           >
             <img
               src={photo.url ?? ''}

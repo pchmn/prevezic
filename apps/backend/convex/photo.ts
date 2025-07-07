@@ -1,21 +1,24 @@
 import { v } from 'convex/values';
-import { internalQuery, mutation } from './_generated/server';
+import { mutation, query } from './_generated/server';
 import { requireUserIsProjectMember } from './projects/projects.utils';
 
-export const list = internalQuery({
+export const list = query({
   args: {
     projectId: v.id('projects'),
   },
   handler: async (ctx, { projectId }) => {
+    await requireUserIsProjectMember(ctx, projectId);
+
     const photos = await ctx.db
       .query('photos')
       .withIndex('by_project', (q) => q.eq('projectId', projectId))
+      .order('desc')
       .collect();
 
     return Promise.all(
       photos.map(async (photo) => ({
         ...photo,
-        url: await ctx.storage.getUrl(photo.storageId),
+        url: (await ctx.storage.getUrl(photo.storageId)) ?? '',
       })),
     );
   },
