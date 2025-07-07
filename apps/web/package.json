@@ -2,11 +2,7 @@
   "name": "@prevezic/web",
   "private": true,
   "type": "module",
-  "files": [
-    "build",
-    "public",
-    ".docker"
-  ],
+  "files": ["build", "public", ".docker"],
   "scripts": {
     "dev": "vite --port 3500 --host",
     "start": "vite --port 3000",
@@ -19,6 +15,7 @@
     "@convex-dev/better-auth": "0.7.0-alpha.11",
     "@convex-dev/react-query": "0.0.0-alpha.11",
     "@prevezic/ui": "workspace:*",
+    "@prevezic/backend": "workspace:*",
     "@tailwindcss/vite": "^4.1.11",
     "@tanstack/react-query": "^5.81.5",
     "@tanstack/react-router": "^1.121.2",

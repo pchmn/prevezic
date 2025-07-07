@@ -9,7 +9,7 @@ export const Route = createFileRoute('/')({
   component: App,
   beforeLoad: async ({ context: { authClient, queryClient } }) => {
     const { data: session } = await authClient.getSession();
-    console.log(session);
+
     if (!session) {
       const { data } = await authClient.signIn.anonymous();
       queryClient.setQueryData(SESSION_QUERY_KEY, data);

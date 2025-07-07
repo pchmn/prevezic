@@ -57,6 +57,9 @@ importers:
       '@convex-dev/react-query':
         specifier: 0.0.0-alpha.11
         version: 0.0.0-alpha.11(@tanstack/react-query@5.81.5(react@19.1.0))(convex@1.25.0(react@19.1.0))(hono@4.7.10)(react@19.1.0)(typescript@5.8.3)(zod@3.25.30)
+      '@prevezic/backend':
+        specifier: workspace:*
+        version: link:../backend
       '@prevezic/ui':
         specifier: workspace:*
         version: link:../../packages/ui
