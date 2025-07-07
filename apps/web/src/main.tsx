@@ -10,6 +10,7 @@ import { routeTree } from './routeTree.gen.ts';
 import { ConvexQueryClient } from '@convex-dev/react-query';
 import '@prevezic/ui/style.css';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import 'react-advanced-cropper/dist/style.css';
 import { appConfig } from './config/config.ts';
 import { useAuth } from './hooks/useAuth.ts';
 import { authClient } from './lib/auth.client.ts';

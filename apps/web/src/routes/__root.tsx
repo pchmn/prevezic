@@ -1,6 +1,5 @@
 import type { QueryClient } from '@tanstack/react-query';
 import { Outlet, createRootRouteWithContext } from '@tanstack/react-router';
-import { TanStackRouterDevtools } from '@tanstack/react-router-devtools';
 import type { ConvexReactClient } from 'convex/react';
 import { SESSION_QUERY_KEY } from '~/hooks/useSession';
 import type { authClient } from '~/lib/auth.client';
@@ -23,7 +22,7 @@ export const Route = createRootRouteWithContext<{
   component: () => (
     <>
       <Outlet />
-      <TanStackRouterDevtools />
+      {/* <TanStackRouterDevtools /> */}
     </>
   ),
 });
