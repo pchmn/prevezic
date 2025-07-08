@@ -26,6 +26,7 @@
     "@tanstack/react-router-devtools": "^1.121.2",
     "@tanstack/router-plugin": "^1.121.2",
     "better-auth": "^1.2.8",
+    "browser-image-compression": "^2.0.2",
     "convex": "^1.25.0",
     "is-network-error": "^1.1.0",
     "lucide-react": "^0.487.0",

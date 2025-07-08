@@ -4,8 +4,8 @@ import type { Id } from '@prevezic/backend/_generated/dataModel';
 import { Flex } from '@prevezic/ui/flex';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { Outlet, createFileRoute } from '@tanstack/react-router';
+import imageCompression from 'browser-image-compression';
 import { useState } from 'react';
-import { ImageEditor } from '~/components/ImageEditor';
 import { appConfig } from '~/config/config';
 import { authClient } from '~/lib/auth.client';
 
@@ -31,12 +31,18 @@ function RouteComponent() {
   const [showCropper, setShowCropper] = useState(false);
   const [selectedImageSrc, setSelectedImageSrc] = useState<string>('');
 
-  const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileSelect = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
-      const imageUrl = URL.createObjectURL(file);
-      setSelectedImageSrc(imageUrl);
-      setShowCropper(true);
+      const compressedFile = await imageCompression(file, {
+        maxSizeMB: 0.2,
+        initialQuality: 0.75,
+        alwaysKeepResolution: true,
+        maxWidthOrHeight: 1500,
+        useWebWorker: true,
+        fileType: 'image/webp',
+      });
+      addPhotoMutation(compressedFile);
     }
     // Reset the input value so the same file can be selected again
     e.target.value = '';
@@ -82,14 +88,14 @@ function RouteComponent() {
         ))}
       </div>
       <input type='file' accept='image/*' capture onChange={handleFileSelect} />
-      <ImageEditor
+      {/* <ImageEditor
         isLoading={isAddingPhoto}
         isOpen={showCropper}
         onOpenChange={setShowCropper}
         imageSrc={selectedImageSrc}
         onSave={addPhotoMutation}
         onCancel={handleCancelCrop}
-      />
+      /> */}
 
       <Outlet />
     </Flex>
