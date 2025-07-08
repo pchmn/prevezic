@@ -1,12 +1,14 @@
 import { convexQuery } from '@convex-dev/react-query';
 import { api } from '@prevezic/backend/_generated/api';
 import type { Id } from '@prevezic/backend/_generated/dataModel';
+import { Button } from '@prevezic/ui/button';
 import { Flex } from '@prevezic/ui/flex';
 import { Spinner } from '@prevezic/ui/spinner';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { Outlet, createFileRoute } from '@tanstack/react-router';
 import imageCompression from 'browser-image-compression';
-import { useEffect } from 'react';
+import { CameraIcon } from 'lucide-react';
+import { useEffect, useRef } from 'react';
 import { appConfig } from '~/config/config';
 import { authClient } from '~/lib/auth.client';
 import { isPrevezicError } from '~/lib/error.utils';
@@ -18,6 +20,8 @@ export const Route = createFileRoute('/projects/$projectId')({
 function RouteComponent() {
   const { projectId } = Route.useParams();
   const navigate = Route.useNavigate();
+
+  const inputRef = useRef<HTMLInputElement>(null);
 
   const { project, medias, members } = useProject(projectId as Id<'projects'>);
 
@@ -45,9 +49,9 @@ function RouteComponent() {
   };
 
   return (
-    <Flex direction='col' gap='md'>
-      <Flex direction='col' gap='md'>
-        <h1>{project?.name}</h1>
+    <Flex direction='col' gap='md' className='relative h-screen'>
+      <Flex direction='col' gap='sm' className='p-4'>
+        <h1 className='text-2xl font-bold'>{project?.name}</h1>
         <Flex gap='sm' className='text-sm text-muted-foreground'>
           <p>{medias.length} photos</p>•<p>{members.length} membres</p>
         </Flex>
@@ -74,7 +78,14 @@ function RouteComponent() {
           </div>
         ))}
       </div>
-      <input type='file' accept='image/*' capture onChange={handleFileSelect} />
+      <input
+        ref={inputRef}
+        hidden
+        type='file'
+        accept='image/*'
+        capture
+        onChange={handleFileSelect}
+      />
 
       {isAddingPhoto && (
         <Flex
@@ -88,6 +99,17 @@ function RouteComponent() {
           <Spinner className='w-8 h-8' />
         </Flex>
       )}
+
+      <Button
+        disabled={isAddingPhoto}
+        hidden={isAddingPhoto}
+        className='fixed bottom-8 left-1/2 -translate-x-1/2 rounded-full p-6 shadow-lg'
+        onClick={() => inputRef.current?.click()}
+      >
+        <CameraIcon className='w-4 h-4' />
+        <span>Ajouter une photo</span>
+      </Button>
+
       <Outlet />
     </Flex>
   );

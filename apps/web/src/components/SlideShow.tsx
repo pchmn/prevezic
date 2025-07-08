@@ -35,7 +35,7 @@ export function SlideShowDialog({
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent
-        className='h-full max-w-full w-full rounded-none p-0 bg-black border-none shadow-none'
+        className='h-full max-w-full w-full rounded-none p-0 bg-black border-none shadow-none outline-none'
         showCloseButton={false}
       >
         <div hidden>
