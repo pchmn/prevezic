@@ -96,8 +96,8 @@ export function ThemeProvider({
   );
 }
 
-const lightColor = '#dedede';
-const darkColor = '#0d0614';
+const lightColor = 'rgb(237 223 232)';
+const darkColor = 'rgb(37 32 37)';
 
 export const changeThemeColor = ({
   theme,
