@@ -17,7 +17,8 @@
     "dotenv": "^16.5.0"
   },
   "exports": {
-    "./_generated/*": "./convex/_generated/*.js"
+    "./_generated/*": "./convex/_generated/*.js",
+    "./error/error.utils": "./convex/error/error.utils.ts"
   },
   "packageManager": "pnpm@10.11.0"
 }

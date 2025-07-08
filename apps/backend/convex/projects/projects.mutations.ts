@@ -1,7 +1,8 @@
-import { ConvexError, v } from 'convex/values';
+import { v } from 'convex/values';
 import { internal } from '../_generated/api';
 import { mutation } from '../_generated/server';
 import { requireAuth } from '../auth/auth.utils';
+import { PrevezicError } from '../error/error.utils';
 import { requireUserIsProjectCreator } from './projects.utils';
 
 export const insert = mutation({
@@ -62,11 +63,29 @@ export const join = mutation({
       .first();
 
     if (!project) {
-      throw new ConvexError('Project not found');
+      throw new PrevezicError({
+        code: 'not_found',
+        message: 'Projet non trouvé',
+      });
     }
 
     if (project.creatorId === userId) {
-      throw new ConvexError('You are the creator of this project');
+      throw new PrevezicError({
+        code: 'already_project_member',
+        message: 'Vous êtes déjà membre de ce projet',
+      });
+    }
+
+    const isMember = await ctx.runQuery(internal.member.isMember, {
+      projectId: project._id,
+      userId,
+    });
+
+    if (isMember) {
+      throw new PrevezicError({
+        code: 'already_project_member',
+        message: 'Vous êtes déjà membre de ce projet',
+      });
     }
 
     await ctx.runMutation(internal.member.insert, {

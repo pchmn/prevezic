@@ -1,8 +1,8 @@
-import { ConvexError } from 'convex/values';
 import { internal } from '../_generated/api';
 import type { Id } from '../_generated/dataModel';
 import type { ActionCtx, MutationCtx, QueryCtx } from '../_generated/server';
 import { requireAuth } from '../auth/auth.utils';
+import { PrevezicError } from '../error/error.utils';
 
 export async function requireUserIsProjectMember(
   ctx: QueryCtx | MutationCtx | ActionCtx,
@@ -16,7 +16,10 @@ export async function requireUserIsProjectMember(
   });
 
   if (!isMember) {
-    throw new ConvexError('You are not a member of this project');
+    throw new PrevezicError({
+      code: 'not_project_member',
+      message: "Vous n'êtes pas membre de ce projet",
+    });
   }
 
   return userId;
@@ -30,11 +33,17 @@ export async function requireUserIsProjectCreator(
 
   const project = await ctx.db.get(projectId);
   if (!project) {
-    throw new ConvexError('Project not found');
+    throw new PrevezicError({
+      code: 'not_found',
+      message: 'Projet non trouvé',
+    });
   }
 
   if (project.creatorId !== userId) {
-    throw new ConvexError('You are not the creator of this project');
+    throw new PrevezicError({
+      code: 'not_project_creator',
+      message: "Vous n'êtes pas le créateur de ce projet",
+    });
   }
 
   return project;

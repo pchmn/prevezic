@@ -1,6 +1,7 @@
 import { v } from 'convex/values';
 import { query } from '../_generated/server';
 import { requireAuth } from '../auth/auth.utils';
+import { PrevezicError } from '../error/error.utils';
 import { requireUserIsProjectMember } from './projects.utils';
 
 export const list = query({
@@ -39,7 +40,10 @@ export const get = query({
     const project = await ctx.db.get(projectId);
 
     if (!project) {
-      throw new Error('Project not found');
+      throw new PrevezicError({
+        code: 'not_found',
+        message: 'Projet non trouvé',
+      });
     }
 
     return project;

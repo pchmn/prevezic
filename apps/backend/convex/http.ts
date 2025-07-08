@@ -3,7 +3,6 @@ import { api } from './_generated/api';
 import type { Id } from './_generated/dataModel';
 import { httpAction } from './_generated/server';
 import { betterAuthComponent, createAuth } from './auth';
-import { requireAuth } from './auth/auth.utils';
 import { requireUserIsProjectMember } from './projects/projects.utils';
 
 const http = httpRouter();
@@ -44,7 +43,6 @@ http.route({
   path: '/add-photo',
   method: 'POST',
   handler: httpAction(async (ctx, request) => {
-    console.log({ userId: await requireAuth(ctx) });
     const projectId = new URL(request.url).searchParams.get(
       'projectId',
     ) as Id<'projects'>;

@@ -6,8 +6,10 @@ import { Spinner } from '@prevezic/ui/spinner';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { Outlet, createFileRoute } from '@tanstack/react-router';
 import imageCompression from 'browser-image-compression';
+import { useEffect } from 'react';
 import { appConfig } from '~/config/config';
 import { authClient } from '~/lib/auth.client';
+import { isPrevezicError } from '~/lib/error.utils';
 
 export const Route = createFileRoute('/projects/$projectId')({
   component: RouteComponent,
@@ -108,19 +110,36 @@ async function addPhoto(file: File | Blob, projectId: Id<'projects'>) {
 }
 
 function useProject(projectId: Id<'projects'>) {
-  const { data: project } = useQuery({
+  const navigate = Route.useNavigate();
+
+  const {
+    data: project,
+    error,
+    isPending: isProjectPending,
+  } = useQuery({
     ...convexQuery(api.project.get, { projectId: projectId as Id<'projects'> }),
   });
 
-  const { data: medias } = useQuery({
+  const { data: medias, isPending: isMediasPending } = useQuery({
     ...convexQuery(api.media.list, { projectId: projectId as Id<'projects'> }),
     initialData: [],
   });
 
-  const { data: members } = useQuery({
+  const { data: members, isPending: isMembersPending } = useQuery({
     ...convexQuery(api.member.list, { projectId: projectId as Id<'projects'> }),
     initialData: [],
   });
 
-  return { project, medias, members };
+  useEffect(() => {
+    if (isPrevezicError(error) && error.data.code === 'not_project_member') {
+      navigate({ to: '/' });
+    }
+  }, [error, navigate]);
+
+  return {
+    project,
+    medias,
+    members,
+    isLoading: isProjectPending || isMediasPending || isMembersPending,
+  };
 }
