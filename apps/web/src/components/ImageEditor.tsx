@@ -46,8 +46,13 @@ export function ImageEditor({
           </DialogDescription> */}
         </DialogHeader>
 
-        <Flex direction='col' gap='md' justify='between'>
-          <Flex direction='col' gap='md'>
+        <Flex
+          direction='col'
+          gap='md'
+          justify='between'
+          className='h-full min-w-0'
+        >
+          <Flex direction='col' gap='md' className='h-full min-w-0'>
             <Cropper
               ref={cropperRef}
               src={imageSrc}
