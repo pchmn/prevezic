@@ -16,11 +16,11 @@ function App() {
 
   const { data: projects, isPending } = useQuery({
     ...convexQuery(api.project.list, {}),
-    initialData: [],
   });
 
   useEffect(() => {
-    if (!isPending && projects.length > 0) {
+    console.log({ isPending, projects });
+    if (!isPending && projects && projects.length > 0) {
       navigate({
         to: '/projects/$projectId',
         params: { projectId: projects[0]._id },
