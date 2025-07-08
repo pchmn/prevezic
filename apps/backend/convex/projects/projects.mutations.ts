@@ -94,5 +94,9 @@ export const join = mutation({
       role: 'member',
       joinedViaInvitation: true,
     });
+
+    return {
+      projectId: project._id,
+    };
   },
 });

@@ -52,8 +52,14 @@ const router = createRouter({
   },
   defaultPreload: 'intent',
   scrollRestoration: true,
-  defaultStructuralSharing: true,
-  defaultPreloadStaleTime: 0,
+  Wrap: ({ children }) => (
+    <ConvexProviderWithAuth
+      client={convexQueryClient.convexClient}
+      useAuth={useAuth}
+    >
+      {children}
+    </ConvexProviderWithAuth>
+  ),
 });
 
 // Register the router instance for type safety
@@ -70,14 +76,12 @@ if (rootElement && !rootElement.innerHTML) {
   root.render(
     <StrictMode>
       <ThemeProvider>
-        <ConvexProviderWithAuth client={convex} useAuth={useAuth}>
-          <PersistQueryClientProvider
-            client={queryClient}
-            persistOptions={{ persister: asyncStoragePersister }}
-          >
-            <RouterProvider router={router} />
-          </PersistQueryClientProvider>
-        </ConvexProviderWithAuth>
+        <PersistQueryClientProvider
+          client={queryClient}
+          persistOptions={{ persister: asyncStoragePersister }}
+        >
+          <RouterProvider router={router} />
+        </PersistQueryClientProvider>
       </ThemeProvider>
     </StrictMode>,
   );
