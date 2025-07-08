@@ -51,8 +51,13 @@ function RouteComponent() {
   return (
     <Flex direction='col' gap='md' className='relative h-screen'>
       <Flex direction='col' gap='sm' className='p-4'>
-        <h1 className='text-2xl font-bold'>{project?.name}</h1>
-        <Flex gap='sm' className='text-sm text-muted-foreground'>
+        <h1
+          className='text-2xl font-bold'
+          style={{ fontFamily: 'Delius Swash Caps' }}
+        >
+          {project?.name}
+        </h1>
+        <Flex gap='sm' className='text-sm text-muted-foreground/75'>
           <p>{medias.length} photos</p>•<p>{members.length} membres</p>
         </Flex>
       </Flex>
