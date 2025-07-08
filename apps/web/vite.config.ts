@@ -15,9 +15,9 @@ export default defineConfig({
     VitePWA({
       registerType: 'autoUpdate',
       manifest: {
-        name: 'Prevezic',
-        short_name: 'Prevezic',
-        description: 'Prevezic - PWA Application',
+        name: 'ACC 40 ans',
+        short_name: 'ACC 40 ans',
+        description: 'ACC 40 ans - PWA Application',
         theme_color: '#171216',
         background_color: '#171216',
         display: 'standalone',
