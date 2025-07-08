@@ -9,7 +9,10 @@ import { routeTree } from './routeTree.gen.ts';
 
 import { ConvexQueryClient } from '@convex-dev/react-query';
 import '@prevezic/ui/style.css';
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { createAsyncStoragePersister } from '@tanstack/query-async-storage-persister';
+import { QueryClient } from '@tanstack/react-query';
+import { PersistQueryClientProvider } from '@tanstack/react-query-persist-client';
+import { del, get, set } from 'idb-keyval';
 import 'react-advanced-cropper/dist/style.css';
 import { appConfig } from './config/config.ts';
 import { useAuth } from './hooks/useAuth.ts';
@@ -24,10 +27,20 @@ const queryClient = new QueryClient({
     queries: {
       queryKeyHashFn: convexQueryClient.hashFn(),
       queryFn: convexQueryClient.queryFn(),
+      gcTime: Number.POSITIVE_INFINITY,
+      networkMode: 'offlineFirst',
     },
   },
 });
 convexQueryClient.connect(queryClient);
+
+const asyncStoragePersister = createAsyncStoragePersister({
+  storage: {
+    getItem: (key) => get(key),
+    setItem: (key, value) => set(key, value),
+    removeItem: (key) => del(key),
+  },
+});
 
 // Create a new router instance
 const router = createRouter({
@@ -58,9 +71,12 @@ if (rootElement && !rootElement.innerHTML) {
     <StrictMode>
       <ThemeProvider>
         <ConvexProviderWithAuth client={convex} useAuth={useAuth}>
-          <QueryClientProvider client={queryClient}>
+          <PersistQueryClientProvider
+            client={queryClient}
+            persistOptions={{ persister: asyncStoragePersister }}
+          >
             <RouterProvider router={router} />
-          </QueryClientProvider>
+          </PersistQueryClientProvider>
         </ConvexProviderWithAuth>
       </ThemeProvider>
     </StrictMode>,
