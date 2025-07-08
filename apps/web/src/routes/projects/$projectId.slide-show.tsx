@@ -20,8 +20,8 @@ function RouteComponent() {
   const { mediaId } = Route.useSearch();
   const navigate = Route.useNavigate();
 
-  const { data: photos } = useQuery({
-    ...convexQuery(api.photo.list, {
+  const { data: medias } = useQuery({
+    ...convexQuery(api.media.list, {
       projectId: projectId as Id<'projects'>,
     }),
     initialData: [],
@@ -36,8 +36,8 @@ function RouteComponent() {
           params: { projectId },
         });
       }}
-      images={photos}
-      initialIndex={photos.findIndex((photo) => photo._id === mediaId)}
+      images={medias}
+      initialIndex={medias.findIndex((media) => media._id === mediaId)}
     />
   );
 }

@@ -17,7 +17,7 @@ function RouteComponent() {
   const { projectId } = Route.useParams();
   const navigate = Route.useNavigate();
 
-  const { project, photos } = useProject(projectId as Id<'projects'>);
+  const { project, medias, members } = useProject(projectId as Id<'projects'>);
 
   const { mutate: addPhotoMutation, isPending: isAddingPhoto } = useMutation({
     mutationFn: async (file: File) => {
@@ -47,27 +47,26 @@ function RouteComponent() {
       <Flex direction='col' gap='md'>
         <h1>{project?.name}</h1>
         <Flex gap='sm' className='text-sm text-muted-foreground'>
-          <p>{project?.photos.length} photos</p>•
-          <p>{project?.members.length} membres</p>
+          <p>{medias.length} photos</p>•<p>{members.length} membres</p>
         </Flex>
       </Flex>
       <div className='w-full grid grid-cols-3 md:grid-cols-3 lg:grid-cols-4 gap-2'>
-        {photos.map((photo) => (
+        {medias.map((media) => (
           <div
-            key={photo._id}
+            key={media._id}
             className='aspect-square'
             style={{ contentVisibility: 'auto' }}
             onClick={() => {
               navigate({
                 to: '/projects/$projectId/slide-show',
                 params: { projectId },
-                search: { mediaId: photo._id },
+                search: { mediaId: media._id },
               });
             }}
           >
             <img
-              src={photo.url ?? ''}
-              alt={photo.storageId}
+              src={media.url ?? ''}
+              alt={media.storageId}
               className='w-full h-full object-cover'
             />
           </div>
@@ -113,10 +112,15 @@ function useProject(projectId: Id<'projects'>) {
     ...convexQuery(api.project.get, { projectId: projectId as Id<'projects'> }),
   });
 
-  const { data: photos } = useQuery({
-    ...convexQuery(api.photo.list, { projectId: projectId as Id<'projects'> }),
+  const { data: medias } = useQuery({
+    ...convexQuery(api.media.list, { projectId: projectId as Id<'projects'> }),
     initialData: [],
   });
 
-  return { project, photos };
+  const { data: members } = useQuery({
+    ...convexQuery(api.member.list, { projectId: projectId as Id<'projects'> }),
+    initialData: [],
+  });
+
+  return { project, medias, members };
 }

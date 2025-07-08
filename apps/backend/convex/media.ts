@@ -9,16 +9,16 @@ export const list = query({
   handler: async (ctx, { projectId }) => {
     await requireUserIsProjectMember(ctx, projectId);
 
-    const photos = await ctx.db
-      .query('photos')
+    const medias = await ctx.db
+      .query('medias')
       .withIndex('by_project', (q) => q.eq('projectId', projectId))
       .order('desc')
       .collect();
 
     return Promise.all(
-      photos.map(async (photo) => ({
-        ...photo,
-        url: (await ctx.storage.getUrl(photo.storageId)) ?? '',
+      medias.map(async (media) => ({
+        ...media,
+        url: (await ctx.storage.getUrl(media.storageId)) ?? '',
       })),
     );
   },
@@ -49,7 +49,7 @@ export const insert = mutation({
   handler: async (ctx, { projectId, uploaderId, ...insertValues }) => {
     await requireUserIsProjectMember(ctx, projectId);
 
-    await ctx.db.insert('photos', {
+    await ctx.db.insert('medias', {
       projectId,
       uploaderId,
       ...insertValues,

@@ -31,8 +31,8 @@ export default defineSchema({
     .index('by_user', ['userId'])
     .index('by_project_and_user', ['projectId', 'userId']),
 
-  // Photos table - uploaded photos for each project
-  photos: defineTable({
+  // Medias table - uploaded photos for each project
+  medias: defineTable({
     projectId: v.id('projects'),
     uploaderId: v.id('users'),
     storageId: v.id('_storage'),

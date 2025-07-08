@@ -1,5 +1,19 @@
 import { v } from 'convex/values';
-import { internalMutation, internalQuery } from './_generated/server';
+import { internalMutation, internalQuery, query } from './_generated/server';
+import { requireUserIsProjectMember } from './projects/projects.utils';
+
+export const list = query({
+  args: {
+    projectId: v.id('projects'),
+  },
+  handler: async (ctx, { projectId }) => {
+    await requireUserIsProjectMember(ctx, projectId);
+    return await ctx.db
+      .query('members')
+      .withIndex('by_project', (q) => q.eq('projectId', projectId))
+      .collect();
+  },
+});
 
 export const insert = internalMutation({
   args: {

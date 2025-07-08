@@ -42,28 +42,6 @@ export const get = query({
       throw new Error('Project not found');
     }
 
-    const photos = await ctx.db
-      .query('photos')
-      .withIndex('by_project', (q) => q.eq('projectId', projectId))
-      .order('desc')
-      .collect();
-
-    const photosWithUrl = await Promise.all(
-      photos.map(async (photo) => ({
-        ...photo,
-        url: await ctx.storage.getUrl(photo.storageId),
-      })),
-    );
-
-    const members = await ctx.db
-      .query('members')
-      .withIndex('by_project', (q) => q.eq('projectId', projectId))
-      .collect();
-
-    return {
-      ...project,
-      photos: photosWithUrl,
-      members,
-    };
+    return project;
   },
 });

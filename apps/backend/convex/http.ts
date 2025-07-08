@@ -54,7 +54,7 @@ http.route({
     const blob = await request.blob();
     const storageId = await ctx.storage.store(blob);
 
-    await ctx.runMutation(api.photo.insert, {
+    await ctx.runMutation(api.media.insert, {
       storageId,
       projectId,
       uploaderId: userId,
