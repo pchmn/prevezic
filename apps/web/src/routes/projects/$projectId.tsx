@@ -2,10 +2,10 @@ import { convexQuery } from '@convex-dev/react-query';
 import { api } from '@prevezic/backend/_generated/api';
 import type { Id } from '@prevezic/backend/_generated/dataModel';
 import { Flex } from '@prevezic/ui/flex';
+import { Spinner } from '@prevezic/ui/spinner';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { Outlet, createFileRoute } from '@tanstack/react-router';
 import imageCompression from 'browser-image-compression';
-import { useState } from 'react';
 import { appConfig } from '~/config/config';
 import { authClient } from '~/lib/auth.client';
 
@@ -20,20 +20,7 @@ function RouteComponent() {
   const { project, photos } = useProject(projectId as Id<'projects'>);
 
   const { mutate: addPhotoMutation, isPending: isAddingPhoto } = useMutation({
-    mutationFn: (croppedFile: File | Blob) =>
-      addPhoto(croppedFile, projectId as Id<'projects'>),
-    onSuccess: () => {
-      setShowCropper(false);
-      setSelectedImageSrc('');
-    },
-  });
-
-  const [showCropper, setShowCropper] = useState(false);
-  const [selectedImageSrc, setSelectedImageSrc] = useState<string>('');
-
-  const handleFileSelect = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
+    mutationFn: async (file: File) => {
       const compressedFile = await imageCompression(file, {
         maxSizeMB: 0.2,
         initialQuality: 0.75,
@@ -42,18 +29,17 @@ function RouteComponent() {
         useWebWorker: true,
         fileType: 'image/webp',
       });
-      addPhotoMutation(compressedFile);
+      return addPhoto(compressedFile, projectId as Id<'projects'>);
+    },
+  });
+
+  const handleFileSelect = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      addPhotoMutation(file);
     }
     // Reset the input value so the same file can be selected again
     e.target.value = '';
-  };
-
-  const handleCancelCrop = () => {
-    setShowCropper(false);
-    if (selectedImageSrc) {
-      URL.revokeObjectURL(selectedImageSrc);
-    }
-    setSelectedImageSrc('');
   };
 
   return (
@@ -88,15 +74,19 @@ function RouteComponent() {
         ))}
       </div>
       <input type='file' accept='image/*' capture onChange={handleFileSelect} />
-      {/* <ImageEditor
-        isLoading={isAddingPhoto}
-        isOpen={showCropper}
-        onOpenChange={setShowCropper}
-        imageSrc={selectedImageSrc}
-        onSave={addPhotoMutation}
-        onCancel={handleCancelCrop}
-      /> */}
 
+      {isAddingPhoto && (
+        <Flex
+          direction='col'
+          align='center'
+          justify='center'
+          gap='md'
+          className='absolute inset-0 bg-background'
+        >
+          <p>Ajout de la photo...</p>
+          <Spinner className='w-8 h-8' />
+        </Flex>
+      )}
       <Outlet />
     </Flex>
   );
