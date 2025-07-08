@@ -56,7 +56,7 @@ function RouteComponent() {
           <p>{medias.length} photos</p>•<p>{members.length} membres</p>
         </Flex>
       </Flex>
-      <div className='w-full grid grid-cols-3 md:grid-cols-3 lg:grid-cols-4 gap-2'>
+      <div className='w-full grid grid-cols-3 md:grid-cols-3 lg:grid-cols-4 gap-1'>
         {medias.map((media) => (
           <div
             key={media._id}
