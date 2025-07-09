@@ -48,8 +48,9 @@ function RouteComponent() {
   const handleFileSelect = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
-      setIsAddingPhoto(true);
       addPhotoMutation(file);
+    } else {
+      setIsAddingPhoto(false);
     }
     // Reset the input value so the same file can be selected again
     e.target.value = '';
@@ -116,7 +117,10 @@ function RouteComponent() {
         disabled={isAddingPhoto}
         hidden={isAddingPhoto}
         className='fixed bottom-6 left-1/2 -translate-x-1/2 rounded-full p-6 shadow-lg font-[600]'
-        onClick={() => inputRef.current?.click()}
+        onClick={() => {
+          inputRef.current?.click();
+          setIsAddingPhoto(true);
+        }}
       >
         <CameraIcon />
         <span>Ajouter une photo</span>
