@@ -29,7 +29,9 @@ export const isPwa = () => {
 export const getToken = async () => {
   if ('caches' in window) {
     const cache = await caches.open(CACHE_NAME);
+    console.log('cache', cache);
     const cachedToken = await cache.match(CACHE_KEY);
+    console.log('cachedToken', cachedToken);
     if (cachedToken) {
       const { token, expires } = (await cachedToken.json()) as {
         token: string;

@@ -9,7 +9,7 @@ let token: string | null = null;
 getToken().then((t) => {
   token = t;
 });
-if (isPwa() && !token) {
+if (isPwa()) {
   console.log('PWA is installed', token);
 } else {
   console.log('PWA is not installed', token);
@@ -34,7 +34,7 @@ export const Route = createRootRouteWithContext<{
   },
   component: () => (
     <>
-      {token && <div>Token: {token}</div>}
+      <div>Token: {token}</div>
       <Outlet />
       {/* <TanStackRouterDevtools /> */}
     </>
