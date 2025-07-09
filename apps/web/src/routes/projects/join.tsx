@@ -6,6 +6,7 @@ import { useMutation } from '@tanstack/react-query';
 import { createFileRoute } from '@tanstack/react-router';
 import { useEffect } from 'react';
 import z from 'zod';
+import { cacheToken } from '~/lib/cache-storage/cache-storage';
 import { isPrevezicError } from '~/lib/error.utils';
 
 const searchSchema = z.object({
@@ -15,6 +16,14 @@ const searchSchema = z.object({
 export const Route = createFileRoute('/projects/join')({
   validateSearch: searchSchema,
   component: RouteComponent,
+  beforeLoad: async ({ search }) => {
+    const token = search.token;
+    await cacheToken(token);
+
+    // const cachedToken = await getToken();
+
+    // console.log({ token, cachedToken });
+  },
 });
 
 function RouteComponent() {

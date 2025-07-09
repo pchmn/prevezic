@@ -3,6 +3,14 @@ import { Outlet, createRootRouteWithContext } from '@tanstack/react-router';
 import type { ConvexReactClient } from 'convex/react';
 import { SESSION_QUERY_KEY } from '~/hooks/useSession';
 import type { authClient } from '~/lib/auth.client';
+import { getToken, isPwa } from '~/lib/cache-storage/cache-storage';
+
+const token = await getToken();
+if (isPwa() && !token) {
+  console.log('PWA is installed', token);
+} else {
+  console.log('PWA is not installed', token);
+}
 
 export const Route = createRootRouteWithContext<{
   authClient: typeof authClient;
@@ -21,6 +29,7 @@ export const Route = createRootRouteWithContext<{
   },
   component: () => (
     <>
+      {token && <div>Token: {token}</div>}
       <Outlet />
       {/* <TanStackRouterDevtools /> */}
     </>
