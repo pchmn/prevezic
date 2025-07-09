@@ -48,8 +48,9 @@ function RouteComponent() {
   const handleFileSelect = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
-      setIsAddingPhoto(true);
       addPhotoMutation(file);
+    } else {
+      setIsAddingPhoto(false);
     }
     // Reset the input value so the same file can be selected again
     e.target.value = '';
@@ -59,14 +60,15 @@ function RouteComponent() {
     <Flex direction='col' gap='md' className='h-screen'>
       <Flex direction='col' gap='sm' className='p-4'>
         <h1
-          className='text-2xl font-bold'
+          className='text-2xl font-bold pt-2'
           style={{ fontFamily: 'Delius Swash Caps' }}
         >
           {project?.name}
         </h1>
         <Flex gap='sm' className='text-sm text-muted-foreground/75'>
-          <p>{medias.length} photos</p>•<p>{members.length} membres</p>
+          <p>{medias.length} photos</p>
         </Flex>
+        {/* {!isPwa() && <Button variant='outline'>Installer l'application</Button>} */}
       </Flex>
       <div className='w-full grid grid-cols-3 md:grid-cols-3 lg:grid-cols-4 gap-1'>
         {medias.map((media) => (
@@ -116,7 +118,10 @@ function RouteComponent() {
         disabled={isAddingPhoto}
         hidden={isAddingPhoto}
         className='fixed bottom-6 left-1/2 -translate-x-1/2 rounded-full p-6 shadow-lg font-[600]'
-        onClick={() => inputRef.current?.click()}
+        onClick={() => {
+          inputRef.current?.click();
+          setIsAddingPhoto(true);
+        }}
       >
         <CameraIcon />
         <span>Ajouter une photo</span>
