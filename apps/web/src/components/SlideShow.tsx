@@ -1,3 +1,4 @@
+import { Button } from '@prevezic/ui/button';
 import {
   Carousel,
   CarouselContent,
@@ -12,7 +13,10 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@prevezic/ui/dialog';
+import { Flex } from '@prevezic/ui/flex';
 import { cn } from '@prevezic/ui/utils';
+import { ArrowLeftIcon, DownloadIcon } from 'lucide-react';
+import { useState } from 'react';
 
 interface SlideShowProps {
   images: {
@@ -28,10 +32,14 @@ export function SlideShowDialog({
   initialIndex,
   open,
   onOpenChange,
+  onDownload,
 }: SlideShowProps & {
   open: boolean;
   onOpenChange: (open: boolean) => void;
+  onDownload?: (index: number) => void;
 }) {
+  const [activeIndex, setActiveIndex] = useState(initialIndex ?? 0);
+
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent
@@ -44,10 +52,36 @@ export function SlideShowDialog({
             <DialogDescription>Slideshow description</DialogDescription>
           </DialogHeader>
         </div>
+
+        <Flex className='absolute top-0 left-0 w-full p-4 justify-between'>
+          <Button
+            variant='ghost'
+            size='icon'
+            className='z-10'
+            onClick={() => {
+              console.log('close');
+              onOpenChange(false);
+            }}
+          >
+            <ArrowLeftIcon className='size-5!' />
+          </Button>
+          <Button
+            variant='ghost'
+            size='icon'
+            className='z-10'
+            onClick={() => {
+              console.log('download');
+              onDownload?.(activeIndex);
+            }}
+          >
+            <DownloadIcon className='size-5!' />
+          </Button>
+        </Flex>
+
         <SlideShow
           images={images}
           initialIndex={initialIndex}
-          // onActiveChange={onActiveChange}
+          onActiveChange={setActiveIndex}
           // onMediaClick={onMediaClick}
         />
       </DialogContent>

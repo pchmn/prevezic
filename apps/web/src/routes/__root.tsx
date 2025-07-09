@@ -34,7 +34,7 @@ export const Route = createRootRouteWithContext<{
   },
   component: () => (
     <>
-      <div>Token: {token}</div>
+      {/* <div>Token: {token}</div> */}
       <Outlet />
       {/* <TanStackRouterDevtools /> */}
     </>

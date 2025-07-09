@@ -33,7 +33,6 @@ function RouteComponent() {
         alwaysKeepResolution: true,
         maxWidthOrHeight: 1500,
         useWebWorker: true,
-        fileType: 'image/webp',
       });
       return addPhoto(compressedFile, projectId as Id<'projects'>);
     },

@@ -48,6 +48,19 @@ function RouteComponent() {
       }}
       images={medias}
       initialIndex={medias.findIndex((media) => media._id === mediaId)}
+      onDownload={(index) => {
+        const media = medias[index];
+        if (!media) return;
+        fetch(media.url).then(async (res) => {
+          const blob = await res.blob();
+          const url = URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = `${media._id}-${new Date(media._creationTime).toISOString()}.${media.contentType.split('/')[1]}`;
+          a.click();
+          a.remove();
+        });
+      }}
     />
   );
 }
