@@ -20,18 +20,21 @@ export default defineConfig({
         // We set a custom background color to ensure it matches the icon's color.
         background: '#ECB4EB',
       },
+      padding: 0,
     },
     maskable: {
       sizes: [512],
       resizeOptions: {
         background: '#ECB4EB',
       },
+      padding: 0,
     },
     apple: {
       sizes: [180],
       resizeOptions: {
         background: '#ECB4EB',
       },
+      padding: 0,
     },
   },
   images: ['public/logo.svg'],
