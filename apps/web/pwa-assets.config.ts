@@ -18,19 +18,19 @@ export default defineConfig({
       resizeOptions: {
         // A padding is generated around the icon. By default, this padding is white because the background color is not specified.
         // We set a custom background color to ensure it matches the icon's color.
-        background: '#e8bce7',
+        background: '#ECB4EB',
       },
     },
     maskable: {
       sizes: [512],
       resizeOptions: {
-        background: '#e8bce7',
+        background: '#ECB4EB',
       },
     },
     apple: {
       sizes: [180],
       resizeOptions: {
-        background: '#e8bce7',
+        background: '#ECB4EB',
       },
     },
   },

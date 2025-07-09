@@ -18,8 +18,8 @@ export default defineConfig({
         name: 'ACC 40 ans',
         short_name: 'ACC 40 ans',
         description: 'ACC 40 ans - PWA Application',
-        theme_color: '#171216',
-        background_color: '#171216',
+        theme_color: '#e8bce7',
+        background_color: '#e8bce7',
         display: 'standalone',
         // We use a query param to redirect to the home page if the app is running as a PWA
         // It will be intercepted by the loader and redirect to the home page

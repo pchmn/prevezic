@@ -108,10 +108,10 @@ function RouteComponent() {
       <Button
         disabled={isAddingPhoto}
         hidden={isAddingPhoto}
-        className='fixed bottom-8 left-1/2 -translate-x-1/2 rounded-full p-6 shadow-lg'
+        className='fixed bottom-6 left-1/2 -translate-x-1/2 rounded-full p-6 shadow-lg font-[600]'
         onClick={() => inputRef.current?.click()}
       >
-        <CameraIcon className='w-4 h-4' />
+        <CameraIcon />
         <span>Ajouter une photo</span>
       </Button>
 
