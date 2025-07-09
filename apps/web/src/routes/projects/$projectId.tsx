@@ -8,7 +8,7 @@ import { useMutation, useQuery } from '@tanstack/react-query';
 import { Outlet, createFileRoute } from '@tanstack/react-router';
 import imageCompression from 'browser-image-compression';
 import { CameraIcon } from 'lucide-react';
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { appConfig } from '~/config/config';
 import { authClient } from '~/lib/auth.client';
 import { isPrevezicError } from '~/lib/error.utils';
@@ -25,7 +25,7 @@ function RouteComponent() {
 
   const { project, medias, members } = useProject(projectId as Id<'projects'>);
 
-  const { mutate: addPhotoMutation, isPending: isAddingPhoto } = useMutation({
+  const { mutate: addPhotoMutation } = useMutation({
     mutationFn: async (file: File) => {
       const compressedFile = await imageCompression(file, {
         maxSizeMB: 0.2,
@@ -36,11 +36,19 @@ function RouteComponent() {
       });
       return addPhoto(compressedFile, projectId as Id<'projects'>);
     },
+    onSuccess: () => {
+      setIsAddingPhoto(false);
+    },
+    onError: () => {
+      setIsAddingPhoto(false);
+    },
   });
+  const [isAddingPhoto, setIsAddingPhoto] = useState(false);
 
   const handleFileSelect = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
+      setIsAddingPhoto(true);
       addPhotoMutation(file);
     }
     // Reset the input value so the same file can be selected again
@@ -48,7 +56,7 @@ function RouteComponent() {
   };
 
   return (
-    <Flex direction='col' gap='md' className='relative h-screen'>
+    <Flex direction='col' gap='md' className='h-screen'>
       <Flex direction='col' gap='sm' className='p-4'>
         <h1
           className='text-2xl font-bold'
@@ -97,7 +105,7 @@ function RouteComponent() {
           align='center'
           justify='center'
           gap='md'
-          className='absolute inset-0 bg-background'
+          className='fixed inset-0 bg-background'
         >
           <p>Ajout de la photo...</p>
           <Spinner className='w-8 h-8' />
