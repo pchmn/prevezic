@@ -39,6 +39,7 @@ export function SlideShowDialog({
   onDownload?: (index: number) => void;
 }) {
   const [activeIndex, setActiveIndex] = useState(initialIndex ?? 0);
+  const [showToolbar, setShowToolbar] = useState(true);
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -53,7 +54,12 @@ export function SlideShowDialog({
           </DialogHeader>
         </div>
 
-        <Flex className='absolute top-0 left-0 w-full p-4 justify-between'>
+        <Flex
+          className={cn(
+            'absolute top-0 left-0 w-full p-4 justify-between bg-black/50 z-10',
+            showToolbar ? 'opacity-100' : 'opacity-0',
+          )}
+        >
           <Button
             variant='ghost'
             size='icon'
@@ -63,7 +69,7 @@ export function SlideShowDialog({
               onOpenChange(false);
             }}
           >
-            <ArrowLeftIcon className='size-5!' />
+            <ArrowLeftIcon className='size-6! text-white' />
           </Button>
           <Button
             variant='ghost'
@@ -74,7 +80,7 @@ export function SlideShowDialog({
               onDownload?.(activeIndex);
             }}
           >
-            <DownloadIcon className='size-5!' />
+            <DownloadIcon className='size-6! text-white' />
           </Button>
         </Flex>
 
@@ -82,7 +88,9 @@ export function SlideShowDialog({
           images={images}
           initialIndex={initialIndex}
           onActiveChange={setActiveIndex}
-          // onMediaClick={onMediaClick}
+          onMediaClick={() => {
+            setShowToolbar(!showToolbar);
+          }}
         />
       </DialogContent>
     </Dialog>
