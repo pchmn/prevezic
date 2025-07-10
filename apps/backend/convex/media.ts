@@ -1,5 +1,7 @@
 import { v } from 'convex/values';
 import { mutation, query } from './_generated/server';
+import { requireAuth } from './auth/auth.utils';
+import { PrevezicError } from './error/error.utils';
 import { requireUserIsProjectMember } from './projects/projects.utils';
 
 export const list = query({
@@ -54,6 +56,35 @@ export const insert = mutation({
       uploaderId,
       ...insertValues,
     });
+  },
+});
+
+export const remove = mutation({
+  args: {
+    mediaId: v.id('medias'),
+  },
+  handler: async (ctx, { mediaId }) => {
+    const userId = await requireAuth(ctx);
+
+    const media = await ctx.db.get(mediaId);
+
+    if (!media) {
+      throw new PrevezicError({
+        code: 'not_found',
+        message: 'Photo introuvable',
+      });
+    }
+
+    const project = await ctx.db.get(media.projectId);
+
+    if (media.uploaderId !== userId && project?.creatorId !== userId) {
+      throw new PrevezicError({
+        code: 'unauthorized',
+        message: 'Action non autorisée',
+      });
+    }
+
+    await ctx.db.delete(mediaId);
   },
 });
 

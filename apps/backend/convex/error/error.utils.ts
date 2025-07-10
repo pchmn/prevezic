@@ -7,6 +7,7 @@ export const PREVEZIC_ERROR_CODES = {
   not_authenticated: 'not_authenticated',
   not_authorized: 'not_authorized',
   not_found: 'not_found',
+  unauthorized: 'unauthorized',
 } as const;
 
 export type PrevezicErrorCode =

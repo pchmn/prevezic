@@ -1,3 +1,6 @@
+import { useConvexMutation } from '@convex-dev/react-query';
+import { api } from '@prevezic/backend/_generated/api';
+import type { Id } from '@prevezic/backend/_generated/dataModel';
 import { Button } from '@prevezic/ui/button';
 import {
   Carousel,
@@ -10,19 +13,24 @@ import {
   Dialog,
   DialogContent,
   DialogDescription,
+  DialogFooter,
   DialogHeader,
   DialogTitle,
 } from '@prevezic/ui/dialog';
 import { Flex } from '@prevezic/ui/flex';
 import { cn } from '@prevezic/ui/utils';
-import { ArrowLeftIcon, DownloadIcon } from 'lucide-react';
+import { useMutation } from '@tanstack/react-query';
+import { ArrowLeftIcon, DownloadIcon, Trash2Icon } from 'lucide-react';
 import { useState } from 'react';
+import { useSession } from '~/hooks/useSession';
+import { toast } from '~/lib/toast/toast';
 
 interface SlideShowProps {
   images: {
     _id: string;
     url: string;
     description?: string;
+    uploaderId: string;
   }[];
   initialIndex?: number;
 }
@@ -38,8 +46,24 @@ export function SlideShowDialog({
   onOpenChange: (open: boolean) => void;
   onDownload?: (index: number) => void;
 }) {
+  const { session } = useSession();
+
   const [activeIndex, setActiveIndex] = useState(initialIndex ?? 0);
   const [showToolbar, setShowToolbar] = useState(true);
+
+  const [removeMediaIsOpen, setRemoveMediaIsOpen] = useState(false);
+
+  const { mutate: removeMedia } = useMutation({
+    mutationFn: useConvexMutation(api.media.remove),
+    onSuccess: () => {
+      setRemoveMediaIsOpen(false);
+      toast.success('Photo supprimée');
+    },
+    onError: () => {
+      setRemoveMediaIsOpen(false);
+      toast.error('Erreur lors de la suppression de la photo');
+    },
+  });
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -70,17 +94,58 @@ export function SlideShowDialog({
           >
             <ArrowLeftIcon className='size-6! text-white' />
           </Button>
-          <Button
-            variant='ghost'
-            size='icon'
-            className='z-10'
-            onClick={() => {
-              onDownload?.(activeIndex);
-            }}
-          >
-            <DownloadIcon className='size-6! text-white' />
-          </Button>
+          <Flex align='center' gap='md'>
+            <Button
+              variant='ghost'
+              size='icon'
+              className='z-10'
+              onClick={() => {
+                onDownload?.(activeIndex);
+              }}
+            >
+              <DownloadIcon className='size-6! text-white' />
+            </Button>
+            {session?.user?.id === images[activeIndex].uploaderId && (
+              <Button
+                variant='ghost'
+                size='icon'
+                className='z-10'
+                onClick={() => setRemoveMediaIsOpen(true)}
+              >
+                <Trash2Icon className='size-6! text-red-300' />
+              </Button>
+            )}
+          </Flex>
         </Flex>
+
+        <Dialog open={removeMediaIsOpen} onOpenChange={setRemoveMediaIsOpen}>
+          <DialogContent>
+            <DialogHeader>
+              <DialogTitle>Supprimer la photo</DialogTitle>
+              <DialogDescription>
+                Êtes-vous sûr de vouloir supprimer cette photo ?
+              </DialogDescription>
+              <DialogFooter>
+                <Button
+                  variant='outline'
+                  onClick={() => setRemoveMediaIsOpen(false)}
+                >
+                  Annuler
+                </Button>
+                <Button
+                  variant='destructive'
+                  onClick={() => {
+                    removeMedia({
+                      mediaId: images[activeIndex]._id as Id<'medias'>,
+                    });
+                  }}
+                >
+                  Supprimer
+                </Button>
+              </DialogFooter>
+            </DialogHeader>
+          </DialogContent>
+        </Dialog>
 
         <SlideShow
           images={images}
