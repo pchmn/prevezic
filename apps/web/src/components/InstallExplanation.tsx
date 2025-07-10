@@ -1,3 +1,4 @@
+import { Button } from '@prevezic/ui/button';
 import { Card } from '@prevezic/ui/card';
 import {
   Dialog,
@@ -5,14 +6,18 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@prevezic/ui/dialog';
+import { CopyIcon } from 'lucide-react';
 import { useEffect, useState } from 'react';
+import { toast } from 'sonner';
 
 type Platform = 'ios' | 'android' | 'desktop';
 
 export function InstallExplanation({
+  invitationToken,
   open,
   onOpenChange,
 }: {
+  invitationToken: string;
   open: boolean;
   onOpenChange: (open: boolean) => void;
 }) {
@@ -44,6 +49,35 @@ export function InstallExplanation({
               1
             </div>
             <div className='flex-1'>
+              <p className='text-sm font-medium'>Copier le code du projet</p>
+              <p className='text-xs text-gray-600 mt-1'>
+                Vous en aurez besoin après l'installation
+              </p>
+            </div>
+          </div>
+          <div className='mt-3 rounded-lg overflow-hidden p-1 flex items-center justify-center gap-2'>
+            <Button variant='outline' disabled>
+              {invitationToken}
+            </Button>
+            <Button
+              variant='ghost'
+              size='icon'
+              onClick={() => {
+                navigator.clipboard.writeText(invitationToken);
+                toast.success('Code copié');
+              }}
+            >
+              <CopyIcon className='w-4 h-4' />
+            </Button>
+          </div>
+        </Card>
+
+        <Card className='p-4'>
+          <div className='flex items-start space-x-3'>
+            <div className='flex-shrink-0 w-8 h-8 bg-tertiary text-white rounded-full flex items-center justify-center text-sm font-bold'>
+              2
+            </div>
+            <div className='flex-1'>
               <p className='text-sm font-medium'>Ouvrez le menu de partage</p>
               <p className='text-xs text-gray-600 mt-1'>
                 Appuyez sur l'icône de partage en bas du navigateur
@@ -62,7 +96,7 @@ export function InstallExplanation({
         <Card className='p-4'>
           <div className='flex items-start space-x-3'>
             <div className='flex-shrink-0 w-8 h-8 bg-tertiary text-white rounded-full flex items-center justify-center text-sm font-bold'>
-              2
+              3
             </div>
             <div className='flex-1'>
               <p className='text-sm font-medium'>Ajoutez à l'écran d'accueil</p>
@@ -83,7 +117,7 @@ export function InstallExplanation({
         <Card className='p-4'>
           <div className='flex items-start space-x-3'>
             <div className='flex-shrink-0 w-8 h-8 bg-tertiary text-white rounded-full flex items-center justify-center text-sm font-bold'>
-              3
+              4
             </div>
             <div className='flex-1'>
               <p className='text-sm font-medium'>Confirmez l'installation</p>
@@ -112,11 +146,39 @@ export function InstallExplanation({
               1
             </div>
             <div className='flex-1'>
+              <p className='text-sm font-medium'>Copier le code du projet</p>
+              <p className='text-xs text-gray-600 mt-1'>
+                Vous en aurez (peut-être) besoin après l'installation
+              </p>
+            </div>
+          </div>
+          <div className='mt-3 rounded-lg overflow-hidden p-1 flex items-center justify-center gap-2'>
+            <Button variant='outline' disabled>
+              {invitationToken}
+            </Button>
+            <Button
+              variant='ghost'
+              size='icon'
+              onClick={() => {
+                navigator.clipboard.writeText(invitationToken);
+              }}
+            >
+              <CopyIcon className='w-4 h-4' />
+            </Button>
+          </div>
+        </Card>
+        <Card className='p-4'>
+          <div className='flex items-start space-x-3'>
+            <div className='flex-shrink-0 w-8 h-8 bg-tertiary text-white rounded-full flex items-center justify-center text-sm font-bold'>
+              2
+            </div>
+            <div className='flex-1'>
               <p className='text-sm font-medium'>
                 Ouvrez le menu du navigateur
               </p>
               <p className='text-xs text-gray-600 mt-1'>
-                Appuyez sur les trois points (⋮) en haut à droite
+                Appuyez sur les trois points (
+                <span className='text-lg font-bold'>⋮</span>) en haut à droite
               </p>
             </div>
           </div>
@@ -125,7 +187,7 @@ export function InstallExplanation({
         <Card className='p-4'>
           <div className='flex items-start space-x-3'>
             <div className='flex-shrink-0 w-8 h-8 bg-tertiary text-white rounded-full flex items-center justify-center text-sm font-bold'>
-              2
+              3
             </div>
             <div className='flex-1'>
               <p className='text-sm font-medium'>Ajoutez à l'écran d'accueil</p>
@@ -140,12 +202,13 @@ export function InstallExplanation({
         <Card className='p-4'>
           <div className='flex items-start space-x-3'>
             <div className='flex-shrink-0 w-8 h-8 bg-tertiary text-white rounded-full flex items-center justify-center text-sm font-bold'>
-              3
+              4
             </div>
             <div className='flex-1'>
               <p className='text-sm font-medium'>Confirmez l'installation</p>
               <p className='text-xs text-gray-600 mt-1'>
-                Appuyez sur "Installer" pour ajouter l'application
+                Appuyez sur "Installer" ou "Ajouter à l'écran d'accueil" pour
+                confirmer
               </p>
             </div>
           </div>

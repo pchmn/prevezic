@@ -107,6 +107,7 @@ function RouteComponent() {
       </Flex>
 
       <InstallExplanation
+        invitationToken={project?.invitationToken ?? ''}
         open={!!installExplanation}
         onOpenChange={() => {
           navigate({ search: { installExplanation: undefined } });
