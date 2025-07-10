@@ -1,0 +1,25 @@
+{
+  "$schema": "https://unpkg.com/release-it@17/schema/release-it.json",
+  "git": {
+    "requireCleanWorkingDir": false,
+    "requireBranch": "main",
+    "commitMessage": "chore: release v${version}"
+  },
+  "plugins": {
+    "@release-it/conventional-changelog": {
+      "preset": {
+        "name": "angular"
+      },
+      "infile": "CHANGELOG.md"
+    },
+    "@release-it-plugins/workspaces": {
+      "skipChecks": true,
+      "publish": false,
+      "workspaces": ["packages/*", "apps/*"]
+    }
+  },
+  "github": {
+    "release": true
+  },
+  "npm": false
+}

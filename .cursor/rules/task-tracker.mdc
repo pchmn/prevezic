@@ -1,0 +1,248 @@
+---
+description: 
+globs: 
+alwaysApply: false
+---
+# Development Task Tracker Rules
+
+## System Overview
+Solo developer task management system for Kipzat project using a folder-based approach with Cursor AI integration.
+
+## GitHub Integration
+When creating a new task, a corresponding GitHub issue will be created in the `pchmn/kipzat` repository using GitHub MCP. The GitHub issue ID will be used as the task ID.
+
+### Issue Content
+The GitHub issue will be an exact copy of the local task file, with the following structure:
+```markdown
+# [TYPE] Task Title
+
+**Task ID**: #[issue-number]  
+**Priority**: High/Medium/Low  
+**Estimate**: Xh  
+**Created**: YYYY-MM-DD  
+**Status**: Todo/Doing/Done  
+**Branch**: [branch-name]
+
+## Description
+What needs to be done and why
+
+## Acceptance Criteria
+- [ ] Criterion 1
+- [ ] Criterion 2
+- [ ] Criterion 3
+
+## Technical Notes
+- Implementation approach
+- Files to modify
+- Dependencies
+- Kipzat-specific considerations
+
+## Progress Log
+- *YYYY-MM-DD*: Task created
+- *YYYY-MM-DD*: Branch created
+- *Add updates as you work*
+
+## Related Tasks
+- Links to related task files
+- Dependencies
+```
+
+### Issue Labels
+- `task` - All tasks
+- `feature` - For feature tasks
+- `bug` - For bug fixes
+- `ui` - For UI/UX tasks
+- `performance` - For performance tasks
+- `tech-debt` - For technical debt
+- `priority-high` - High priority tasks
+- `priority-medium` - Medium priority tasks
+- `priority-low` - Low priority tasks
+
+## Git Branch Management
+When creating a new task, a corresponding Git branch will be created:
+
+### Branch Naming Convention
+- **Features**: `feat/#[issue-number]-[short-description]`
+- **Bugs**: `fix/#[issue-number]-[short-description]`
+- **UI/UX**: `ui/#[issue-number]-[short-description]`
+- **Performance**: `perf/#[issue-number]-[short-description]`
+- **Tech Debt**: `tech/#[issue-number]-[short-description]`
+- **Documentation**: `docs/#[issue-number]-[short-description]`
+
+### Git Workflow
+1. Create GitHub issue first
+2. Use issue number as task ID
+3. Create new branch from `main` using issue number
+4. Update task file with branch name
+5. Work on branch until task is complete
+6. Create PR when task is done
+7. Move task file to `done/` after merge
+
+## Task Challenge System
+Before creating a new task, the following questions must be answered:
+
+### 1. Value Assessment
+- [ ] How does this task contribute to Kipzat's core purpose?
+- [ ] What specific user problem does it solve?
+- [ ] Is this the simplest solution to the problem?
+
+### 2. Scope Validation
+- [ ] Can this task be completed in one sitting (2-4 hours)?
+- [ ] If not, how can it be broken down into smaller tasks?
+- [ ] What are the clear boundaries of this task?
+
+### 3. Dependencies Check
+- [ ] What other tasks need to be completed first?
+- [ ] What technical dependencies exist?
+- [ ] Are there any external dependencies (APIs, services)?
+
+### 4. Success Criteria
+- [ ] How will we know this task is complete?
+- [ ] What specific metrics or outcomes define success?
+- [ ] What could go wrong, and how will we handle it?
+
+### 5. Learning Value
+- [ ] What new knowledge or skills will this task provide?
+- [ ] How can this learning be applied to future tasks?
+- [ ] Is this the best way to learn this?
+
+## Task Creation Process
+1. User proposes a task
+2. AI challenges the task using the Task Challenge System
+3. User and AI discuss and refine the task
+4. After satisfactory answers:
+   - Create GitHub issue in `kipzat` repository
+   - Use issue number as task ID
+   - Create appropriate task file in `.tasks/todo/` folder
+   - Create Git branch using issue number
+   - Fill template with Kipzat context and branch info
+   - Update `.tasks/TRACKER.md` to include new task
+
+## Folder Structure
+```
+kipzat/
+├── .tasks/
+│   ├── TRACKER.md                    # Main task overview
+│   ├── todo/                         # Active tasks to work on
+│   ├── doing/                        # Currently working on (limit 1-2)
+│   ├── done/                         # Completed tasks
+│   └── backlog/                      # Future ideas and low priority
+```
+
+## Task File Naming Convention
+- **Features**: `feature-[short-description].md`
+- **Bugs**: `bug-[short-description].md`
+- **UI/UX**: `ui-[short-description].md`
+- **Performance**: `perf-[short-description].md`
+- **Tech Debt**: `tech-[short-description].md`
+- **Documentation**: `docs-[short-description].md`
+
+## Task File Template
+```markdown
+# [TYPE] Task Title
+
+**Task ID**: #[issue-number]  
+**Priority**: High/Medium/Low  
+**Estimate**: Xh  
+**Created**: YYYY-MM-DD  
+**Status**: Todo/Doing/Done  
+**Branch**: [branch-name]
+
+## Description
+What needs to be done and why
+
+## Acceptance Criteria
+- [ ] Criterion 1
+- [ ] Criterion 2
+- [ ] Criterion 3
+
+## Technical Notes
+- Implementation approach
+- Files to modify
+- Dependencies
+- Kipzat-specific considerations
+
+## Progress Log
+- *YYYY-MM-DD*: Task created
+- *YYYY-MM-DD*: Branch created
+- *Add updates as you work*
+
+## Related Tasks
+- Links to related task files
+- Dependencies
+
+---
+*Move this file to appropriate folder (todo → doing → done) as you progress*
+```
+
+## TRACKER.md Structure
+Main tracking file at `.tasks/TRACKER.md` with sections:
+- 🔥 Currently Working On (doing folder contents)
+- 📝 Next Up (todo folder contents)  
+- 💡 Backlog (backlog folder contents)
+- ✅ Recently Completed (done folder contents)
+- 📊 Quick Stats
+
+## Task Creation Commands
+When the user requests task creation, use these patterns:
+
+**User says**: "Create a task for [description]"
+**Action**: 
+1. Challenge the task using the Task Challenge System
+2. Only after satisfactory answers:
+   - Create GitHub issue in `kipzat` repository
+   - Use issue number as task ID
+   - Create appropriate task file in `.tasks/todo/` folder
+   - Create Git branch using issue number
+   - Fill template with Kipzat context and branch info
+   - Update `.tasks/TRACKER.md` to include new task
+
+**User says**: "Create a [bug/feature/ui/perf] task for [description]"
+**Action**: Same as above but use specific task type
+
+## Task Management Workflow
+1. **Creation**: 
+   - Create GitHub issue first
+   - Use issue number as task ID
+   - Create task file in `todo/` folder
+   - Create Git branch using issue number
+   - Update TRACKER.md
+2. **Work**: 
+   - User moves file from `todo/` → `doing/` when starting
+   - Works on corresponding Git branch
+   - Updates issue progress
+3. **Progress**: 
+   - User updates Progress Log section as they work
+   - Updates issue status
+4. **Completion**: 
+   - Create PR for the branch
+   - Link PR to issue
+   - After merge, move file from `doing/` → `done/`
+   - Close GitHub issue
+5. **Planning**: User can move tasks between `todo/` ↔ `backlog/`
+
+## Integration with Kipzat Context
+When creating tasks, always consider:
+- Multi-source memory nature (GitHub, X, links, notes)
+- AI processing requirements (summarization, embeddings, tagging)
+- Natural search (with embeddings) of a memory is essential
+- Technology stack (React 19, Hono.js, Drizzle ORM, PostgreSQL)
+- Search performance with vector embeddings
+- Mobile/responsive design needs
+- PWA requirements
+- !!! DO NOT PUT ANY CONFIDENTIAL DATA IN THE TASK !!!
+
+## Task Prioritization Guidelines
+- **High**: Core memory functionality, critical bugs, security issues
+- **Medium**: UX improvements, performance optimizations, new features
+- **Low**: Nice-to-have features, code cleanup, documentation
+
+## Cursor Integration
+- Reference tasks with: `@.tasks/doing/task-name.md`
+- Update tracker with: `@.tasks/TRACKER.md`  
+- Use both rules files: `@/rules` for project context + task system
+- Move files between folders as work progresses
+- Create and manage Git branches for tasks
+- Create and update GitHub issues in `kipzat` repository
+
+This system enables efficient task management for solo development while leveraging Cursor's AI capabilities for task creation and project context awareness. 

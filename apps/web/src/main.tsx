@@ -1,23 +1,91 @@
-import '@/core/firebase';
-import '@/core/i18n';
-import './index.css';
-
-import { UiProvider } from '@prevezic/react';
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { ThemeProvider } from '@prevezic/ui/theme-provider';
+import { RouterProvider, createRouter } from '@tanstack/react-router';
+import { ConvexProviderWithAuth, ConvexReactClient } from 'convex/react';
 import ReactDOM from 'react-dom/client';
-import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 
-import routes from '@/App';
+// Import the generated route tree
+import { routeTree } from './routeTree.gen.ts';
 
-const queryClient = new QueryClient();
+import { ConvexQueryClient } from '@convex-dev/react-query';
+import { Toaster } from '@prevezic/ui/sonner';
+import '@prevezic/ui/style.css';
+import { createAsyncStoragePersister } from '@tanstack/query-async-storage-persister';
+import { QueryClient } from '@tanstack/react-query';
+import { PersistQueryClientProvider } from '@tanstack/react-query-persist-client';
+import { del, get, set } from 'idb-keyval';
+import 'react-advanced-cropper/dist/style.css';
+import { appConfig } from './config/config.ts';
+import { useAuth } from './hooks/useAuth.ts';
+import { authClient } from './lib/auth.client.ts';
+import reportWebVitals from './reportWebVitals.ts';
+import './styles.css';
 
-const router = createBrowserRouter([routes]);
+const convex = new ConvexReactClient(appConfig.convexUrl);
+const convexQueryClient = new ConvexQueryClient(convex);
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      queryKeyHashFn: convexQueryClient.hashFn(),
+      queryFn: convexQueryClient.queryFn(),
+      gcTime: Number.POSITIVE_INFINITY,
+      networkMode: 'offlineFirst',
+    },
+  },
+});
+convexQueryClient.connect(queryClient);
 
-// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-ReactDOM.createRoot(document.getElementById('root')!).render(
-  <QueryClientProvider client={queryClient}>
-    <UiProvider>
-      <RouterProvider router={router} />
-    </UiProvider>
-  </QueryClientProvider>
-);
+const asyncStoragePersister = createAsyncStoragePersister({
+  storage: {
+    getItem: (key) => get(key),
+    setItem: (key, value) => set(key, value),
+    removeItem: (key) => del(key),
+  },
+});
+
+// Create a new router instance
+const router = createRouter({
+  routeTree,
+  context: {
+    authClient,
+    queryClient,
+    convex,
+  },
+  defaultPreload: 'intent',
+  Wrap: ({ children }) => (
+    <ConvexProviderWithAuth
+      client={convexQueryClient.convexClient}
+      useAuth={useAuth}
+    >
+      {children}
+    </ConvexProviderWithAuth>
+  ),
+});
+
+// Register the router instance for type safety
+declare module '@tanstack/react-router' {
+  interface Register {
+    router: typeof router;
+  }
+}
+
+// Render the app
+const rootElement = document.getElementById('app');
+if (rootElement && !rootElement.innerHTML) {
+  const root = ReactDOM.createRoot(rootElement);
+  root.render(
+    <ThemeProvider>
+      <PersistQueryClientProvider
+        client={queryClient}
+        persistOptions={{ persister: asyncStoragePersister }}
+      >
+        <RouterProvider router={router} />
+        <Toaster />
+      </PersistQueryClientProvider>
+    </ThemeProvider>,
+  );
+}
+
+// If you want to start measuring performance in your app, pass a function
+// to log results (for example: reportWebVitals(console.log))
+// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
+reportWebVitals();

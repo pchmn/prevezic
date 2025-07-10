@@ -1,0 +1,22 @@
+{
+  "name": "dokploy",
+  "private": true,
+  "sideEffects": false,
+  "version": "0.0.1",
+  "scripts": {
+    "openapi-ts": "openapi-ts",
+    "build": "rm -rf dist && esbuild src/index.ts --bundle --minify --outfile=dist/index.js --sourcemap --platform=node"
+  },
+  "dependencies": {
+    "@actions/core": "^1.11.1",
+    "@actions/exec": "^1.1.1",
+    "@actions/github": "^6.0.0",
+    "@hey-api/client-fetch": "^0.5.0"
+  },
+  "devDependencies": {
+    "@hey-api/openapi-ts": "^0.57.1",
+    "@types/node": "^20",
+    "esbuild": "^0.24.0",
+    "typescript": "^5.6.3"
+  }
+}

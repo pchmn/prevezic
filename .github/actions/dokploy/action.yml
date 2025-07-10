@@ -1,0 +1,68 @@
+# npx @hey-api/openapi-ts -i swagger.json -o src/sdk/client -c @hey-api/client-fetch
+name: Dokploy
+description: Deploy your application to Dokploy
+
+inputs:
+  github-token:
+    description: The GitHub token
+    default: ${{ github.token }}
+    required: false
+  dokploy-base-url:
+    description: The Dokploy base URL
+    required: true
+  dokploy-token:
+    description: The Dokploy token
+    required: true
+  project-id:
+    description: The Dokploy project ID
+    required: true
+  application-id:
+    description: The Dokploy application ID
+    required: false
+  application-name:
+    description: The Dokploy application name
+    required: false
+  application-domain:
+    description: The Dokploy application domain
+    required: false
+  docker-image:
+    description: The Docker image to deploy
+    required: false
+  docker-port:
+    description: The Docker port exposed
+    required: false
+  docker-username:
+    description: The Docker username
+    required: false
+  docker-password:
+    description: The Docker password
+    required: false
+  env:
+    description: The environment variables to set
+    required: false
+  comment-pr:
+    description: Comment PR with preview URL
+    required: false
+    default: "false"
+  app-url:
+    description: The application URL
+    required: false
+  action:
+    description: The action to perform (deploy | destroy)
+    default: "deploy"
+  compose-file:
+    description: The Dokploy compose file
+    required: false
+  compose-id:
+    description: The Dokploy compose ID
+    required: false
+  compose-name:
+    description: The Dokploy compose name
+    required: false
+  compose-domain:
+    description: The Dokploy compose domain
+    required: false
+
+runs:
+  using: "node20"
+  main: "dist/index.js"

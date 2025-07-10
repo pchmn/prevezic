@@ -1,11 +1,20 @@
 {
-  "extends": "@prevezic/tsconfig/vite.json",
+  "extends": "@prevezic/tsconfig/base.json",
+  "include": ["**/*"],
   "compilerOptions": {
-    "types": ["vite/client", "vitest/globals", "@prevezic/react/types"],
+    "allowImportingTsExtensions": true,
+    "lib": ["DOM", "DOM.Iterable", "ES2022"],
+    "types": [
+      "node",
+      "vite/client",
+      "vite-plugin-pwa/pwa-assets",
+      "vite-plugin-pwa/info"
+    ],
+    "rootDirs": ["."],
+    "noEmit": true,
     "baseUrl": ".",
     "paths": {
-      "@/*": ["src/*"],
-    },
-  },
-  "include": ["src", "vite.config.ts"]
+      "~/*": ["./src/*"]
+    }
+  }
 }

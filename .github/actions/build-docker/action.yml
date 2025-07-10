@@ -1,0 +1,128 @@
+name: Build and push Docker images
+# https://github.com/docker/build-push-action
+description: Build and push Docker images using docker/build-push-action
+
+inputs:
+  # Login inputs
+  registry:
+    description: Docker registry
+    required: false
+  username:
+    description: Docker username
+    required: false
+  password:
+    description: Docker password
+    required: false
+
+  # AWS inputs (for CI caching)
+  aws-region:
+    description: AWS region
+    required: false
+  aws-access-key-id:
+    description: AWS access key ID
+    required: false
+  aws-secret-access-key:
+    description: AWS secret access key
+    required: false
+  aws-bucket-name:
+    description: AWS bucket name
+    required: false
+
+  # Build inputs
+  build-args:
+    description: List of build-time variables
+    required: false
+  cache-from:
+    description: List of cache sources
+    default: "type=gha"
+  cache-to:
+    description: List of cache destinations
+    default: "type=gha,mode=max"
+  context:
+    description: Build's context is the set of files located in the specified PATH or URL
+    required: false
+  file:
+    description: Path to the Dockerfile
+    required: false
+  labels:
+    description: List of metadata for an image
+    required: false
+  platforms:
+    description: List of target platforms for build
+    required: false
+  push:
+    description: Push is a shorthand for --output=type=registry
+    required: false
+  secrets:
+    description: List of secrets to expose to the build (e.g., key=string, GIT_AUTH_TOKEN=mytoken)
+    required: false
+  tags:
+    description: List of tags
+    required: false
+
+runs:
+  using: "composite"
+  steps:
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v3
+
+    - name: Login to Docker Registry
+      uses: docker/login-action@v3
+      with:
+        registry: ${{ inputs.registry }}
+        username: ${{ inputs.username }}
+        password: ${{ inputs.password }}
+
+    # - uses: aws-actions/configure-aws-credentials@v4
+    #   if: inputs.aws-bucket-name
+    #   with:
+    #     aws-region: ${{ inputs.aws-region }}
+    #     aws-access-key-id: ${{ inputs.aws-access-key-id }}
+    #     aws-secret-access-key: ${{ inputs.aws-secret-access-key }}
+
+    # - name: Docker Build Cache
+    #   if: inputs.aws-bucket-name
+    #   id: s3-cache
+    #   uses: runs-on/cache@v4
+    #   with:
+    #     path: |
+    #       pnpm
+    #       .turbo
+    #     key: build-cache-${{ hashFiles('pnpm-lock.yaml') }}
+    #     restore-keys: |
+    #       build-cache-
+    #   env:
+    #     RUNS_ON_S3_BUCKET_CACHE: ${{ inputs.aws-bucket-name }}
+
+    # - name: Docker Build Cache
+    #   if: ${{ !inputs.aws-bucket-name }}
+    #   id: gha-cache
+    #   uses: actions/cache@v4
+    #   with:
+    #     path: |
+    #       pnpm
+    #       .turbo
+    #     key: build-cache-${{ hashFiles('pnpm-lock.yaml') }}
+    #     restore-keys: |
+    #       build-cache-
+
+    # - name: Inject cache into docker
+    #   uses: reproducible-containers/buildkit-cache-dance@v3.1.0
+    #   with:
+    #     cache-map: |
+    #       {
+    #         "pnpm": "/pnpm",
+    #         ".turbo": "/.turbo"
+    #       }
+    #     skip-extraction: ${{ steps.s3-cache.outputs.cache-hit || steps.gha-cache.outputs.cache-hit }}
+
+    - name: Build and push Docker image
+      uses: docker/build-push-action@v5
+      with:
+        build-args: ${{ inputs.build-args }}
+        context: ${{ inputs.context }}
+        file: ${{ inputs.file }}
+        platforms: ${{ inputs.platforms }}
+        push: ${{ inputs.push }}
+        secrets: ${{ inputs.secrets }}
+        tags: ${{ inputs.tags }}

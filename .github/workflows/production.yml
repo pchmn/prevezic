@@ -1,0 +1,126 @@
+name: Deploy to Production
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+
+jobs:
+  get-version:
+    name: 🏷️ Get version
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: ./.github/actions/setup-node
+        with:
+          install: true
+
+      - id: get_version
+        run: |
+          echo "APP_VERSION=$(pnpm release-it --release-version)" >> "$GITHUB_OUTPUT"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+    outputs:
+      app_version: ${{ steps.get_version.outputs.APP_VERSION }}
+
+  build-web:
+    name: 🐳 Build Web image
+    runs-on: ubuntu-latest
+    needs: get-version
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: 🐳 Build docker image
+        uses: ./.github/actions/build-docker
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+          context: .
+          file: ./apps/web/.docker/Dockerfile
+          tags: pchmn/prevezic-web:${{ needs.get-version.outputs.app_version }}
+          push: true
+
+  deploy-convex:
+    name: 🚀 Deploy Convex Production
+    runs-on: ubuntu-latest
+    needs: build-web
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: 🏗️ Setup node
+        uses: ./.github/actions/setup-node
+        with:
+          install: true
+      
+      - name: 🔄 Set environment variables
+        working-directory: ./apps/backend
+        run: |
+          npx convex env set BETTER_AUTH_SECRET ${{ secrets.PRODUCTION_BETTER_AUTH_SECRET }}
+          npx convex env set SITE_URL https://prevezic.app
+        env:
+          CONVEX_DEPLOY_KEY: ${{ secrets.PRODUCTION_CONVEX_DEPLOY_KEY }}
+          # CONVEX_SELF_HOSTED_URL: ${{ secrets.CONVEX_SELF_HOSTED_URL }}
+          # CONVEX_SELF_HOSTED_ADMIN_KEY: ${{ secrets.CONVEX_SELF_HOSTED_ADMIN_KEY }}
+          
+      - name: 🚀 Deploy Functions
+        working-directory: ./apps/backend
+        run: |
+          npx convex deploy
+        env:
+          CONVEX_DEPLOY_KEY: ${{ secrets.PRODUCTION_CONVEX_DEPLOY_KEY }}
+          # CONVEX_SELF_HOSTED_URL: ${{ secrets.CONVEX_SELF_HOSTED_URL }}
+          # CONVEX_SELF_HOSTED_ADMIN_KEY: ${{ secrets.CONVEX_SELF_HOSTED_ADMIN_KEY }}
+
+  deploy-web:
+    name: 🚀 Deploy Web App Production
+    runs-on: ubuntu-latest
+    needs: [get-version, deploy-convex]
+    permissions:
+      contents: read
+      pull-requests: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: 🚀 Deploy to Dokploy
+        uses: ./.github/actions/dokploy
+        with:
+          dokploy-base-url: ${{ secrets.DOKPLOY_BASE_URL }}
+          dokploy-token: ${{ secrets.DOKPLOY_TOKEN }}
+          project-id: 9Q2mI4ygVsQzgTdtlbhjO
+          application-name: Production
+          application-domain: acc-40.fr
+          docker-image: pchmn/prevezic-web:${{ needs.get-version.outputs.app_version }}
+          docker-username: ${{ secrets.DOCKER_USERNAME }}
+          docker-password: ${{ secrets.DOCKER_PASSWORD }}
+          docker-port: 80
+          env: |
+            VITE_APP_VERSION=${{ needs.get-version.outputs.app_version }}
+            VITE_APP_ENV=production
+            VITE_CONVEX_URL=${{ secrets.PRODUCTION_CONVEX_URL }}
+            VITE_CONVEX_SITE_URL=${{ secrets.PRODUCTION_CONVEX_SITE_URL }}
+
+  release:
+    name: 📦 Release version
+    runs-on: ubuntu-latest
+    needs: deploy-web
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 100
+          fetch-tags: true
+
+      - uses: ./.github/actions/setup-node
+        with:
+          install: true
+
+      - name: 📦 Release
+        run: |
+          git config --global user.email "release-it-bot@github.com"
+          git config --global user.name "release-it-bot"
+          pnpm release-it --ci
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
