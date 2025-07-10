@@ -12,6 +12,7 @@ import { useEffect, useRef, useState } from 'react';
 import { appConfig } from '~/config/config';
 import { authClient } from '~/lib/auth.client';
 import { isPrevezicError } from '~/lib/error.utils';
+import { toast } from '~/lib/toast/toast';
 
 export const Route = createFileRoute('/projects/$projectId')({
   component: RouteComponent,
@@ -41,6 +42,7 @@ function RouteComponent() {
     },
     onError: () => {
       setIsAddingPhoto(false);
+      toast.error("Erreur lors de l'ajout de la photo, veuillez réessayer");
     },
   });
   const [isAddingPhoto, setIsAddingPhoto] = useState(false);

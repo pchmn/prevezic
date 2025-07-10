@@ -1,18 +1,11 @@
+import { Flex } from '@prevezic/ui/flex';
+import { Spinner } from '@prevezic/ui/spinner';
 import type { QueryClient } from '@tanstack/react-query';
 import { Outlet, createRootRouteWithContext } from '@tanstack/react-router';
 import type { ConvexReactClient } from 'convex/react';
 import { SESSION_QUERY_KEY } from '~/hooks/useSession';
 import type { authClient } from '~/lib/auth.client';
-
-// let token: string | null = null;
-// getToken().then((t) => {
-//   token = t;
-// });
-// if (isPwa()) {
-//   console.log('PWA is installed', token);
-// } else {
-//   console.log('PWA is not installed', token);
-// }
+import { toast } from '~/lib/toast/toast';
 
 export const Route = createRootRouteWithContext<{
   authClient: typeof authClient;
@@ -20,18 +13,30 @@ export const Route = createRootRouteWithContext<{
   convex: ConvexReactClient;
 }>()({
   beforeLoad: async ({ context: { authClient, queryClient } }) => {
-    const { data: session } = await authClient.getSession();
+    let error: Record<string, unknown> | null = null;
+
+    const { data: session, error: sessionError } =
+      await authClient.getSession();
 
     if (!session) {
-      const { data } = await authClient.signIn.anonymous();
+      const { data, error: signInError } = await authClient.signIn.anonymous();
+      error = sessionError || signInError;
       queryClient.setQueryData(SESSION_QUERY_KEY, data);
     } else {
       queryClient.setQueryData(SESSION_QUERY_KEY, session);
     }
+
+    if (error) {
+      toast.error('Erreur lors de la connexion, veuillez réessayer');
+    }
   },
+  pendingComponent: () => (
+    <Flex align='center' justify='center' className='h-screen'>
+      <Spinner className='w-8 h-8' />
+    </Flex>
+  ),
   component: () => (
     <>
-      {/* <div>Token: {token}</div> */}
       <Outlet />
       {/* <TanStackRouterDevtools /> */}
     </>
