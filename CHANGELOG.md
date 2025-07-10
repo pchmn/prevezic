@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.2](https://github.com/pchmn/prevezic/compare/0.1.1...0.1.2) (2025-07-10)
+
+
+### Bug Fixes
+
+* **wen:** removing image ([35c0cb9](https://github.com/pchmn/prevezic/commit/35c0cb99ab76f30953b2085e323d5ffad92dd006))
+
 ## [0.1.1](https://github.com/pchmn/prevezic/compare/0.1.0...0.1.1) (2025-07-10)
 
 # 0.1.0 (2025-07-10)
