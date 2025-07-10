@@ -42,8 +42,8 @@ function RouteComponent() {
       open={true}
       onOpenChange={() => {
         navigate({
-          to: '/projects/$projectId',
-          params: { projectId },
+          to: '..',
+          replace: true,
         });
       }}
       images={medias}

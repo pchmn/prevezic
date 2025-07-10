@@ -32,6 +32,7 @@ function App() {
       navigate({
         to: '/projects/$projectId',
         params: { projectId: projects[0]._id },
+        replace: true,
       });
     }
   }, [isPending, projects, navigate]);
@@ -46,7 +47,11 @@ function App() {
         />
         <Button
           onClick={() =>
-            navigate({ to: '/projects/join', search: { token: code } })
+            navigate({
+              to: '/projects/join',
+              search: { token: code },
+              replace: true,
+            })
           }
         >
           Rejoindre
