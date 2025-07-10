@@ -21,7 +21,7 @@ import { Flex } from '@prevezic/ui/flex';
 import { cn } from '@prevezic/ui/utils';
 import { useMutation } from '@tanstack/react-query';
 import { ArrowLeftIcon, DownloadIcon, Trash2Icon } from 'lucide-react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useSession } from '~/hooks/useSession';
 import { toast } from '~/lib/toast/toast';
 
@@ -53,7 +53,7 @@ export function SlideShowDialog({
 
   const [removeMediaIsOpen, setRemoveMediaIsOpen] = useState(false);
 
-  const { mutate: removeMedia } = useMutation({
+  const { mutate: removeMedia, isPending: isRemoveMediaPending } = useMutation({
     mutationFn: useConvexMutation(api.media.remove),
     onSuccess: () => {
       setRemoveMediaIsOpen(false);
@@ -64,6 +64,12 @@ export function SlideShowDialog({
       toast.error('Erreur lors de la suppression de la photo');
     },
   });
+
+  useEffect(() => {
+    if (images.length === 0) {
+      onOpenChange(false);
+    }
+  }, [images, onOpenChange]);
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -105,7 +111,7 @@ export function SlideShowDialog({
             >
               <DownloadIcon className='size-6! text-white' />
             </Button>
-            {session?.user?.id === images[activeIndex].uploaderId && (
+            {session?.user?.id === images[activeIndex]?.uploaderId && (
               <Button
                 variant='ghost'
                 size='icon'
@@ -119,7 +125,7 @@ export function SlideShowDialog({
         </Flex>
 
         <Dialog open={removeMediaIsOpen} onOpenChange={setRemoveMediaIsOpen}>
-          <DialogContent>
+          <DialogContent closable={!isRemoveMediaPending}>
             <DialogHeader>
               <DialogTitle>Supprimer la photo</DialogTitle>
               <DialogDescription>
@@ -129,6 +135,7 @@ export function SlideShowDialog({
                 <Button
                   variant='outline'
                   onClick={() => setRemoveMediaIsOpen(false)}
+                  disabled={isRemoveMediaPending}
                 >
                   Annuler
                 </Button>
@@ -139,6 +146,7 @@ export function SlideShowDialog({
                       mediaId: images[activeIndex]._id as Id<'medias'>,
                     });
                   }}
+                  loading={isRemoveMediaPending}
                 >
                   Supprimer
                 </Button>

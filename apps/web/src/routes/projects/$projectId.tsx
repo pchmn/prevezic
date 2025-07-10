@@ -138,7 +138,7 @@ function RouteComponent() {
           ))}
         </div>
       ) : (
-        <div className='w-full h-full flex items-center justify-center'>
+        <div className='w-full h-full flex justify-center pt-8'>
           <p className='text-sm text-muted-foreground'>
             Aucune photo ajoutée pour le moment
           </p>
