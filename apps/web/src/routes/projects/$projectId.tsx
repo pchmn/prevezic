@@ -86,8 +86,7 @@ function RouteComponent() {
             style={{ contentVisibility: 'auto' }}
             onClick={() => {
               navigate({
-                to: '/projects/$projectId/slide-show',
-                params: { projectId },
+                to: './slide-show',
                 search: { mediaId: media._id },
               });
             }}

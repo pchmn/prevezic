@@ -51,7 +51,6 @@ const router = createRouter({
     convex,
   },
   defaultPreload: 'intent',
-  scrollRestoration: true,
   Wrap: ({ children }) => (
     <ConvexProviderWithAuth
       client={convexQueryClient.convexClient}

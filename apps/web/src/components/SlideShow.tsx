@@ -65,7 +65,6 @@ export function SlideShowDialog({
             size='icon'
             className='z-10'
             onClick={() => {
-              console.log('close');
               onOpenChange(false);
             }}
           >
@@ -76,7 +75,6 @@ export function SlideShowDialog({
             size='icon'
             className='z-10'
             onClick={() => {
-              console.log('download');
               onDownload?.(activeIndex);
             }}
           >

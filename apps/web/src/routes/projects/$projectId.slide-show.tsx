@@ -28,7 +28,6 @@ function RouteComponent() {
     ...convexQuery(api.media.list, {
       projectId: projectId as Id<'projects'>,
     }),
-    initialData: [],
   });
 
   useEffect(() => {
@@ -46,10 +45,10 @@ function RouteComponent() {
           replace: true,
         });
       }}
-      images={medias}
-      initialIndex={medias.findIndex((media) => media._id === mediaId)}
+      images={medias ?? []}
+      initialIndex={medias?.findIndex((media) => media._id === mediaId)}
       onDownload={(index) => {
-        const media = medias[index];
+        const media = medias?.[index];
         if (!media) return;
         fetch(media.url).then(async (res) => {
           const blob = await res.blob();
