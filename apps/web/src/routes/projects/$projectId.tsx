@@ -9,12 +9,20 @@ import { Outlet, createFileRoute } from '@tanstack/react-router';
 import imageCompression from 'browser-image-compression';
 import { CameraIcon } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
+import { z } from 'zod/v4';
+import { InstallExplanation } from '~/components/InstallExplanation';
 import { appConfig } from '~/config/config';
 import { authClient } from '~/lib/auth.client';
+import { isPwa } from '~/lib/cache-storage/cache-storage';
 import { isPrevezicError } from '~/lib/error.utils';
 import { toast } from '~/lib/toast/toast';
 
+const searchSchema = z.object({
+  installExplanation: z.boolean().optional(),
+});
+
 export const Route = createFileRoute('/projects/$projectId')({
+  validateSearch: searchSchema,
   component: RouteComponent,
 });
 
@@ -23,6 +31,8 @@ function RouteComponent() {
   const navigate = Route.useNavigate();
 
   const inputRef = useRef<HTMLInputElement>(null);
+
+  const { installExplanation } = Route.useSearch();
 
   const { project, medias, members } = useProject(projectId as Id<'projects'>);
 
@@ -67,19 +77,42 @@ function RouteComponent() {
   };
 
   return (
-    <Flex direction='col' gap='md' className='h-screen'>
-      <Flex direction='col' gap='sm' className='p-4'>
-        <h1
-          className='text-2xl font-bold pt-2'
-          style={{ fontFamily: 'Delius Swash Caps' }}
-        >
-          {project?.name}
-        </h1>
-        <Flex gap='sm' className='text-sm text-muted-foreground/75'>
-          <p>{medias.length} photos</p>
+    <Flex direction='col' className='h-screen'>
+      <Flex justify='between'>
+        <Flex direction='col' gap='sm' className='p-6'>
+          <h1
+            className='text-2xl font-bold '
+            style={{ fontFamily: 'Delius Swash Caps' }}
+          >
+            {project?.name}
+          </h1>
+          <span className='text-sm text-muted-foreground/75'>
+            {medias.length} photos
+          </span>
         </Flex>
-        {/* {!isPwa() && <Button variant='outline'>Installer l'application</Button>} */}
+        {!isPwa() && (
+          <div className='p-6'>
+            <Button
+              variant='outline'
+              onClick={() =>
+                navigate({
+                  search: { installExplanation: true },
+                })
+              }
+            >
+              Installer
+            </Button>
+          </div>
+        )}
       </Flex>
+
+      <InstallExplanation
+        open={!!installExplanation}
+        onOpenChange={() => {
+          navigate({ search: { installExplanation: undefined } });
+        }}
+      />
+
       <div className='w-full grid grid-cols-3 md:grid-cols-3 lg:grid-cols-4 gap-1'>
         {medias.map((media) => (
           <div
@@ -180,6 +213,7 @@ function useProject(projectId: Id<'projects'>) {
 
   useEffect(() => {
     if (isPrevezicError(error) && error.data.code === 'not_project_member') {
+      toast.error('Projet non trouvé');
       navigate({ to: '/' });
     }
   }, [error, navigate]);
