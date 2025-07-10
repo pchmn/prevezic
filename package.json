@@ -1,8 +1,11 @@
 {
   "name": "prevezic",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "private": true,
-  "workspaces": ["apps/*", "packages/*"],
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
   "type": "module",
   "scripts": {
     "check": "biome check --write .",
@@ -35,6 +38,9 @@
   },
   "packageManager": "pnpm@10.11.0",
   "pnpm": {
-    "onlyBuiltDependencies": ["better-sqlite3", "sharp"]
+    "onlyBuiltDependencies": [
+      "better-sqlite3",
+      "sharp"
+    ]
   }
 }
