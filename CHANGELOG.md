@@ -1,5 +1,7 @@
 # Changelog
 
+## [0.1.1](https://github.com/pchmn/prevezic/compare/0.1.0...0.1.1) (2025-07-10)
+
 # 0.1.0 (2025-07-10)
 
 
