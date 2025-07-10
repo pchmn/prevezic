@@ -34,16 +34,17 @@ function RouteComponent() {
 
   const { installExplanation } = Route.useSearch();
 
-  const { project, medias, members } = useProject(projectId as Id<'projects'>);
+  const { project, medias } = useProject(projectId as Id<'projects'>);
 
   const { mutate: addPhotoMutation } = useMutation({
     mutationFn: async (file: File) => {
       const compressedFile = await imageCompression(file, {
-        maxSizeMB: 0.2,
+        maxSizeMB: 0.15,
         initialQuality: 0.75,
         alwaysKeepResolution: true,
         maxWidthOrHeight: 1500,
         useWebWorker: true,
+        maxIteration: 15,
       });
       return addPhoto(compressedFile, projectId as Id<'projects'>);
     },
@@ -114,27 +115,35 @@ function RouteComponent() {
         }}
       />
 
-      <div className='w-full grid grid-cols-3 md:grid-cols-3 lg:grid-cols-4 gap-1'>
-        {medias.map((media) => (
-          <div
-            key={media._id}
-            className='aspect-square'
-            style={{ contentVisibility: 'auto' }}
-            onClick={() => {
-              navigate({
-                to: './slide-show',
-                search: { mediaId: media._id },
-              });
-            }}
-          >
-            <img
-              src={media.url ?? ''}
-              alt={media.storageId}
-              className='w-full h-full object-cover'
-            />
-          </div>
-        ))}
-      </div>
+      {medias.length > 0 ? (
+        <div className='w-full grid grid-cols-3 md:grid-cols-3 lg:grid-cols-4 gap-1'>
+          {medias.map((media) => (
+            <div
+              key={media._id}
+              className='aspect-square'
+              style={{ contentVisibility: 'auto' }}
+              onClick={() => {
+                navigate({
+                  to: './slide-show',
+                  search: { mediaId: media._id },
+                });
+              }}
+            >
+              <img
+                src={media.url ?? ''}
+                alt={media.storageId}
+                className='w-full h-full object-cover'
+              />
+            </div>
+          ))}
+        </div>
+      ) : (
+        <div className='w-full h-full flex items-center justify-center'>
+          <p className='text-sm text-muted-foreground'>
+            Aucune photo ajoutée pour le moment
+          </p>
+        </div>
+      )}
       <input
         ref={inputRef}
         hidden
@@ -207,10 +216,10 @@ function useProject(projectId: Id<'projects'>) {
     initialData: [],
   });
 
-  const { data: members, isPending: isMembersPending } = useQuery({
-    ...convexQuery(api.member.list, { projectId: projectId as Id<'projects'> }),
-    initialData: [],
-  });
+  // const { data: members, isPending: isMembersPending } = useQuery({
+  //   ...convexQuery(api.member.list, { projectId: projectId as Id<'projects'> }),
+  //   initialData: [],
+  // });
 
   useEffect(() => {
     if (isPrevezicError(error) && error.data.code === 'not_project_member') {
@@ -222,7 +231,7 @@ function useProject(projectId: Id<'projects'>) {
   return {
     project,
     medias,
-    members,
-    isLoading: isProjectPending || isMediasPending || isMembersPending,
+    // members,
+    isLoading: isProjectPending || isMediasPending,
   };
 }
