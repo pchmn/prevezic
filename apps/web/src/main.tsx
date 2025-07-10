@@ -1,13 +1,13 @@
 import { ThemeProvider } from '@prevezic/ui/theme-provider';
 import { RouterProvider, createRouter } from '@tanstack/react-router';
 import { ConvexProviderWithAuth, ConvexReactClient } from 'convex/react';
-import { StrictMode } from 'react';
 import ReactDOM from 'react-dom/client';
 
 // Import the generated route tree
 import { routeTree } from './routeTree.gen.ts';
 
 import { ConvexQueryClient } from '@convex-dev/react-query';
+import { Toaster } from '@prevezic/ui/sonner';
 import '@prevezic/ui/style.css';
 import { createAsyncStoragePersister } from '@tanstack/query-async-storage-persister';
 import { QueryClient } from '@tanstack/react-query';
@@ -73,16 +73,15 @@ const rootElement = document.getElementById('app');
 if (rootElement && !rootElement.innerHTML) {
   const root = ReactDOM.createRoot(rootElement);
   root.render(
-    <StrictMode>
-      <ThemeProvider>
-        <PersistQueryClientProvider
-          client={queryClient}
-          persistOptions={{ persister: asyncStoragePersister }}
-        >
-          <RouterProvider router={router} />
-        </PersistQueryClientProvider>
-      </ThemeProvider>
-    </StrictMode>,
+    <ThemeProvider>
+      <PersistQueryClientProvider
+        client={queryClient}
+        persistOptions={{ persister: asyncStoragePersister }}
+      >
+        <RouterProvider router={router} />
+        <Toaster />
+      </PersistQueryClientProvider>
+    </ThemeProvider>,
   );
 }
 

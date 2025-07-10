@@ -7,6 +7,7 @@ import { createFileRoute } from '@tanstack/react-router';
 import { useEffect } from 'react';
 import z from 'zod';
 import { isPrevezicError } from '~/lib/error.utils';
+import { toast } from '~/lib/toast/toast';
 
 const searchSchema = z.object({
   token: z.string(),
@@ -36,6 +37,7 @@ function RouteComponent() {
           });
         } else {
           console.error(error.data.code, error.data.message);
+          toast.error(error.data.message);
           navigate({ to: '/' });
         }
       }
