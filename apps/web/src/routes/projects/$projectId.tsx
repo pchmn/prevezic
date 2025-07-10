@@ -45,6 +45,14 @@ function RouteComponent() {
   });
   const [isAddingPhoto, setIsAddingPhoto] = useState(false);
 
+  useEffect(() => {
+    if (inputRef.current) {
+      inputRef.current.addEventListener('cancel', () => {
+        setIsAddingPhoto(false);
+      });
+    }
+  }, []);
+
   const handleFileSelect = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
