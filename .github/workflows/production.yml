@@ -60,7 +60,7 @@ jobs:
         working-directory: ./apps/backend
         run: |
           npx convex env set BETTER_AUTH_SECRET ${{ secrets.PRODUCTION_BETTER_AUTH_SECRET }}
-          npx convex env set SITE_URL https://prevezic.app
+          npx convex env set SITE_URL https://acc-40.fr
         env:
           CONVEX_DEPLOY_KEY: ${{ secrets.PRODUCTION_CONVEX_DEPLOY_KEY }}
           # CONVEX_SELF_HOSTED_URL: ${{ secrets.CONVEX_SELF_HOSTED_URL }}
