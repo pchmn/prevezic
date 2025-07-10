@@ -5,7 +5,6 @@ import { Outlet, createRootRouteWithContext } from '@tanstack/react-router';
 import type { ConvexReactClient } from 'convex/react';
 import { SESSION_QUERY_KEY } from '~/hooks/useSession';
 import type { authClient } from '~/lib/auth.client';
-import { toast } from '~/lib/toast/toast';
 
 export const Route = createRootRouteWithContext<{
   authClient: typeof authClient;
@@ -27,12 +26,19 @@ export const Route = createRootRouteWithContext<{
     }
 
     if (error) {
-      toast.error('Erreur lors de la connexion, veuillez réessayer');
+      throw error;
     }
   },
   pendingComponent: () => (
     <Flex align='center' justify='center' className='h-screen'>
       <Spinner className='w-8 h-8' />
+    </Flex>
+  ),
+  errorComponent: () => (
+    <Flex align='center' justify='center' className='h-screen p-4 text-center'>
+      <div className='text-red-300'>
+        Impossible de se connecter, veuillez recharger la page
+      </div>
     </Flex>
   ),
   component: () => (

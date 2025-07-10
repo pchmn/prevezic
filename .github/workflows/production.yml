@@ -92,7 +92,7 @@ jobs:
           dokploy-token: ${{ secrets.DOKPLOY_TOKEN }}
           project-id: 9Q2mI4ygVsQzgTdtlbhjO
           application-name: Production
-          application-domain: prevezic.app
+          application-domain: acc-40.fr
           docker-image: pchmn/prevezic-web:${{ needs.get-version.outputs.app_version }}
           docker-username: ${{ secrets.DOCKER_USERNAME }}
           docker-password: ${{ secrets.DOCKER_PASSWORD }}
