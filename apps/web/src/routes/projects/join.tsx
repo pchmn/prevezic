@@ -15,12 +15,6 @@ const searchSchema = z.object({
 export const Route = createFileRoute('/projects/join')({
   validateSearch: searchSchema,
   component: RouteComponent,
-  beforeLoad: async ({ search }) => {
-    // const token = search.token;
-    // await cacheToken(token);
-    // const cachedToken = await getToken();
-    // console.log({ token, cachedToken });
-  },
 });
 
 function RouteComponent() {
@@ -34,7 +28,16 @@ function RouteComponent() {
     },
     onError: (error) => {
       if (isPrevezicError(error)) {
-        console.error(error.data.code);
+        if (error.data.code === 'already_project_member') {
+          console.warn(error.data.code, error.data.message);
+          navigate({
+            to: '../$projectId',
+            params: { projectId: error.data.metadata?.projectId as string },
+          });
+        } else {
+          console.error(error.data.code, error.data.message);
+          navigate({ to: '/' });
+        }
       }
       navigate({ to: '/' });
     },

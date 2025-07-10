@@ -73,6 +73,9 @@ export const join = mutation({
       throw new PrevezicError({
         code: 'already_project_member',
         message: 'Vous êtes déjà membre de ce projet',
+        metadata: {
+          projectId: project._id,
+        },
       });
     }
 

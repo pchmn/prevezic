@@ -1,4 +1,4 @@
-import { ConvexError } from 'convex/values';
+import { ConvexError, type Value } from 'convex/values';
 
 export const PREVEZIC_ERROR_CODES = {
   not_project_member: 'not_project_member',
@@ -15,6 +15,7 @@ export type PrevezicErrorCode =
 export class PrevezicError extends ConvexError<{
   code: PrevezicErrorCode;
   message: string;
+  metadata?: Record<string, Value>;
 }> {}
 
 export function isPrevezicError(error: unknown): error is PrevezicError {
