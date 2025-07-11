@@ -37,7 +37,9 @@ function RouteComponent() {
           });
         } else {
           console.error(error.data.code, error.data.message);
-          toast.error(error.data.message);
+          if (error.data.code !== 'not_authenticated') {
+            toast.error(error.data.message);
+          }
           navigate({ to: '/' });
         }
       }
