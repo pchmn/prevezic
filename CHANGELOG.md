@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.3.1](https://github.com/pchmn/prevezic/compare/0.3.0...0.3.1) (2025-07-11)
+
+
+### Bug Fixes
+
+* **web:** dont show unauth toast ([398e1e2](https://github.com/pchmn/prevezic/commit/398e1e2957a987882df609c757e534168fc76fd0))
+
 # [0.3.0](https://github.com/pchmn/prevezic/compare/0.2.0...0.3.0) (2025-07-11)
 
 
