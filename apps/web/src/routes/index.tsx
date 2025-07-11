@@ -64,7 +64,7 @@ function App() {
 
         <Flex gap='md' flex='1' align='center' justify='center'>
           <Input
-            placeholder='Entrer le code...'
+            placeholder="Entrer le code d'invitation..."
             value={code}
             onChange={(e) => setCode(e.target.value)}
           />
