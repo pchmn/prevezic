@@ -2,6 +2,7 @@ import { ThemeProvider } from '@prevezic/ui/theme-provider';
 import { RouterProvider, createRouter } from '@tanstack/react-router';
 import { ConvexProviderWithAuth, ConvexReactClient } from 'convex/react';
 import ReactDOM from 'react-dom/client';
+import { InstallationPromptProvider } from './components/InstallationPromptProvider';
 
 // Import the generated route tree
 import { routeTree } from './routeTree.gen.ts';
@@ -74,13 +75,15 @@ if (rootElement && !rootElement.innerHTML) {
   const root = ReactDOM.createRoot(rootElement);
   root.render(
     <ThemeProvider>
-      <PersistQueryClientProvider
-        client={queryClient}
-        persistOptions={{ persister: asyncStoragePersister }}
-      >
-        <RouterProvider router={router} />
-        <Toaster />
-      </PersistQueryClientProvider>
+      <InstallationPromptProvider>
+        <PersistQueryClientProvider
+          client={queryClient}
+          persistOptions={{ persister: asyncStoragePersister }}
+        >
+          <RouterProvider router={router} />
+          <Toaster />
+        </PersistQueryClientProvider>
+      </InstallationPromptProvider>
     </ThemeProvider>,
   );
 }

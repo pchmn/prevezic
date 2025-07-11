@@ -11,6 +11,7 @@ import { CameraIcon } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 import { z } from 'zod/v4';
 import { InstallExplanation } from '~/components/InstallExplanation';
+import { useInstallationPrompt } from '~/components/InstallationPromptProvider';
 import { appConfig } from '~/config/config';
 import { authClient } from '~/lib/auth.client';
 import { isPwa } from '~/lib/cache-storage/cache-storage';
@@ -33,6 +34,8 @@ function RouteComponent() {
   const inputRef = useRef<HTMLInputElement>(null);
 
   const { installExplanation } = Route.useSearch();
+  const { isInstalled, isInstallable, showInstallPrompt } =
+    useInstallationPrompt();
 
   const { project, medias } = useProject(projectId as Id<'projects'>);
 
@@ -95,11 +98,15 @@ function RouteComponent() {
           <div className='p-6'>
             <Button
               variant='outline'
-              onClick={() =>
-                navigate({
-                  search: { installExplanation: true },
-                })
-              }
+              onClick={() => {
+                if (isInstallable) {
+                  showInstallPrompt();
+                } else {
+                  navigate({
+                    search: { installExplanation: true },
+                  });
+                }
+              }}
             >
               Installer
             </Button>
