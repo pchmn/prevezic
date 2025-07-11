@@ -1,5 +1,17 @@
 # Changelog
 
+# [0.3.0](https://github.com/pchmn/prevezic/compare/0.2.0...0.3.0) (2025-07-11)
+
+
+### Bug Fixes
+
+* **web:** build ([3c94be8](https://github.com/pchmn/prevezic/commit/3c94be8f874fdc790efd435f5dacb17cef133b22))
+
+
+### Features
+
+* **web:** improve installation explanation ([e0a3d8b](https://github.com/pchmn/prevezic/commit/e0a3d8bdf6549956c7d819d8db3c1d259626f03e))
+
 # [0.2.0](https://github.com/pchmn/prevezic/compare/0.1.2...0.2.0) (2025-07-11)
 
 
