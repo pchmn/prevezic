@@ -1,5 +1,12 @@
 # Changelog
 
+# [0.2.0](https://github.com/pchmn/prevezic/compare/0.1.2...0.2.0) (2025-07-11)
+
+
+### Features
+
+* **web:** try install prompt ([3e8e9f1](https://github.com/pchmn/prevezic/commit/3e8e9f1e21128234880d892394bd09563caaa918))
+
 ## [0.1.2](https://github.com/pchmn/prevezic/compare/0.1.1...0.1.2) (2025-07-10)
 
 
