@@ -15,6 +15,7 @@ export default defineSchema({
     invitationToken: v.string(), // unique token for invitation links
     isActive: v.boolean(), // whether project is still accepting photos
     coverPhotoId: v.optional(v.id('_storage')), // featured photo for the project
+    updatedAt: v.optional(v.number()),
   })
     .index('by_creator', ['creatorId'])
     .index('by_invitation_token', ['invitationToken'])
@@ -26,6 +27,7 @@ export default defineSchema({
     userId: v.id('users'),
     role: v.union(v.literal('creator'), v.literal('member')),
     joinedViaInvitation: v.boolean(),
+    updatedAt: v.optional(v.number()),
   })
     .index('by_project', ['projectId'])
     .index('by_user', ['userId'])
@@ -39,6 +41,8 @@ export default defineSchema({
     contentType: v.string(),
     fileSize: v.number(),
     caption: v.optional(v.string()),
+    date: v.optional(v.number()),
+    updatedAt: v.optional(v.number()),
     // Photo metadata
     width: v.optional(v.number()),
     height: v.optional(v.number()),
@@ -50,5 +54,6 @@ export default defineSchema({
     cameraModel: v.optional(v.string()),
   })
     .index('by_project', ['projectId'])
-    .index('by_uploader', ['uploaderId']),
+    .index('by_uploader', ['uploaderId'])
+    .index('by_date', ['date']),
 });
