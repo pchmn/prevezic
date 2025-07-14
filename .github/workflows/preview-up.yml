@@ -60,6 +60,15 @@ jobs:
           # CONVEX_SELF_HOSTED_URL: ${{ secrets.CONVEX_SELF_HOSTED_URL }}
           # CONVEX_SELF_HOSTED_ADMIN_KEY: ${{ secrets.CONVEX_SELF_HOSTED_ADMIN_KEY }}
 
+      - name: 🔄 Run migrations
+        working-directory: ./apps/backend
+        run: |
+          npx convex run migrations:runAll
+        env:
+          CONVEX_DEPLOY_KEY: ${{ secrets.PREVIEW_CONVEX_DEPLOY_KEY }}
+          # CONVEX_SELF_HOSTED_URL: ${{ secrets.CONVEX_SELF_HOSTED_URL }}
+          # CONVEX_SELF_HOSTED_ADMIN_KEY: ${{ secrets.CONVEX_SELF_HOSTED_ADMIN_KEY }}
+
   deploy-web:
     name: 🚀 Deploy Web App Preview
     runs-on: ubuntu-latest
