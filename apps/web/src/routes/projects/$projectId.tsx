@@ -7,6 +7,8 @@ import { Spinner } from '@prevezic/ui/spinner';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { Outlet, createFileRoute } from '@tanstack/react-router';
 import imageCompression from 'browser-image-compression';
+import { parse } from 'date-fns';
+import ExifReader from 'exifreader';
 import { CameraIcon } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 import { z } from 'zod/v4';
@@ -49,7 +51,14 @@ function RouteComponent() {
         useWebWorker: true,
         maxIteration: 15,
       });
-      return addPhoto(compressedFile, projectId as Id<'projects'>);
+
+      const tags = await ExifReader.load(file, { expanded: true });
+
+      return addPhoto({
+        file: compressedFile,
+        exifTags: tags,
+        projectId: projectId as Id<'projects'>,
+      });
     },
     onSuccess: () => {
       setIsAddingPhoto(false);
@@ -191,20 +200,59 @@ function RouteComponent() {
   );
 }
 
-async function addPhoto(file: File | Blob, projectId: Id<'projects'>) {
+async function addPhoto({
+  file,
+  exifTags,
+  projectId,
+}: {
+  file: File | Blob;
+  exifTags: ExifReader.ExpandedTags;
+  projectId: Id<'projects'>;
+}) {
   const sendImageUrl = new URL(`${appConfig.convexSiteUrl}/add-photo`);
   sendImageUrl.searchParams.set('projectId', projectId);
 
   const { data } = await authClient.convex.token();
 
+  const formData = new FormData();
+  formData.append('file', file);
+  formData.append(
+    'metadata',
+    JSON.stringify({
+      date: getDateFromExif(exifTags),
+      location: getLocationFromExif(exifTags),
+    }),
+  );
+  formData.append('projectId', projectId);
+
   await fetch(sendImageUrl, {
     method: 'POST',
     headers: {
-      'Content-Type': file.type,
       Authorization: `Bearer ${data?.token}`,
     },
-    body: file,
+    body: formData,
   });
+}
+
+function getDateFromExif(tags: ExifReader.ExpandedTags) {
+  return tags.exif?.DateTimeOriginal?.description
+    ? parse(
+        tags.exif.DateTimeOriginal.description,
+        'yyyy:MM:dd HH:mm:ss',
+        new Date(),
+      ).getTime()
+    : undefined;
+}
+
+function getLocationFromExif(tags: ExifReader.ExpandedTags) {
+  return tags.gps
+    ? !tags.gps.Latitude || !tags.gps.Longitude
+      ? undefined
+      : {
+          lat: tags.gps.Latitude,
+          lng: tags.gps.Longitude,
+        }
+    : undefined;
 }
 
 function useProject(projectId: Id<'projects'>) {

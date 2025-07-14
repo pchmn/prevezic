@@ -47,8 +47,12 @@ export default defineSchema({
     width: v.optional(v.number()),
     height: v.optional(v.number()),
     // GPS coordinates if available
-    latitude: v.optional(v.number()),
-    longitude: v.optional(v.number()),
+    location: v.optional(
+      v.object({
+        lat: v.number(),
+        lng: v.number(),
+      }),
+    ),
     // EXIF data
     cameraMake: v.optional(v.string()),
     cameraModel: v.optional(v.string()),
