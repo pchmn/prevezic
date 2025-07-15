@@ -1,5 +1,12 @@
 # Changelog
 
+# [0.6.0](https://github.com/pchmn/prevezic/compare/0.5.0...0.6.0) (2025-07-15)
+
+
+### Features
+
+* **web:** improve compression ([daa0289](https://github.com/pchmn/prevezic/commit/daa028900e73c9c42e6bce92e4d49e3f1ea10a92))
+
 # [0.5.0](https://github.com/pchmn/prevezic/compare/0.4.1...0.5.0) (2025-07-15)
 
 
