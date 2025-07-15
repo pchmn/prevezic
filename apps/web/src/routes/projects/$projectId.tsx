@@ -3,22 +3,18 @@ import { api } from '@prevezic/backend/_generated/api';
 import type { Id } from '@prevezic/backend/_generated/dataModel';
 import { Button } from '@prevezic/ui/button';
 import { Flex } from '@prevezic/ui/flex';
-import { Spinner } from '@prevezic/ui/spinner';
-import { useMutation, useQuery } from '@tanstack/react-query';
+import { useQuery } from '@tanstack/react-query';
 import { Outlet, createFileRoute } from '@tanstack/react-router';
-import imageCompression from 'browser-image-compression';
-import { parse } from 'date-fns';
-import ExifReader from 'exifreader';
 import { CameraIcon } from 'lucide-react';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef } from 'react';
 import { z } from 'zod/v4';
 import { InstallExplanation } from '~/components/InstallExplanation';
 import { useInstallationPrompt } from '~/components/InstallationPromptProvider';
-import { appConfig } from '~/config/config';
-import { authClient } from '~/lib/auth.client';
 import { isPwa } from '~/lib/cache-storage/cache-storage';
 import { isPrevezicError } from '~/lib/error.utils';
 import { toast } from '~/lib/toast/toast';
+import { UploadProgress } from '~/modules/upload/UploadProgress';
+import { useFileUpload } from '~/modules/upload/useFileUpload';
 
 const searchSchema = z.object({
   installExplanation: z.boolean().optional(),
@@ -41,49 +37,26 @@ function RouteComponent() {
 
   const { project, medias } = useProject(projectId as Id<'projects'>);
 
-  const { mutate: addPhotoMutation } = useMutation({
-    mutationFn: async (file: File) => {
-      const compressedFile = await imageCompression(file, {
-        maxSizeMB: 0.15,
-        initialQuality: 0.75,
-        alwaysKeepResolution: true,
-        maxWidthOrHeight: 1500,
-        useWebWorker: true,
-        maxIteration: 15,
-      });
-
-      const tags = await ExifReader.load(file, { expanded: true });
-
-      return addPhoto({
-        file: compressedFile,
-        exifTags: tags,
-        projectId: projectId as Id<'projects'>,
-      });
-    },
-    onSuccess: () => {
-      setIsAddingPhoto(false);
-    },
-    onError: () => {
-      setIsAddingPhoto(false);
-      toast.error("Erreur lors de l'ajout de la photo, veuillez réessayer");
-    },
-  });
-  const [isAddingPhoto, setIsAddingPhoto] = useState(false);
+  const {
+    uploads,
+    hasActiveUploads,
+    addFiles,
+    retryUpload,
+    clearCompletedUploads,
+  } = useFileUpload(projectId as Id<'projects'>);
 
   useEffect(() => {
     if (inputRef.current) {
       inputRef.current.addEventListener('cancel', () => {
-        setIsAddingPhoto(false);
+        // setIsAddingPhoto(false); // This state is removed
       });
     }
   }, []);
 
   const handleFileSelect = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      addPhotoMutation(file);
-    } else {
-      setIsAddingPhoto(false);
+    const files = e.target.files;
+    if (files && files.length > 0) {
+      await addFiles(files);
     }
     // Reset the input value so the same file can be selected again
     e.target.value = '';
@@ -167,28 +140,23 @@ function RouteComponent() {
         accept='image/*'
         capture
         onChange={handleFileSelect}
+        multiple
       />
 
-      {isAddingPhoto && (
-        <Flex
-          direction='col'
-          align='center'
-          justify='center'
-          gap='md'
-          className='fixed inset-0 bg-background'
-        >
-          <p>Ajout de la photo...</p>
-          <Spinner className='w-8 h-8' />
-        </Flex>
+      {uploads.length > 0 && (
+        <UploadProgress
+          uploads={uploads}
+          onRetry={retryUpload}
+          onClear={clearCompletedUploads}
+        />
       )}
 
       <Button
-        disabled={isAddingPhoto}
-        hidden={isAddingPhoto}
+        disabled={hasActiveUploads}
+        hidden={hasActiveUploads}
         className='fixed bottom-6 left-1/2 -translate-x-1/2 rounded-full p-6 shadow-lg font-[600]'
         onClick={() => {
           inputRef.current?.click();
-          setIsAddingPhoto(true);
         }}
       >
         <CameraIcon />
@@ -198,61 +166,6 @@ function RouteComponent() {
       <Outlet />
     </Flex>
   );
-}
-
-async function addPhoto({
-  file,
-  exifTags,
-  projectId,
-}: {
-  file: File | Blob;
-  exifTags: ExifReader.ExpandedTags;
-  projectId: Id<'projects'>;
-}) {
-  const sendImageUrl = new URL(`${appConfig.convexSiteUrl}/add-photo`);
-  sendImageUrl.searchParams.set('projectId', projectId);
-
-  const { data } = await authClient.convex.token();
-
-  const formData = new FormData();
-  formData.append('file', file);
-  formData.append(
-    'metadata',
-    JSON.stringify({
-      date: getDateFromExif(exifTags),
-      location: getLocationFromExif(exifTags),
-    }),
-  );
-  formData.append('projectId', projectId);
-
-  await fetch(sendImageUrl, {
-    method: 'POST',
-    headers: {
-      Authorization: `Bearer ${data?.token}`,
-    },
-    body: formData,
-  });
-}
-
-function getDateFromExif(tags: ExifReader.ExpandedTags) {
-  return tags.exif?.DateTimeOriginal?.description
-    ? parse(
-        tags.exif.DateTimeOriginal.description,
-        'yyyy:MM:dd HH:mm:ss',
-        new Date(),
-      ).getTime()
-    : undefined;
-}
-
-function getLocationFromExif(tags: ExifReader.ExpandedTags) {
-  return tags.gps
-    ? !tags.gps.Latitude || !tags.gps.Longitude
-      ? undefined
-      : {
-          lat: tags.gps.Latitude,
-          lng: tags.gps.Longitude,
-        }
-    : undefined;
 }
 
 function useProject(projectId: Id<'projects'>) {
@@ -289,4 +202,11 @@ function useProject(projectId: Id<'projects'>) {
     // members,
     isLoading: isProjectPending || isMediasPending,
   };
+}
+
+export interface FileUpload {
+  id: string;
+  file: File;
+  status: 'pending' | 'compressing' | 'uploading' | 'success' | 'error';
+  error?: string;
 }
