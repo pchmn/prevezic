@@ -59,5 +59,6 @@ export default defineSchema({
   })
     .index('by_project', ['projectId'])
     .index('by_uploader', ['uploaderId'])
-    .index('by_date', ['date']),
+    // Compound index for filtering by project and then ordering by date
+    .index('by_project_and_date', ['projectId', 'date']),
 });

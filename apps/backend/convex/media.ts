@@ -13,7 +13,7 @@ export const list = query({
 
     const medias = await ctx.db
       .query('medias')
-      .withIndex('by_project', (q) => q.eq('projectId', projectId))
+      .withIndex('by_project_and_date', (q) => q.eq('projectId', projectId))
       .order('desc')
       .collect();
 
