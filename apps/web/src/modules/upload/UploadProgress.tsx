@@ -21,7 +21,7 @@ export function UploadProgress({
   if (uploads.length === 0) return null;
 
   return (
-    <div className='fixed bottom-20 left-4 right-4 bg-background border rounded-lg shadow-lg max-h-60 overflow-hidden'>
+    <div className='fixed bottom-24 left-4 right-4 bg-background border rounded-lg shadow-lg max-h-60 overflow-hidden'>
       {/* Header */}
       <div className='p-3 border-b flex justify-between items-center'>
         <span className='font-medium'>

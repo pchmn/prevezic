@@ -161,8 +161,6 @@ function RouteComponent() {
       >
         <Button
           variant='outline'
-          disabled={hasActiveUploads}
-          hidden={hasActiveUploads}
           className='rounded-full p-6 shadow-lg font-[600] bg-[#f7eef3] dark:bg-[#2b212a]!'
           onClick={() => {
             inputRefUpload.current?.click();
@@ -173,8 +171,6 @@ function RouteComponent() {
         </Button>
 
         <Button
-          disabled={hasActiveUploads}
-          hidden={hasActiveUploads}
           className='rounded-full p-6 shadow-lg font-[600]'
           onClick={() => {
             inputRefCamera.current?.click();
