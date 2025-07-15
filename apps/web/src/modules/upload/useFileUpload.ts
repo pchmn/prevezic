@@ -76,12 +76,10 @@ export function useFileUpload(projectId: Id<'projects'>) {
       updateUploadStatus(upload.id, 'compressing');
 
       const compressedFile = await imageCompression(upload.file, {
-        maxSizeMB: 0.15,
         initialQuality: 0.75,
         alwaysKeepResolution: true,
-        maxWidthOrHeight: 1500,
+        maxWidthOrHeight: 1920,
         useWebWorker: true,
-        maxIteration: 15,
       });
 
       // Update status to uploading

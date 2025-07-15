@@ -91,6 +91,7 @@ export const remove = mutation({
       });
     }
 
+    await ctx.storage.delete(media.storageId);
     await ctx.db.delete(mediaId);
   },
 });
