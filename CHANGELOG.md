@@ -1,5 +1,12 @@
 # Changelog
 
+# [0.5.0](https://github.com/pchmn/prevezic/compare/0.4.1...0.5.0) (2025-07-15)
+
+
+### Features
+
+* **web:** increase concurrency limit ([dc18d01](https://github.com/pchmn/prevezic/commit/dc18d01274f398cd49af191fb9f9dee1bcd14354))
+
 ## [0.4.1](https://github.com/pchmn/prevezic/compare/0.4.0...0.4.1) (2025-07-15)
 
 
