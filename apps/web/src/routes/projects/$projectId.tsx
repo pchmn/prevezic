@@ -147,6 +147,7 @@ function RouteComponent() {
 
       {uploads.length > 0 && (
         <UploadProgress
+          className='fixed bottom-4 left-4 right-4 z-[2]'
           uploads={uploads}
           onRetry={retryUpload}
           onClear={clearCompletedUploads}
@@ -157,7 +158,7 @@ function RouteComponent() {
         justify='between'
         align='center'
         gap='sm'
-        className='fixed p-1 bottom-6 left-1/2 -translate-x-1/2 backdrop-blur-md bg-white/10 dark:bg-black/10 rounded-full border border-white/20 dark:border-white/10 shadow-xl'
+        className='fixed p-1 bottom-4 left-1/2 -translate-x-1/2 backdrop-blur-md bg-white/10 dark:bg-black/10 rounded-full border border-white/20 dark:border-white/10 shadow-xl'
       >
         <Button
           variant='outline'
