@@ -152,7 +152,7 @@ export function useProgressToast(
         <UploadProgress
           uploads={uploads}
           onRetry={retryUpload}
-          onClear={() => sonnerToast.dismiss(t)}
+          onClear={dismissToast}
           className='w-full'
         />
       ),
