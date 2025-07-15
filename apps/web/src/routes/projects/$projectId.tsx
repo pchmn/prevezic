@@ -138,7 +138,6 @@ function RouteComponent() {
         hidden
         type='file'
         accept='image/*'
-        capture
         onChange={handleFileSelect}
         multiple
       />
