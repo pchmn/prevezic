@@ -64,9 +64,12 @@ export function UploadProgress({
 
       <CardContent
         className={cn(
-          'max-h-40 overflow-y-auto',
+          'max-h-40 overflow-y-auto overscroll-none',
           uploads.length > 1 ? 'p-0' : 'px-4 py-5',
         )}
+        onPointerMove={(e) => e.stopPropagation()}
+        onPointerDown={(e) => e.stopPropagation()}
+        onPointerUp={(e) => e.stopPropagation()}
       >
         {uploads.map((upload) => (
           <div
