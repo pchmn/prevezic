@@ -183,9 +183,9 @@ export function SlideShow({
       opts={{ startIndex: initialIndex }}
       onActiveChange={onActiveChange}
     >
-      <CarouselContent className='-ml-2'>
+      <CarouselContent className='-ml-[1px]'>
         {images.map((image, index) => (
-          <CarouselItem key={image.url} className='relative pl-2'>
+          <CarouselItem key={image.url} className='relative pl-[1px]'>
             <img
               key={image.url}
               src={image.url}

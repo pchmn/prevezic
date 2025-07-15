@@ -8,28 +8,7 @@ import { authClient } from '~/lib/auth.client';
 import type { FileUpload } from './types';
 
 export function useFileUpload(projectId: Id<'projects'>) {
-  const [uploads, setUploads] = useState<FileUpload[]>([
-    // {
-    //   id: '1',
-    //   file: new File([], 'test-1.jpg'),
-    //   status: 'success',
-    // },
-    // {
-    //   id: '2',
-    //   file: new File([], 'test-2.jpg'),
-    //   status: 'compressing',
-    // },
-    // {
-    //   id: '3',
-    //   file: new File([], 'test-3.jpg'),
-    //   status: 'success',
-    // },
-    // {
-    //   id: '4',
-    //   file: new File([], 'test-4.jpg'),
-    //   status: 'error',
-    // },
-  ]);
+  const [uploads, setUploads] = useState<FileUpload[]>([]);
 
   const hasActiveUploads = uploads.some((u) =>
     ['pending', 'compressing', 'uploading'].includes(u.status),
@@ -60,7 +39,7 @@ export function useFileUpload(projectId: Id<'projects'>) {
   };
 
   const processFilesWithConcurrency = async (fileUploads: FileUpload[]) => {
-    const CONCURRENT_LIMIT = 3; // Process max 3 files simultaneously
+    const CONCURRENT_LIMIT = 12;
 
     for (let i = 0; i < fileUploads.length; i += CONCURRENT_LIMIT) {
       const batch = fileUploads.slice(i, i + CONCURRENT_LIMIT);
