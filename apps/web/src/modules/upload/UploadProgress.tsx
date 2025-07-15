@@ -2,7 +2,7 @@ import { Button } from '@prevezic/ui/button';
 import { Spinner } from '@prevezic/ui/spinner';
 import { cn } from '@prevezic/ui/utils';
 import { CheckIcon, XIcon } from 'lucide-react';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { toast as sonnerToast } from 'sonner';
 import type { FileUpload } from './types';
 
@@ -35,7 +35,6 @@ export function UploadProgress({
         className,
       )}
     >
-      {/* Header */}
       {uploads.length > 1 && (
         <div className='p-3 border-b flex justify-between items-center'>
           <span className='font-medium'>
@@ -62,7 +61,6 @@ export function UploadProgress({
         </div>
       )}
 
-      {/* Upload list */}
       <div className='max-h-40 overflow-y-auto'>
         {uploads.map((upload) => (
           <div
@@ -110,84 +108,49 @@ export function useProgressToast(
 ) {
   const [uploadToastId, setUploadToastId] = useState<string | number>();
 
-  useEffect(() => {
-    if (uploads.length > 0) {
-      const activeUploads = uploads.filter(
-        (u) => !['success', 'error'].includes(u.status),
-      );
-      const completedUploads = uploads.filter((u) =>
-        ['success', 'error'].includes(u.status),
-      );
-      if (uploadToastId) {
-        // Update existing toast
-        sonnerToast.custom(
-          (t) => (
-            <UploadProgress
-              uploads={uploads}
-              onRetry={retryUpload}
-              onClear={() => {
-                clearCompletedUploads();
-                sonnerToast.dismiss(t);
-                setUploadToastId(undefined);
-              }}
-              className='w-full'
-            />
-          ),
-          {
-            duration:
-              completedUploads.length === 1 &&
-              completedUploads[0].status === 'success'
-                ? 3000
-                : Number.POSITIVE_INFINITY,
-            id: uploadToastId,
-            dismissible: activeUploads.length === 0,
-            onAutoClose: () => {
-              clearCompletedUploads();
-              setUploadToastId(undefined);
-            },
-            onDismiss: () => {
-              clearCompletedUploads();
-              setUploadToastId(undefined);
-            },
-          },
-        );
-      } else {
-        // Create new toast
-        const toastId = sonnerToast.custom(
-          (t) => (
-            <UploadProgress
-              uploads={uploads}
-              onRetry={retryUpload}
-              onClear={() => {
-                clearCompletedUploads();
-                sonnerToast.dismiss(t);
-                setUploadToastId(undefined);
-              }}
-              className='w-full'
-            />
-          ),
-          {
-            duration: Number.POSITIVE_INFINITY,
-            dismissible: activeUploads.length === 0,
-            onAutoClose: () => {
-              clearCompletedUploads();
-              setUploadToastId(undefined);
-            },
-            onDismiss: () => {
-              clearCompletedUploads();
-              setUploadToastId(undefined);
-            },
-          },
-        );
-        // toast.message(<div>test</div>, {
-        //   duration: Number.POSITIVE_INFINITY,
-        // });
-        setUploadToastId(toastId);
-      }
-    } else if (uploadToastId) {
-      // Dismiss toast when no uploads
+  const dismissToast = useCallback(() => {
+    clearCompletedUploads();
+    if (uploadToastId) {
       sonnerToast.dismiss(uploadToastId);
-      setUploadToastId(undefined);
     }
-  }, [uploads, uploadToastId, retryUpload, clearCompletedUploads]);
+    setUploadToastId(undefined);
+  }, [clearCompletedUploads, uploadToastId]);
+
+  useEffect(() => {
+    if (uploads.length === 0) {
+      if (uploadToastId) dismissToast();
+      return;
+    }
+
+    const activeUploads = uploads.filter(
+      (u) => !['success', 'error'].includes(u.status),
+    );
+    const isOnlyOneSuccess =
+      uploads.length === 1 && uploads[0].status === 'success';
+
+    const toastOptions = {
+      duration: isOnlyOneSuccess ? 3000 : Number.POSITIVE_INFINITY,
+      dismissible: activeUploads.length === 0,
+      onAutoClose: dismissToast,
+      onDismiss: dismissToast,
+      ...(uploadToastId && { id: uploadToastId }), // Add id only if updating
+    };
+
+    const toastId = sonnerToast.custom(
+      (t) => (
+        <UploadProgress
+          uploads={uploads}
+          onRetry={retryUpload}
+          onClear={() => sonnerToast.dismiss(t)}
+          className='w-full'
+        />
+      ),
+      toastOptions,
+    );
+
+    // Only set the ID if it's a new toast (not an update)
+    if (!uploadToastId) {
+      setUploadToastId(toastId);
+    }
+  }, [uploads, uploadToastId, retryUpload, dismissToast]);
 }
