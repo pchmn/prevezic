@@ -1,5 +1,30 @@
 # Changelog
 
+# [0.4.0](https://github.com/pchmn/prevezic/compare/0.3.1...0.4.0) (2025-07-15)
+
+
+### Bug Fixes
+
+* **web:** reset upload count ([655d0cc](https://github.com/pchmn/prevezic/commit/655d0cc39e727aadbb787039b1f6e1bffda9506c))
+* **web:** scrolling behavior ([7fdb2f6](https://github.com/pchmn/prevezic/commit/7fdb2f6d37f2bc6e629c77557347b1058faa70d6))
+
+
+### Features
+
+* add ui cursor rules ([f5f2f7f](https://github.com/pchmn/prevezic/commit/f5f2f7f6b6813716728cc32c15ebfd830b84e872))
+* **backend:** create new date field ([87a25f6](https://github.com/pchmn/prevezic/commit/87a25f6cbe8b0e11a5db20377b5c335f981d395b))
+* handle file metadata ([5f5ab15](https://github.com/pchmn/prevezic/commit/5f5ab151df05373b74c9bb8c1c407b6be698a1ad))
+* improve media quality ([f5fc35c](https://github.com/pchmn/prevezic/commit/f5fc35cfc16ded6547f7f93ab93a653f92f2ab66))
+* **web:** accept upload ([63f729b](https://github.com/pchmn/prevezic/commit/63f729bad5bd437293547658a42ef1d4ec9a38e8))
+* **web:** handle multiple files upload ([a13e879](https://github.com/pchmn/prevezic/commit/a13e87945f630ea073fe1d9840316bd07e435ae7))
+* **web:** improve upload ([194deeb](https://github.com/pchmn/prevezic/commit/194deebe999f31b5c42d73440390c8b3e85f5767))
+* **web:** improve upload progress ([ffd2ac2](https://github.com/pchmn/prevezic/commit/ffd2ac24d5fbbbbe67fd5821f27f35eca8d8e440))
+* **web:** order by media date ([d950e49](https://github.com/pchmn/prevezic/commit/d950e496949cfde2462352a9834d072e70114806))
+* **web:** simplify useProgress hook ([d86c921](https://github.com/pchmn/prevezic/commit/d86c921ffc222b4e3485ca984e7fbc2e96064ea7))
+* **web:** still show buttons ([0f302a3](https://github.com/pchmn/prevezic/commit/0f302a35e27a668cefbb2648599a3383a465dc47))
+* **web:** upload or take a picture ([c6e9d51](https://github.com/pchmn/prevezic/commit/c6e9d51dcdd4d73f80e35b4b87ea64836ee72285))
+* **web:** use toast for upload progress ([f05f4b1](https://github.com/pchmn/prevezic/commit/f05f4b177626b0ed69b8eb4f5b968fd0eb8908b9))
+
 ## [0.3.1](https://github.com/pchmn/prevezic/compare/0.3.0...0.3.1) (2025-07-11)
 
 
