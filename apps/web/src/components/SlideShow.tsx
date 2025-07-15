@@ -86,14 +86,14 @@ export function SlideShowDialog({
 
         <Flex
           className={cn(
-            'absolute top-0 left-0 w-full p-4 justify-between bg-black/50 z-10',
+            'absolute top-0 left-0 w-full p-4 justify-between z-10',
             showToolbar ? 'opacity-100' : 'opacity-0',
           )}
         >
           <Button
             variant='ghost'
             size='icon'
-            className='z-10'
+            className='z-10 p-5 backdrop-blur-md bg-black/30 rounded-full border border-white/20'
             onClick={() => {
               onOpenChange(false);
             }}
@@ -104,7 +104,7 @@ export function SlideShowDialog({
             <Button
               variant='ghost'
               size='icon'
-              className='z-10'
+              className='z-10 p-5 backdrop-blur-md bg-black/30 rounded-full border border-white/20'
               onClick={() => {
                 onDownload?.(activeIndex);
               }}
@@ -115,7 +115,7 @@ export function SlideShowDialog({
               <Button
                 variant='ghost'
                 size='icon'
-                className='z-10'
+                className='z-10 p-5 backdrop-blur-md bg-black/30 rounded-full border border-white/20'
                 onClick={() => setRemoveMediaIsOpen(true)}
               >
                 <Trash2Icon className='size-6! text-red-300' />
@@ -183,14 +183,9 @@ export function SlideShow({
       opts={{ startIndex: initialIndex }}
       onActiveChange={onActiveChange}
     >
-      <CarouselContent
-        className={cn({
-          'gap-0.5': images.length > 40,
-          'gap-0': images.length > 100,
-        })}
-      >
+      <CarouselContent className='-ml-2'>
         {images.map((image, index) => (
-          <CarouselItem key={image.url} className='relative'>
+          <CarouselItem key={image.url} className='relative pl-2'>
             <img
               key={image.url}
               src={image.url}
