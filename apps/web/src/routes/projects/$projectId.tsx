@@ -13,7 +13,7 @@ import { useInstallationPrompt } from '~/components/InstallationPromptProvider';
 import { isPwa } from '~/lib/cache-storage/cache-storage';
 import { isPrevezicError } from '~/lib/error.utils';
 import { toast } from '~/lib/toast/toast';
-import { UploadProgress } from '~/modules/upload/UploadProgress';
+import { useProgressToast } from '~/modules/upload/UploadProgress';
 import { useFileUpload } from '~/modules/upload/useFileUpload';
 
 const searchSchema = z.object({
@@ -45,6 +45,8 @@ function RouteComponent() {
     retryUpload,
     clearCompletedUploads,
   } = useFileUpload(projectId as Id<'projects'>);
+
+  useProgressToast(uploads, retryUpload, clearCompletedUploads);
 
   const handleFileSelect = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
@@ -144,15 +146,6 @@ function RouteComponent() {
         onChange={handleFileSelect}
         multiple
       />
-
-      {uploads.length > 0 && (
-        <UploadProgress
-          className='fixed bottom-4 left-4 right-4 z-[2]'
-          uploads={uploads}
-          onRetry={retryUpload}
-          onClear={clearCompletedUploads}
-        />
-      )}
 
       <Flex
         justify='between'
