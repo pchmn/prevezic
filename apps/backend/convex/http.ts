@@ -1,5 +1,5 @@
 import { httpRouter } from 'convex/server';
-import { api } from './_generated/api';
+import { internal } from './_generated/api';
 import type { Id } from './_generated/dataModel';
 import { httpAction } from './_generated/server';
 import { betterAuthComponent, createAuth } from './auth';
@@ -48,16 +48,24 @@ http.route({
     ) as Id<'projects'>;
     const userId = await requireUserIsProjectMember(ctx, projectId);
 
-    // Step 1: Store the file
-    const blob = await request.blob();
-    const storageId = await ctx.storage.store(blob);
+    const formData = await request.formData();
+    const file = formData.get('file') as File;
+    const metadata = JSON.parse(
+      (formData.get('metadata') as string) ?? '{}',
+    ) as {
+      date?: number;
+      location?: { lat: number; lng: number };
+    };
+    const storageId = await ctx.storage.store(file);
 
-    await ctx.runMutation(api.media.insert, {
+    await ctx.runMutation(internal.media.insert, {
       storageId,
       projectId,
       uploaderId: userId,
-      contentType: blob.type,
-      fileSize: blob.size,
+      contentType: file.type,
+      fileSize: file.size,
+      date: metadata.date ?? Date.now(),
+      location: metadata.location,
     });
 
     // Step 3: Return a response with the correct CORS headers

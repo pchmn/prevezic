@@ -1,31 +1,41 @@
-import { toast as sonnerToast } from 'sonner';
+import { type ExternalToast, toast as sonnerToast } from 'sonner';
 
-function success(message: string, description?: string) {
-  sonnerToast.success(message, {
-    description,
+function success(message: string | React.ReactNode, data?: ExternalToast) {
+  return sonnerToast.success(message, {
+    ...data,
     icon: SuccessIcon,
   });
 }
 
-function error(message: string, description?: string) {
-  sonnerToast.error(message, {
-    description,
+function error(message: string | React.ReactNode, data?: ExternalToast) {
+  return sonnerToast.error(message, {
+    ...data,
     icon: ErrorIcon,
   });
 }
 
-function info(message: string, description?: string) {
-  sonnerToast.info(message, {
-    description,
+function info(message: string | React.ReactNode, data?: ExternalToast) {
+  return sonnerToast.info(message, {
+    ...data,
     icon: InfoIcon,
   });
 }
 
-function warning(message: string, description?: string) {
-  sonnerToast.warning(message, {
-    description,
+function warning(message: string | React.ReactNode, data?: ExternalToast) {
+  return sonnerToast.warning(message, {
+    ...data,
     icon: WarningIcon,
   });
+}
+
+function message(message: string | React.ReactNode, data?: ExternalToast) {
+  return sonnerToast.message(message, data);
+}
+
+function custom(children: React.ReactNode, data?: ExternalToast) {
+  return sonnerToast.custom(() => {
+    return <div>{children}</div>;
+  }, data);
 }
 
 const SuccessIcon = (
@@ -84,4 +94,4 @@ const ErrorIcon = (
   </svg>
 );
 
-export const toast = { success, error, info, warning };
+export const toast = { success, error, info, warning, custom, message };

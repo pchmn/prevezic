@@ -3,20 +3,18 @@ import { api } from '@prevezic/backend/_generated/api';
 import type { Id } from '@prevezic/backend/_generated/dataModel';
 import { Button } from '@prevezic/ui/button';
 import { Flex } from '@prevezic/ui/flex';
-import { Spinner } from '@prevezic/ui/spinner';
-import { useMutation, useQuery } from '@tanstack/react-query';
+import { useQuery } from '@tanstack/react-query';
 import { Outlet, createFileRoute } from '@tanstack/react-router';
-import imageCompression from 'browser-image-compression';
-import { CameraIcon } from 'lucide-react';
-import { useEffect, useRef, useState } from 'react';
+import { CameraIcon, UploadIcon } from 'lucide-react';
+import { useEffect, useRef } from 'react';
 import { z } from 'zod/v4';
 import { InstallExplanation } from '~/components/InstallExplanation';
 import { useInstallationPrompt } from '~/components/InstallationPromptProvider';
-import { appConfig } from '~/config/config';
-import { authClient } from '~/lib/auth.client';
 import { isPwa } from '~/lib/cache-storage/cache-storage';
 import { isPrevezicError } from '~/lib/error.utils';
 import { toast } from '~/lib/toast/toast';
+import { useProgressToast } from '~/modules/upload/UploadProgress';
+import { useFileUpload } from '~/modules/upload/useFileUpload';
 
 const searchSchema = z.object({
   installExplanation: z.boolean().optional(),
@@ -31,7 +29,8 @@ function RouteComponent() {
   const { projectId } = Route.useParams();
   const navigate = Route.useNavigate();
 
-  const inputRef = useRef<HTMLInputElement>(null);
+  const inputRefUpload = useRef<HTMLInputElement>(null);
+  const inputRefCamera = useRef<HTMLInputElement>(null);
 
   const { installExplanation } = Route.useSearch();
   const { isInstalled, isInstallable, showInstallPrompt } =
@@ -39,42 +38,20 @@ function RouteComponent() {
 
   const { project, medias } = useProject(projectId as Id<'projects'>);
 
-  const { mutate: addPhotoMutation } = useMutation({
-    mutationFn: async (file: File) => {
-      const compressedFile = await imageCompression(file, {
-        maxSizeMB: 0.15,
-        initialQuality: 0.75,
-        alwaysKeepResolution: true,
-        maxWidthOrHeight: 1500,
-        useWebWorker: true,
-        maxIteration: 15,
-      });
-      return addPhoto(compressedFile, projectId as Id<'projects'>);
-    },
-    onSuccess: () => {
-      setIsAddingPhoto(false);
-    },
-    onError: () => {
-      setIsAddingPhoto(false);
-      toast.error("Erreur lors de l'ajout de la photo, veuillez réessayer");
-    },
-  });
-  const [isAddingPhoto, setIsAddingPhoto] = useState(false);
+  const {
+    uploads,
+    hasActiveUploads,
+    addFiles,
+    retryUpload,
+    clearCompletedUploads,
+  } = useFileUpload(projectId as Id<'projects'>);
 
-  useEffect(() => {
-    if (inputRef.current) {
-      inputRef.current.addEventListener('cancel', () => {
-        setIsAddingPhoto(false);
-      });
-    }
-  }, []);
+  useProgressToast(uploads, retryUpload, clearCompletedUploads);
 
   const handleFileSelect = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      addPhotoMutation(file);
-    } else {
-      setIsAddingPhoto(false);
+    const files = e.target.files;
+    if (files && files.length > 0) {
+      await addFiles(files);
     }
     // Reset the input value so the same file can be selected again
     e.target.value = '';
@@ -152,59 +129,53 @@ function RouteComponent() {
         </div>
       )}
       <input
-        ref={inputRef}
+        ref={inputRefUpload}
+        hidden
+        type='file'
+        accept='image/*'
+        onChange={handleFileSelect}
+        multiple
+      />
+
+      <input
+        ref={inputRefCamera}
         hidden
         type='file'
         accept='image/*'
         capture
         onChange={handleFileSelect}
+        multiple
       />
 
-      {isAddingPhoto && (
-        <Flex
-          direction='col'
-          align='center'
-          justify='center'
-          gap='md'
-          className='fixed inset-0 bg-background'
-        >
-          <p>Ajout de la photo...</p>
-          <Spinner className='w-8 h-8' />
-        </Flex>
-      )}
-
-      <Button
-        disabled={isAddingPhoto}
-        hidden={isAddingPhoto}
-        className='fixed bottom-6 left-1/2 -translate-x-1/2 rounded-full p-6 shadow-lg font-[600]'
-        onClick={() => {
-          inputRef.current?.click();
-          setIsAddingPhoto(true);
-        }}
+      <Flex
+        justify='between'
+        align='center'
+        gap='sm'
+        className='fixed p-1 bottom-4 left-1/2 -translate-x-1/2 backdrop-blur-md bg-white/10 dark:bg-black/10 rounded-full border border-white/20 dark:border-white/10 shadow-xl'
       >
-        <CameraIcon />
-        <span>Ajouter une photo</span>
-      </Button>
+        <Button
+          variant='outline'
+          className='rounded-full p-6 shadow-lg font-[600] bg-[#f7eef3] dark:bg-[#2b212a]!'
+          onClick={() => {
+            inputRefUpload.current?.click();
+          }}
+        >
+          <UploadIcon className='size-6!' />
+        </Button>
+
+        <Button
+          className='rounded-full p-6 shadow-lg font-[600]'
+          onClick={() => {
+            inputRefCamera.current?.click();
+          }}
+        >
+          <CameraIcon className='size-6!' />
+        </Button>
+      </Flex>
 
       <Outlet />
     </Flex>
   );
-}
-
-async function addPhoto(file: File | Blob, projectId: Id<'projects'>) {
-  const sendImageUrl = new URL(`${appConfig.convexSiteUrl}/add-photo`);
-  sendImageUrl.searchParams.set('projectId', projectId);
-
-  const { data } = await authClient.convex.token();
-
-  await fetch(sendImageUrl, {
-    method: 'POST',
-    headers: {
-      'Content-Type': file.type,
-      Authorization: `Bearer ${data?.token}`,
-    },
-    body: file,
-  });
 }
 
 function useProject(projectId: Id<'projects'>) {
@@ -241,4 +212,11 @@ function useProject(projectId: Id<'projects'>) {
     // members,
     isLoading: isProjectPending || isMediasPending,
   };
+}
+
+export interface FileUpload {
+  id: string;
+  file: File;
+  status: 'pending' | 'compressing' | 'uploading' | 'success' | 'error';
+  error?: string;
 }

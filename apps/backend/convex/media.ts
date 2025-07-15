@@ -1,5 +1,5 @@
 import { v } from 'convex/values';
-import { mutation, query } from './_generated/server';
+import { internalMutation, mutation, query } from './_generated/server';
 import { requireAuth } from './auth/auth.utils';
 import { PrevezicError } from './error/error.utils';
 import { requireUserIsProjectMember } from './projects/projects.utils';
@@ -13,7 +13,7 @@ export const list = query({
 
     const medias = await ctx.db
       .query('medias')
-      .withIndex('by_project', (q) => q.eq('projectId', projectId))
+      .withIndex('by_project_and_date', (q) => q.eq('projectId', projectId))
       .order('desc')
       .collect();
 
@@ -37,7 +37,7 @@ export const generateUploadUrl = mutation({
   },
 });
 
-export const insert = mutation({
+export const insert = internalMutation({
   args: {
     projectId: v.id('projects'),
     uploaderId: v.id('users'),
@@ -47,9 +47,16 @@ export const insert = mutation({
     caption: v.optional(v.string()),
     width: v.optional(v.number()),
     height: v.optional(v.number()),
+    date: v.optional(v.number()),
+    location: v.optional(
+      v.object({
+        lat: v.number(),
+        lng: v.number(),
+      }),
+    ),
   },
   handler: async (ctx, { projectId, uploaderId, ...insertValues }) => {
-    await requireUserIsProjectMember(ctx, projectId);
+    // await requireUserIsProjectMember(ctx, projectId);
 
     await ctx.db.insert('medias', {
       projectId,
@@ -84,6 +91,7 @@ export const remove = mutation({
       });
     }
 
+    await ctx.storage.delete(media.storageId);
     await ctx.db.delete(mediaId);
   },
 });

@@ -1,0 +1,262 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+# React UI Component Preferences
+
+## Overview
+Always prefer using components from `@/ui` instead of raw Tailwind classes. This ensures consistency, maintainability, and leverages the design system.
+
+## Layout & Structure
+
+### Flexbox Layouts
+❌ **Don't use:**
+```jsx
+<div className="flex items-center justify-between gap-4">
+<div className="flex flex-col gap-2">
+<div className="flex-1">
+```
+
+✅ **Use instead:**
+```jsx
+<Flex align="center" justify="between" gap="lg">
+<Flex direction="col" gap="sm">
+<Flex className="flex-1"> // or use flex-1 as needed
+```
+
+### Cards & Containers
+❌ **Don't use:**
+```jsx
+<div className="rounded-xl border bg-card shadow-xs p-6">
+```
+
+✅ **Use instead:**
+```jsx
+<Card>
+  <CardHeader>
+  <CardContent>
+  <CardFooter>
+</Card>
+```
+
+### Dividers & Separators
+❌ **Don't use:**
+```jsx
+<div className="border-t w-full">
+<hr className="my-4">
+```
+
+✅ **Use instead:**
+```jsx
+<Divider />
+<Divider text="or" />
+```
+
+## Interactive Elements
+
+### Buttons
+❌ **Don't use:**
+```jsx
+<button className="bg-primary text-white px-4 py-2 rounded-md hover:bg-primary/90">
+<div className="cursor-pointer bg-secondary...">
+```
+
+✅ **Use instead:**
+```jsx
+<Button variant="default">
+<Button variant="outline">
+<Button variant="ghost">
+<Button size="sm">
+<Button size="icon">
+```
+
+### Form Elements
+❌ **Don't use:**
+```jsx
+<input className="border rounded-md px-3 py-2...">
+<select className="border rounded-md...">
+<label className="text-sm font-medium...">
+```
+
+✅ **Use instead:**
+```jsx
+<Input />
+<Select>
+<Label />
+<Switch />
+```
+
+## Feedback & Loading States
+
+### Loading States
+❌ **Don't use:**
+```jsx
+<div className="animate-pulse bg-gray-200 rounded h-4">
+<div className="animate-spin border-2 border-primary...">
+```
+
+✅ **Use instead:**
+```jsx
+<Skeleton className="h-4 w-20" />
+<Spinner />
+```
+
+### Status & Badges
+❌ **Don't use:**
+```jsx
+<span className="bg-green-100 text-green-800 px-2 py-1 rounded-full text-xs">
+```
+
+✅ **Use instead:**
+```jsx
+<Badge variant="success">
+<Badge variant="destructive">
+<Badge variant="outline">
+```
+
+## Overlays & Modals
+
+### Dialogs & Drawers
+❌ **Don't use:**
+```jsx
+<div className="fixed inset-0 bg-black/50 z-50">
+  <div className="fixed inset-x-4 top-4 bg-white rounded-lg...">
+```
+
+✅ **Use instead:**
+```jsx
+<Dialog>
+  <DialogTrigger>
+  <DialogContent>
+</Dialog>
+
+<Drawer>
+  <DrawerTrigger>
+  <DrawerContent>
+</Drawer>
+```
+
+### Tooltips
+❌ **Don't use:**
+```jsx
+<div className="relative group">
+  <div className="absolute bottom-full...">
+```
+
+✅ **Use instead:**
+```jsx
+<Tooltip>
+  <TooltipTrigger>
+  <TooltipContent>
+</Tooltip>
+```
+
+## Navigation
+
+### Breadcrumbs
+❌ **Don't use:**
+```jsx
+<nav className="flex items-center space-x-2 text-sm">
+  <span className="text-muted-foreground">Home</span>
+  <span>/</span>
+```
+
+✅ **Use instead:**
+```jsx
+<Breadcrumb>
+  <BreadcrumbList>
+    <BreadcrumbItem>
+    <BreadcrumbSeparator>
+</Breadcrumb>
+```
+
+### Dropdown Menus
+❌ **Don't use:**
+```jsx
+<div className="relative">
+  <div className="absolute top-full bg-white border rounded-md shadow-lg...">
+```
+
+✅ **Use instead:**
+```jsx
+<DropdownMenu>
+  <DropdownMenuTrigger>
+  <DropdownMenuContent>
+  <DropdownMenuItem>
+</DropdownMenu>
+```
+
+## Component Media & Carousels
+
+### Image Carousels
+❌ **Don't use:**
+```jsx
+<div className="flex overflow-x-auto space-x-4">
+```
+
+✅ **Use instead:**
+```jsx
+<Carousel>
+  <CarouselContent>
+    <CarouselItem>
+  <CarouselPrevious>
+  <CarouselNext>
+</Carousel>
+```
+
+## When Raw Tailwind is Acceptable
+
+You may use raw Tailwind classes for:
+- Unique spacing/positioning that doesn't fit component patterns (`mt-8`, `absolute top-4 right-4`)
+- Layout utilities (`grid`, `grid-cols-3`, `w-full`, `h-screen`)
+- Responsive utilities (`md:hidden`, `lg:flex`)  
+- Custom color/styling that extends component variants
+- One-off styles that don't warrant a component
+
+## Import Pattern
+
+Always import UI components from the alias:
+
+```jsx
+import { Button, Card, CardContent, Flex } from '@/ui';
+// or individual imports
+import { Button } from '@/ui/button';
+```
+
+## Benefits
+
+- **Consistency**: All components follow the same design system
+- **Maintainability**: Changes to design tokens affect all instances
+- **Type Safety**: Props are typed and validated
+- **Accessibility**: Components include proper ARIA attributes
+- **Performance**: Optimized styles and behavior
+- **Developer Experience**: IntelliSense and autocomplete for component APIs
+
+## General Principles for New Components
+
+### Before Writing Custom Styles
+Always check if a component exists in `@/ui` first:
+
+1. **Check the components directory**: Look in `packages/ui/src/components/`
+2. **Search imports**: Use IDE search to see if others have used a similar pattern
+3. **Consider the design system**: Does this pattern fit with existing components?
+
+### For Any New UI Pattern
+❌ **Don't immediately reach for:**
+```jsx
+<div className="complex-tailwind-classes...">
+```
+
+✅ **Ask yourself:**
+- Is there already a `@/ui` component for this?
+- Could this pattern be added to `@/ui`?
+- Am I recreating something that should be standardized?
+
+### Common Patterns to Check For
+- Any `flex` layouts → Check for `<Flex>`
+- Form inputs → Check for `<Input>`, `<Select>`, `<Label>`, etc.
+- Buttons/clickable elements → Check for `<Button>`
+- Cards/containers → Check for `<Card>`
+- Loading states → Check for `<Skeleton>`, `<Spinner>`
+- Overlays/modals → Check for `<Dialog>`, `<Drawer>`, `<Tooltip>`
