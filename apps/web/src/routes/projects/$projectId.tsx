@@ -157,7 +157,7 @@ function RouteComponent() {
         justify='between'
         align='center'
         gap='sm'
-        className='fixed bottom-6 left-1/2 -translate-x-1/2'
+        className='fixed p-1 bottom-6 left-1/2 -translate-x-1/2 backdrop-blur-md bg-white/10 dark:bg-black/10 rounded-full border border-white/20 dark:border-white/10 shadow-xl'
       >
         <Button
           variant='outline'
@@ -167,7 +167,6 @@ function RouteComponent() {
           }}
         >
           <UploadIcon className='size-6!' />
-          {/* <span>Ajouter une photo</span> */}
         </Button>
 
         <Button
@@ -177,7 +176,6 @@ function RouteComponent() {
           }}
         >
           <CameraIcon className='size-6!' />
-          {/* <span>Prendre une photo</span> */}
         </Button>
       </Flex>
 
