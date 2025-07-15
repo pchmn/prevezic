@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.4.1](https://github.com/pchmn/prevezic/compare/0.4.0...0.4.1) (2025-07-15)
+
+
+### Bug Fixes
+
+* **web:** slideshow padding ([d9c0338](https://github.com/pchmn/prevezic/commit/d9c0338bddcc312e4681b9cc24c45b2c0ccfee3c))
+
 # [0.4.0](https://github.com/pchmn/prevezic/compare/0.3.1...0.4.0) (2025-07-15)
 
 
