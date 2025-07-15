@@ -5,7 +5,7 @@ import { Button } from '@prevezic/ui/button';
 import { Flex } from '@prevezic/ui/flex';
 import { useQuery } from '@tanstack/react-query';
 import { Outlet, createFileRoute } from '@tanstack/react-router';
-import { CameraIcon } from 'lucide-react';
+import { CameraIcon, UploadIcon } from 'lucide-react';
 import { useEffect, useRef } from 'react';
 import { z } from 'zod/v4';
 import { InstallExplanation } from '~/components/InstallExplanation';
@@ -29,7 +29,8 @@ function RouteComponent() {
   const { projectId } = Route.useParams();
   const navigate = Route.useNavigate();
 
-  const inputRef = useRef<HTMLInputElement>(null);
+  const inputRefUpload = useRef<HTMLInputElement>(null);
+  const inputRefCamera = useRef<HTMLInputElement>(null);
 
   const { installExplanation } = Route.useSearch();
   const { isInstalled, isInstallable, showInstallPrompt } =
@@ -44,14 +45,6 @@ function RouteComponent() {
     retryUpload,
     clearCompletedUploads,
   } = useFileUpload(projectId as Id<'projects'>);
-
-  useEffect(() => {
-    if (inputRef.current) {
-      inputRef.current.addEventListener('cancel', () => {
-        // setIsAddingPhoto(false); // This state is removed
-      });
-    }
-  }, []);
 
   const handleFileSelect = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
@@ -134,10 +127,20 @@ function RouteComponent() {
         </div>
       )}
       <input
-        ref={inputRef}
+        ref={inputRefUpload}
         hidden
         type='file'
         accept='image/*'
+        onChange={handleFileSelect}
+        multiple
+      />
+
+      <input
+        ref={inputRefCamera}
+        hidden
+        type='file'
+        accept='image/*'
+        capture
         onChange={handleFileSelect}
         multiple
       />
@@ -150,17 +153,37 @@ function RouteComponent() {
         />
       )}
 
-      <Button
-        disabled={hasActiveUploads}
-        hidden={hasActiveUploads}
-        className='fixed bottom-6 left-1/2 -translate-x-1/2 rounded-full p-6 shadow-lg font-[600]'
-        onClick={() => {
-          inputRef.current?.click();
-        }}
+      <Flex
+        justify='between'
+        align='center'
+        gap='sm'
+        className='fixed bottom-6 left-1/2 -translate-x-1/2'
       >
-        <CameraIcon />
-        <span>Ajouter une photo</span>
-      </Button>
+        <Button
+          variant='outline'
+          disabled={hasActiveUploads}
+          hidden={hasActiveUploads}
+          className='rounded-full p-6 shadow-lg font-[600] bg-[#f7eef3] dark:bg-[#2b212a]!'
+          onClick={() => {
+            inputRefUpload.current?.click();
+          }}
+        >
+          <UploadIcon className='size-6!' />
+          {/* <span>Ajouter une photo</span> */}
+        </Button>
+
+        <Button
+          disabled={hasActiveUploads}
+          hidden={hasActiveUploads}
+          className='rounded-full p-6 shadow-lg font-[600]'
+          onClick={() => {
+            inputRefCamera.current?.click();
+          }}
+        >
+          <CameraIcon className='size-6!' />
+          {/* <span>Prendre une photo</span> */}
+        </Button>
+      </Flex>
 
       <Outlet />
     </Flex>
