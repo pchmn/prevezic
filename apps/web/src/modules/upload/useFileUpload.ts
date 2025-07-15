@@ -5,11 +5,31 @@ import ExifReader from 'exifreader';
 import { useState } from 'react';
 import { appConfig } from '~/config/config';
 import { authClient } from '~/lib/auth.client';
-import { toast } from '~/lib/toast/toast';
 import type { FileUpload } from './types';
 
 export function useFileUpload(projectId: Id<'projects'>) {
-  const [uploads, setUploads] = useState<FileUpload[]>([]);
+  const [uploads, setUploads] = useState<FileUpload[]>([
+    // {
+    //   id: '1',
+    //   file: new File([], 'test-1.jpg'),
+    //   status: 'success',
+    // },
+    // {
+    //   id: '2',
+    //   file: new File([], 'test-2.jpg'),
+    //   status: 'compressing',
+    // },
+    // {
+    //   id: '3',
+    //   file: new File([], 'test-3.jpg'),
+    //   status: 'success',
+    // },
+    // {
+    //   id: '4',
+    //   file: new File([], 'test-4.jpg'),
+    //   status: 'error',
+    // },
+  ]);
 
   const hasActiveUploads = uploads.some((u) =>
     ['pending', 'compressing', 'uploading'].includes(u.status),
@@ -82,10 +102,6 @@ export function useFileUpload(projectId: Id<'projects'>) {
       const errorMessage =
         error instanceof Error ? error.message : 'Upload failed';
       updateUploadStatus(upload.id, 'error', errorMessage);
-
-      toast.error(
-        `Erreur lors de l'ajout de ${upload.file.name}: ${errorMessage}`,
-      );
     }
   };
 
